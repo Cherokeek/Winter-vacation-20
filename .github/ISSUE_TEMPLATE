@@ -1,0 +1,14 @@
+Here are some things you should try before filing a bug report:
+
++ For client issues related to [emacs-ccls](https://github.com/MaskRay/emacs-ccls) or [vscode-ccls](https://github.com/MaskRay/vscode-ccls), report in their own repository.
++ For build problems, check https://github.com/MaskRay/ccls/wiki/Build
++ Check https://github.com/MaskRay/ccls/wiki/Debugging
++ Check [the FAQ](https://github.com/MaskRay/ccls/wiki/FAQ) to see if your issue is mentioned.
+
+If none of those help, remove this section and fill out the four sections in the template below.
+
+---
+
+### Observed behavior
+
+Des
