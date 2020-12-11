@@ -29,4 +29,8 @@ Describe what you expected to happen.
 
 ### System information
 
-* ccls version (`gi
+* ccls version (`git describe --tags --long`): 
+* clang version: 
+* OS: 
+* Editor: 
+* Language client (and version): 
