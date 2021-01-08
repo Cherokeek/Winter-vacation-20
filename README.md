@@ -15,4 +15,15 @@ ccls, which originates from [cquery](https://github.com/cquery-project/cquery), 
   * [hover information](src/messages/textDocument_hover.cc)
   * diagnostics and code actions (clang FixIts)
   * semantic highlighting and preprocessor skipped regions
-  * semantic navigation: `
+  * semantic navigation: `$ccls/navigate`
+
+It has a global view of the code base and support a lot of cross reference features, see [wiki/FAQ](../../wiki/FAQ).
+It starts indexing the whole project (including subprojects if exist) parallelly when you open the first file, while the main thread can serve requests before the indexing is complete.
+Saving files will incrementally update the index.
+
+# >>> [Getting started](../../wiki/Home) (CLICK HERE) <<<
+
+* [Build](../../wiki/Build)
+* [FAQ](../../wiki/FAQ)
+
+ccls can index itself (~180MiB RSS when idle, noted on 2018-09-01), FreeBSD, glibc,
