@@ -68,4 +68,24 @@ OUTPUT:
       "short_name": "foo0",
       "spell": "6:8-6:12|6:3-6:12|2|-1",
       "type": 13487927231218873822,
-      "kind": 1
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 17097499197730163115,
+      "detailed_name": "Type foo1",
+      "qual_name_offset": 5,
+      "short_name": "foo1",
+      "hover": "Type foo1 = Type()",
+      "spell": "7:8-7:12|7:3-7:21|2|-1",
+      "type": 13487927231218873822,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
