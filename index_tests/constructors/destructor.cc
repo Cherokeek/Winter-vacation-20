@@ -78,4 +78,22 @@ OUTPUT:
       "kind": 5,
       "parent_kind": 0,
       "declarations": [],
-      "derived":
+      "derived": [],
+      "instances": [1893354193220338759],
+      "uses": ["3:3-3:6|4|-1", "4:4-4:7|4|-1", "8:3-8:6|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 1893354193220338759,
+      "detailed_name": "Foo f",
+      "qual_name_offset": 4,
+      "short_name": "f",
+      "spell": "8:7-8:8|8:3-8:8|2|-1",
+      "type": 15041163540773201510,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
