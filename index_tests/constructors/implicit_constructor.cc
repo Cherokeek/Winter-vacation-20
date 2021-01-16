@@ -48,4 +48,24 @@ OUTPUT:
       "detailed_name": "struct Type {}",
       "qual_name_offset": 7,
       "short_name": "Type",
-      "spell": "1:8-1:12
+      "spell": "1:8-1:12|1:1-3:2|2|-1",
+      "bases": [],
+      "funcs": [10530961286677896857],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [449111627548814328, 17097499197730163115],
+      "uses": ["2:3-2:7|4|-1", "6:3-6:7|4|-1", "7:15-7:19|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 449111627548814328,
+      "detailed_name": "Type foo0",
+      "qual_name_offset": 5,
+      "short_name": "foo0",
+      "spell": "6:8-6:12|6:3-6:12|2|-1",
+      "type": 13487927231218873822,
+      "kind": 1
