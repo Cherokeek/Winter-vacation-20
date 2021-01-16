@@ -27,3 +27,25 @@ OUTPUT:
       "declarations": [],
       "derived": [],
       "uses": []
+    }, {
+      "usr": 10530961286677896857,
+      "detailed_name": "Type::Type()",
+      "qual_name_offset": 0,
+      "short_name": "Type",
+      "spell": "2:3-2:7|2:3-2:12|1026|-1",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 9,
+      "parent_kind": 23,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": ["6:8-6:12|16676|-1", "7:15-7:19|16676|-1"]
+    }],
+  "usr2type": [{
+      "usr": 13487927231218873822,
+      "detailed_name": "struct Type {}",
+      "qual_name_offset": 7,
+      "short_name": "Type",
+      "spell": "1:8-1:12
