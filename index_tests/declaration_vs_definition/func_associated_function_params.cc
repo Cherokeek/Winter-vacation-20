@@ -21,4 +21,27 @@ OUTPUT:
       "kind": 12,
       "parent_kind": 0,
       "storage": 0,
-      "declarations": ["1:5-
+      "declarations": ["1:5-1:8|1:1-1:18|1|-1", "2:5-2:8|2:1-3:16|1|-1", "4:5-4:8|4:1-4:26|1|-1"],
+      "derived": [],
+      "uses": []
+    }],
+  "usr2type": [{
+      "usr": 53,
+      "detailed_name": "",
+      "qual_name_offset": 0,
+      "short_name": "",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 0,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [14555488990109936920, 10963664335057337329],
+      "uses": []
+    }],
+  "usr2var": [{
+      "usr": 10963664335057337329,
+      "deta
