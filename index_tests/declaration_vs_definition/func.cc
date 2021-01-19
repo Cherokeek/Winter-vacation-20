@@ -25,4 +25,7 @@ OUTPUT:
       "derived": [],
       "uses": []
     }],
-  "usr2type": 
+  "usr2type": [],
+  "usr2var": []
+}
+*/
