@@ -44,4 +44,28 @@ OUTPUT:
     }],
   "usr2var": [{
       "usr": 10963664335057337329,
-      "deta
+      "detailed_name": "int b",
+      "qual_name_offset": 4,
+      "short_name": "b",
+      "spell": "5:20-5:21|5:16-5:21|1026|-1",
+      "type": 53,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 14555488990109936920,
+      "detailed_name": "int a",
+      "qual_name_offset": 4,
+      "short_name": "a",
+      "spell": "5:13-5:14|5:9-5:14|1026|-1",
+      "type": 53,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
