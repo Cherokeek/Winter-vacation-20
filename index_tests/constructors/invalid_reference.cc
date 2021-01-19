@@ -35,4 +35,17 @@ OUTPUT:
       "short_name": "Foo",
       "spell": "1:8-1:11|1:1-1:14|2|-1",
       "bases": [],
-      "funcs": [1731
+      "funcs": [17319723337446061757],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["4:1-4:4|4|-1", "4:6-4:9|4|-1"]
+    }],
+  "usr2var": []
+}
+*/
