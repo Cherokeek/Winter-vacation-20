@@ -71,4 +71,8 @@ OUTPUT:
       "declarations": [],
       "derived": [],
       "instances": [],
-      "us
+      "uses": ["7:6-7:9|4|-1"]
+    }],
+  "usr2var": []
+}
+*/
