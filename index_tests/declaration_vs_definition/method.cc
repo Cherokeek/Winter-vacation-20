@@ -50,4 +50,25 @@ OUTPUT:
       "callees": [],
       "kind": 6,
       "parent_kind": 5,
-      "storage": 
+      "storage": 0,
+      "declarations": ["4:8-4:11|4:3-4:13|1025|-1"],
+      "derived": [],
+      "uses": []
+    }],
+  "usr2type": [{
+      "usr": 15041163540773201510,
+      "detailed_name": "class Foo {}",
+      "qual_name_offset": 6,
+      "short_name": "Foo",
+      "spell": "1:7-1:10|1:1-5:2|2|-1",
+      "bases": [],
+      "funcs": [4012226004228259562, 10939323144126021546, 15416083548883122431],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 5,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "us
