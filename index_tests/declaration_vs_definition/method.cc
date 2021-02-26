@@ -27,4 +27,27 @@ OUTPUT:
       "uses": []
     }, {
       "usr": 10939323144126021546,
-      "detailed_name": "virtual void Foo
+      "detailed_name": "virtual void Foo::purevirtual() = 0",
+      "qual_name_offset": 13,
+      "short_name": "purevirtual",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 6,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["3:16-3:27|3:3-3:33|1089|-1"],
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 15416083548883122431,
+      "detailed_name": "void Foo::def()",
+      "qual_name_offset": 5,
+      "short_name": "def",
+      "spell": "7:11-7:14|7:1-7:19|1026|-1",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 6,
+      "parent_kind": 5,
+      "storage": 
