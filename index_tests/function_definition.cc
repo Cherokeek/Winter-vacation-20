@@ -15,4 +15,13 @@ OUTPUT:
       "vars": [],
       "callees": [],
       "kind": 12,
-      "par
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
+    }],
+  "usr2type": [],
+  "usr2var": []
+}
+*/
