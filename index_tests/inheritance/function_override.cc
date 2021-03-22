@@ -62,4 +62,19 @@ OUTPUT:
       "detailed_name": "class Derived : public Root {}",
       "qual_name_offset": 6,
       "short_name": "Derived",
- 
+      "spell": "4:7-4:14|4:1-6:2|2|-1",
+      "bases": [3897841498936210886],
+      "funcs": [6666242542855173890],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 5,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }],
+  "usr2var": []
+}
+*/
