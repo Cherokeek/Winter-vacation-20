@@ -42,4 +42,24 @@ OUTPUT:
     }],
   "usr2type": [{
       "usr": 3897841498936210886,
-      "deta
+      "detailed_name": "class Root {}",
+      "qual_name_offset": 6,
+      "short_name": "Root",
+      "spell": "1:7-1:11|1:1-3:2|2|-1",
+      "bases": [],
+      "funcs": [9948027785633571339],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 5,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [10963370434658308541],
+      "instances": [],
+      "uses": ["4:24-4:28|2052|-1"]
+    }, {
+      "usr": 10963370434658308541,
+      "detailed_name": "class Derived : public Root {}",
+      "qual_name_offset": 6,
+      "short_name": "Derived",
+ 
