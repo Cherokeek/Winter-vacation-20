@@ -55,4 +55,30 @@ OUTPUT:
       "funcs": [],
       "types": [],
       "vars": [],
-      "alias_of
+      "alias_of": 0,
+      "kind": 0,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [12666114896600231317],
+      "uses": []
+    }, {
+      "usr": 14635009347499519042,
+      "detailed_name": "",
+      "qual_name_offset": 0,
+      "short_name": "",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 0,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [2981279427664991319],
+      "uses": []
+    }],
+  "usr2var": [{
+      "usr": 2981279427664991319,
+      "detailed_name": "(lambda)
