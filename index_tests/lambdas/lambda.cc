@@ -81,4 +81,26 @@ OUTPUT:
     }],
   "usr2var": [{
       "usr": 2981279427664991319,
-      "detailed_name": "(lambda)
+      "detailed_name": "(lambda) dosomething",
+      "qual_name_offset": 9,
+      "short_name": "dosomething",
+      "hover": "(lambda) dosomething",
+      "spell": "4:8-4:19|4:3-7:4|2|-1",
+      "type": 14635009347499519042,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["9:3-9:14|4|-1", "10:3-10:14|4|-1", "11:3-11:14|4|-1"]
+    }, {
+      "usr": 12666114896600231317,
+      "detailed_name": "int x",
+      "qual_name_offset": 4,
+      "short_name": "x",
+      "spell": "2:7-2:8|2:3-2:8|2|-1",
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["4:24-
