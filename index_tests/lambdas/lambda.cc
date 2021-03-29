@@ -103,4 +103,19 @@ OUTPUT:
       "parent_kind": 12,
       "storage": 0,
       "declarations": [],
-      "uses": ["4:24-
+      "uses": ["4:24-4:25|4|-1", "5:7-5:8|28|-1"]
+    }, {
+      "usr": 12879188959314906706,
+      "detailed_name": "int y",
+      "qual_name_offset": 4,
+      "short_name": "y",
+      "spell": "4:31-4:32|4:27-4:32|2|-1",
+      "type": 0,
+      "kind": 253,
+      "parent_kind": 6,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["6:7-6:8|28|-1"]
+    }]
+}
+*/
