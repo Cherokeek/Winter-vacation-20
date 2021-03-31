@@ -60,4 +60,25 @@ OUTPUT:
       "declarations": [],
       "derived": [],
       "instances": [],
-      "uses": ["5:12-5:15|4|-1", "5:12-5:15
+      "uses": ["5:12-5:15|4|-1", "5:12-5:15|64|0"]
+    }],
+  "usr2var": [{
+      "usr": 1569772797058982873,
+      "detailed_name": "A",
+      "qual_name_offset": 0,
+      "short_name": "A",
+      "hover": "#define A 5",
+      "spell": "1:9-1:10|1:9-1:12|2|-1",
+      "type": 0,
+      "kind": 255,
+      "parent_kind": 1,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["8:9-8:10|64|-1"]
+    }, {
+      "usr": 4904139678698066671,
+      "detailed_name": "DISALLOW",
+      "qual_name_offset": 0,
+      "short_name": "DISALLOW",
+      "hover": "#define DISALLOW(type) type(type&&) = delete;",
+      "spell": "2:9-2:17|2:9-2:46|2|-1",
