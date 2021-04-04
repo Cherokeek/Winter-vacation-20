@@ -82,3 +82,25 @@ OUTPUT:
       "short_name": "DISALLOW",
       "hover": "#define DISALLOW(type) type(type&&) = delete;",
       "spell": "2:9-2:17|2:9-2:46|2|-1",
+      "type": 0,
+      "kind": 255,
+      "parent_kind": 1,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["5:3-5:11|64|-1"]
+    }, {
+      "usr": 10677751717622394455,
+      "detailed_name": "int x",
+      "qual_name_offset": 4,
+      "short_name": "x",
+      "hover": "int x = A",
+      "spell": "8:5-8:6|8:1-8:10|2|-1",
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
