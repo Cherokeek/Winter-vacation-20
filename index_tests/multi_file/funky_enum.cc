@@ -47,4 +47,33 @@ OUTPUT: funky_enum.h
       "short_name": "B",
       "hover": "B = 1",
       "comments": "This file cannot be built directory. It is included in an enum definition of\nanother file.",
-      "spell": "5:1-5:2
+      "spell": "5:1-5:2|5:1-5:2|1026|-1",
+      "type": 16985894625255407295,
+      "kind": 22,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+OUTPUT: funky_enum.cc
+{
+  "includes": [{
+      "line": 1,
+      "resolved_path": "&funky_enum.h"
+    }],
+  "skipped_ranges": [],
+  "usr2func": [],
+  "usr2type": [{
+      "usr": 16985894625255407295,
+      "detailed_name": "enum Foo {}",
+      "qual_name_offset": 5,
+      "short_name": "Foo",
+      "spell": "1:6-1:9|1:1-3:2|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 10,
+      "p
