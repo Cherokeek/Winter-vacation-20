@@ -31,4 +31,20 @@ OUTPUT: funky_enum.h
       "detailed_name": "C",
       "qual_name_offset": 0,
       "short_name": "C",
-      "h
+      "hover": "C = 2",
+      "comments": "This file cannot be built directory. It is included in an enum definition of\nanother file.",
+      "spell": "6:1-6:2|6:1-6:2|1026|-1",
+      "type": 16985894625255407295,
+      "kind": 22,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 15962370213938840720,
+      "detailed_name": "B",
+      "qual_name_offset": 0,
+      "short_name": "B",
+      "hover": "B = 1",
+      "comments": "This file cannot be built directory. It is included in an enum definition of\nanother file.",
+      "spell": "5:1-5:2
