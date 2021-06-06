@@ -76,4 +76,12 @@ OUTPUT: funky_enum.cc
       "vars": [],
       "alias_of": 0,
       "kind": 10,
-      "p
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }],
+  "usr2var": []
+}
+*/
