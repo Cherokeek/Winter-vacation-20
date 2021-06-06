@@ -15,4 +15,32 @@ OUTPUT: header.h
       "qual_name_offset": 5,
       "short_name": "Foo1",
       "spell": "10:6-10:10|10:1-10:15|2|-1",
-      "bas
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
+    }],
+  "usr2type": [{
+      "usr": 53,
+      "detailed_name": "",
+      "qual_name_offset": 0,
+      "short_name": "",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 0,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [2638219001294786365, 8395885290297540138],
+      "uses": []
+    }, {
+      "usr": 529393482671181129,
+      "de
