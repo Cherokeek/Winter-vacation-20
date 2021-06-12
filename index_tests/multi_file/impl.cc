@@ -43,4 +43,29 @@ OUTPUT: header.h
       "uses": []
     }, {
       "usr": 529393482671181129,
-      "de
+      "detailed_name": "struct Foo2 {}",
+      "qual_name_offset": 7,
+      "short_name": "Foo2",
+      "spell": "13:8-13:12|13:1-13:15|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }, {
+      "usr": 619345544228965342,
+      "detailed_name": "using Foo0 = SameFileDerived",
+      "qual_name_offset": 6,
+      "short_name": "Foo0",
+      "spell": "7:7-7:11|7:1-7:29|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 1675061
