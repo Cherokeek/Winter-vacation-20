@@ -68,4 +68,29 @@ OUTPUT: header.h
       "funcs": [],
       "types": [],
       "vars": [],
-      "alias_of": 1675061
+      "alias_of": 16750616846959666305,
+      "kind": 252,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }, {
+      "usr": 4481210672785600703,
+      "detailed_name": "enum Foo3 {}",
+      "qual_name_offset": 5,
+      "short_name": "Foo3",
+      "spell": "15:6-15:10|15:1-15:22|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 10,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }, {
+      "usr": 842011900678242
