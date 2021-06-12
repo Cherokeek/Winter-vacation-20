@@ -93,4 +93,26 @@ OUTPUT: header.h
       "instances": [],
       "uses": []
     }, {
-      "usr": 842011900678242
+      "usr": 8420119006782424779,
+      "detailed_name": "struct Base {}",
+      "qual_name_offset": 7,
+      "short_name": "Base",
+      "spell": "3:8-3:12|3:1-3:15|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [16750616846959666305],
+      "instances": [],
+      "uses": ["5:26-5:30|2052|-1"]
+    }, {
+      "usr": 16750616846959666305,
+      "detailed_name": "struct SameFileDerived : Base {}",
+      "qual_name_offset": 7,
+      "short_name": "SameFileDerived",
+      "spell": "5:8-5:23|5:1-5:33|2|-1",
+ 
