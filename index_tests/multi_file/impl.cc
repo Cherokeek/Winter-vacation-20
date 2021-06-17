@@ -115,4 +115,27 @@ OUTPUT: header.h
       "qual_name_offset": 7,
       "short_name": "SameFileDerived",
       "spell": "5:8-5:23|5:1-5:33|2|-1",
- 
+      "bases": [8420119006782424779],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["7:14-7:29|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 2638219001294786365,
+      "detailed_name": "int Foo4",
+      "qual_name_offset": 4,
+      "short_name": "Foo4",
+      "spell": "17:5-17:9|17:1-17:9|2|-1",
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "uses": [
