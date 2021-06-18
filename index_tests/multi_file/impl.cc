@@ -138,4 +138,27 @@ OUTPUT: header.h
       "parent_kind": 0,
       "storage": 0,
       "declarations": [],
-      "uses": [
+      "uses": []
+    }, {
+      "usr": 6141718166919284735,
+      "detailed_name": "A",
+      "qual_name_offset": 0,
+      "short_name": "A",
+      "hover": "A = 0",
+      "spell": "15:13-15:14|15:13-15:14|1026|-1",
+      "type": 4481210672785600703,
+      "kind": 22,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 7285646116511901840,
+      "detailed_name": "C",
+      "qual_name_offset": 0,
+      "short_name": "C",
+      "hover": "C = 2",
+      "spell": "15:19-15:20|15:19-15:20|1026|-1",
+      "type": 4481210672785600703,
+      "kind": 22,
+      "parent_ki
