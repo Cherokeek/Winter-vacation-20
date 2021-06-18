@@ -161,4 +161,27 @@ OUTPUT: header.h
       "spell": "15:19-15:20|15:19-15:20|1026|-1",
       "type": 4481210672785600703,
       "kind": 22,
-      "parent_ki
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 8395885290297540138,
+      "detailed_name": "static int Foo5",
+      "qual_name_offset": 11,
+      "short_name": "Foo5",
+      "spell": "18:12-18:16|18:1-18:16|2|-1",
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 0,
+      "storage": 2,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 17716334512218775320,
+      "detailed_name": "B",
+      "qual_name_offset": 0,
+      "short_name": "B",
+      "hover": "B = 1",
+      "spell": "15:16-15:17|15:16-15:17|1026|-1",
+      "type": 4481210672785600703,
