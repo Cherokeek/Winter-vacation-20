@@ -185,3 +185,29 @@ OUTPUT: header.h
       "hover": "B = 1",
       "spell": "15:16-15:17|15:16-15:17|1026|-1",
       "type": 4481210672785600703,
+      "kind": 22,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+OUTPUT: impl.cc
+{
+  "includes": [{
+      "line": 0,
+      "resolved_path": "&header.h"
+    }],
+  "skipped_ranges": [],
+  "usr2func": [{
+      "usr": 5817708529036841195,
+      "detailed_name": "void Impl()",
+      "qual_name_offset": 5,
+      "short_name": "Impl",
+      "spell": "3:6-3:10|3:1-5:2|2|-1",
+      "bases": [],
+      "vars": [],
+      "callees": ["4:3-4:7|11650481237659640387|3|16420"],
+      "kind": 12,
+      "parent_kind": 0,
+      "storag
