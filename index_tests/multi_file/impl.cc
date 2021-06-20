@@ -210,4 +210,26 @@ OUTPUT: impl.cc
       "callees": ["4:3-4:7|11650481237659640387|3|16420"],
       "kind": 12,
       "parent_kind": 0,
-      "storag
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 11650481237659640387,
+      "detailed_name": "void Foo1()",
+      "qual_name_offset": 5,
+      "short_name": "Foo1",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": ["4:3-4:7|16420|-1"]
+    }],
+  "usr2type": [],
+  "usr2var": []
+}
+*/
