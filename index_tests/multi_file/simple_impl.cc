@@ -59,4 +59,12 @@ OUTPUT: simple_impl.cc
       "callees": [],
       "kind": 12,
       "parent_kind": 0,
-  
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": ["4:3-4:9|16420|-1"]
+    }],
+  "usr2type": [],
+  "usr2var": []
+}
+*/
