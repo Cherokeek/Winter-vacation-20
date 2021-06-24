@@ -13,4 +13,16 @@ OUTPUT:
       "qual_name_offset": 5,
       "short_name": "foo",
       "bases": [],
-    
+      "vars": [],
+      "callees": [],
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["2:6-2:9|2:1-2:11|1|-1"],
+      "derived": [],
+      "uses": []
+    }],
+  "usr2type": [],
+  "usr2var": []
+}
+*/
