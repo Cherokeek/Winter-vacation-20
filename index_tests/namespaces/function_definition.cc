@@ -26,3 +26,21 @@ OUTPUT:
     }],
   "usr2type": [{
       "usr": 2029211996748007610,
+      "detailed_name": "namespace hello {}",
+      "qual_name_offset": 10,
+      "short_name": "hello",
+      "bases": [],
+      "funcs": [243328841292951622],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 3,
+      "parent_kind": 0,
+      "declarations": ["1:11-1:16|1:1-3:2|1|-1"],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }],
+  "usr2var": []
+}
+*/
