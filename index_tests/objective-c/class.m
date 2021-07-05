@@ -35,4 +35,29 @@ OUTPUT:
       "funcs": [],
       "vars": [],
       "instances": [2],
-      "uses": 
+      "uses": ["14:3-14:9|-1|1|4", "14:23-14:29|-1|1|4"]
+    }, {
+      "id": 1,
+      "usr": 17,
+      "detailed_name": "",
+      "short_name": "",
+      "kind": 0,
+      "parents": [],
+      "derived": [],
+      "types": [],
+      "funcs": [],
+      "vars": [],
+      "instances": [0, 1],
+      "uses": []
+    }],
+  "funcs": [{
+      "id": 0,
+      "usr": 12775970426728664910,
+      "detailed_name": "AClass::test",
+      "short_name": "test",
+      "kind": 17,
+      "storage": 0,
+      "declarations": [{
+          "spelling": "2:11-2:15",
+          "extent": "2:3-2:16",
+          "c
