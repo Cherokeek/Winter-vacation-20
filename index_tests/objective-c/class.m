@@ -105,4 +105,26 @@ OUTPUT:
         }],
       "extent": "4:29-4:34|-1|1|0",
       "base": [],
-  
+      "derived": [],
+      "locals": [],
+      "uses": [],
+      "callees": []
+    }, {
+      "id": 3,
+      "usr": 17992064398538597892,
+      "detailed_name": "AClass::setAProp:",
+      "short_name": "setAProp:",
+      "kind": 16,
+      "storage": 0,
+      "declarations": [{
+          "spelling": "0:0-0:0",
+          "extent": "4:29-4:34",
+          "content": "aProp",
+          "param_spellings": ["4:29-4:34"]
+        }],
+      "extent": "4:29-4:34|-1|1|0",
+      "base": [],
+      "derived": [],
+      "locals": [],
+      "uses": ["0:0-0:0|4|3|64"],
+    
