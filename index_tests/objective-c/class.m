@@ -81,4 +81,28 @@ OUTPUT:
           "spelling": "3:11-3:27",
           "extent": "3:3-3:28",
           "content": "- (void)anInstanceMethod;",
-          "param_spellings": [
+          "param_spellings": []
+        }],
+      "spell": "9:9-9:25|-1|1|2",
+      "extent": "9:1-9:28|-1|1|0",
+      "base": [],
+      "derived": [],
+      "locals": [],
+      "uses": ["15:13-15:29|4|3|64"],
+      "callees": []
+    }, {
+      "id": 2,
+      "usr": 12774569141855220778,
+      "detailed_name": "AClass::aProp",
+      "short_name": "aProp",
+      "kind": 16,
+      "storage": 0,
+      "declarations": [{
+          "spelling": "0:0-0:0",
+          "extent": "4:29-4:34",
+          "content": "aProp",
+          "param_spellings": []
+        }],
+      "extent": "4:29-4:34|-1|1|0",
+      "base": [],
+  
