@@ -127,4 +127,26 @@ OUTPUT:
       "derived": [],
       "locals": [],
       "uses": ["0:0-0:0|4|3|64"],
-    
+      "callees": []
+    }, {
+      "id": 4,
+      "usr": 7033269674615638282,
+      "detailed_name": "int main()",
+      "short_name": "main",
+      "kind": 12,
+      "storage": 1,
+      "declarations": [],
+      "spell": "12:5-12:9|-1|1|2",
+      "extent": "12:1-17:2|-1|1|0",
+      "base": [],
+      "derived": [],
+      "locals": [],
+      "uses": [],
+      "callees": ["15:13-15:29|1|3|64", "0:0-0:0|3|3|64"]
+    }],
+  "vars": [{
+      "id": 0,
+      "usr": 14842397373703114213,
+      "detailed_name": "int AClass::aProp",
+      "short_name": "aProp",
+      "declarations": ["4:29
