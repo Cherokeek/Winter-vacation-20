@@ -149,4 +149,27 @@ OUTPUT:
       "usr": 14842397373703114213,
       "detailed_name": "int AClass::aProp",
       "short_name": "aProp",
-      "declarations": ["4:29
+      "declarations": ["4:29-4:34|-1|1|1"],
+      "type": 1,
+      "uses": ["16:12-16:17|4|3|4"],
+      "kind": 19,
+      "storage": 0
+    }, {
+      "id": 1,
+      "usr": 17112602610366149042,
+      "detailed_name": "int AClass::_aProp",
+      "short_name": "_aProp",
+      "declarations": [],
+      "spell": "4:29-4:34|-1|1|2",
+      "extent": "4:29-4:34|-1|1|0",
+      "type": 1,
+      "uses": [],
+      "kind": 14,
+      "storage": 0
+    }, {
+      "id": 2,
+      "usr": 6849095699869081177,
+      "detailed_name": "AClass *instance",
+      "short_name": "instance",
+      "hover": "AClass *instance = [AClass init]",
+  
