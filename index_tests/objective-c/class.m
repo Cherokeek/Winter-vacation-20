@@ -172,4 +172,13 @@ OUTPUT:
       "detailed_name": "AClass *instance",
       "short_name": "instance",
       "hover": "AClass *instance = [AClass init]",
-  
+      "declarations": [],
+      "spell": "14:11-14:19|4|3|2",
+      "extent": "14:3-14:35|4|3|2",
+      "type": 0,
+      "uses": ["15:4-15:12|4|3|4", "16:3-16:11|4|3|4"],
+      "kind": 13,
+      "storage": 1
+    }]
+}
+*/
