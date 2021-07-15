@@ -18,4 +18,26 @@ OUTPUT:
       "short_name": "operator()",
       "bases": [],
       "vars": [],
-      
+      "callees": [],
+      "kind": 6,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["3:8-3:16|3:3-3:24|1025|-1"],
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 3986818119971932909,
+      "detailed_name": "int Foo::operator()(int a, int b)",
+      "qual_name_offset": 4,
+      "short_name": "operator()",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 6,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["4:7-4:15|4:3-4:31|1025|-1"],
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 78744361
