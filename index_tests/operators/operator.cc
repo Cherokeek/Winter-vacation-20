@@ -62,4 +62,27 @@ OUTPUT:
       "bases": [],
       "vars": [],
       "callees": [],
-      "kind"
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["7:6-7:14|7:1-7:42|1|-1"],
+      "derived": [],
+      "uses": []
+    }],
+  "usr2type": [{
+      "usr": 15041163540773201510,
+      "detailed_name": "class Foo {}",
+      "qual_name_offset": 6,
+      "short_name": "Foo",
+      "spell": "1:7-1:10|1:1-5:2|2|-1",
+      "bases": [],
+      "funcs": [7874436189163837815, 3545323327609582678, 3986818119971932909],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 5,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["7:1-7:4|4|
