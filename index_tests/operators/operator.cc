@@ -40,4 +40,26 @@ OUTPUT:
       "derived": [],
       "uses": []
     }, {
-      "usr": 78744361
+      "usr": 7874436189163837815,
+      "detailed_name": "void Foo::operator()(int)",
+      "qual_name_offset": 5,
+      "short_name": "operator()",
+      "spell": "2:8-2:18|2:3-2:27|1026|-1",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 6,
+      "parent_kind": 5,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 8288368475529136092,
+      "detailed_name": "Foo &operator+=(const Foo &, const int &)",
+      "qual_name_offset": 5,
+      "short_name": "operator+=",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind"
