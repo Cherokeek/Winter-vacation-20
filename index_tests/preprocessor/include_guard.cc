@@ -16,4 +16,13 @@ OUTPUT:
       "qual_name_offset": 0,
       "short_name": "FOO",
       "hover": "#define FOO",
-      "spell": "2:9-2:12|2:9-
+      "spell": "2:9-2:12|2:9-2:12|2|-1",
+      "type": 0,
+      "kind": 255,
+      "parent_kind": 1,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
