@@ -35,4 +35,24 @@ OUTPUT:
       "declarations": [],
       "derived": [],
       "instances": [12898699035586282159, 9008550860229740818],
-      "uses":
+      "uses": []
+    }, {
+      "usr": 1532099849728741556,
+      "detailed_name": "enum ns::VarType {}",
+      "qual_name_offset": 5,
+      "short_name": "VarType",
+      "spell": "2:8-2:15|2:3-2:18|1026|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 10,
+      "parent_kind": 3,
+      "declarations": [],
+      "derived": [],
+      "instances": [4731849186641714451, 4731849186641714451],
+      "uses": ["6:22-6:29|4|-1", "6:44-6:51|4|-1", "10:18-10:25|4|-1"]
+    }, {
+      "usr": 11072669167287398027,
+      "detailed_n
