@@ -55,4 +55,26 @@ OUTPUT:
       "uses": ["6:22-6:29|4|-1", "6:44-6:51|4|-1", "10:18-10:25|4|-1"]
     }, {
       "usr": 11072669167287398027,
-      "detailed_n
+      "detailed_name": "namespace ns {}",
+      "qual_name_offset": 10,
+      "short_name": "ns",
+      "bases": [],
+      "funcs": [],
+      "types": [1532099849728741556, 12688716854043726585],
+      "vars": [{
+          "L": 12898699035586282159,
+          "R": -1
+        }, {
+          "L": 9008550860229740818,
+          "R": -1
+        }],
+      "alias_of": 0,
+      "kind": 3,
+      "parent_kind": 0,
+      "declarations": ["1:11-1:13|1:1-15:2|1|-1"],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }, {
+      "usr": 12688716854043726585,
+      "detailed_name": "struct ns:
