@@ -77,4 +77,25 @@ OUTPUT:
       "uses": []
     }, {
       "usr": 12688716854043726585,
-      "detailed_name": "struct ns:
+      "detailed_name": "struct ns::Holder {}",
+      "qual_name_offset": 7,
+      "short_name": "Holder",
+      "spell": "5:10-5:16|5:3-7:4|1026|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 3,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["10:26-10:32|4|-1", "13:13-13:19|4|-1", "14:14-14:20|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 4731849186641714451,
+      "detailed_name": "static constexpr ns::VarType ns::Holder::static_var",
+      "qual_name_offset": 29,
+      "short_name": "static_var",
+      "hover": "static 
