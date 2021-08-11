@@ -115,3 +115,23 @@ OUTPUT:
       "spell": "14:7-14:11|14:3-14:37|1026|-1",
       "type": 53,
       "kind": 13,
+      "parent_kind": 3,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 12898699035586282159,
+      "detailed_name": "int ns::Foo",
+      "qual_name_offset": 4,
+      "short_name": "Foo",
+      "hover": "int ns::Foo = Holder<int>::static_var",
+      "spell": "13:7-13:10|13:3-13:36|1026|-1",
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 3,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
