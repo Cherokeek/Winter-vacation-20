@@ -24,4 +24,29 @@ OUTPUT:
       "callees": [],
       "kind": 254,
       "parent_kind": 23,
-      "storag
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": ["8:19-8:22|36|-1", "9:20-9:23|36|-1"]
+    }],
+  "usr2type": [{
+      "usr": 53,
+      "detailed_name": "",
+      "qual_name_offset": 0,
+      "short_name": "",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 0,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [16721564935990383768, 12028309045033782423],
+      "uses": []
+    }, {
+      "usr": 10528472276654770367,
+      "detailed_name": "struct Foo {}",
+      "qual_name_offset": 7,
+      "short_nam
