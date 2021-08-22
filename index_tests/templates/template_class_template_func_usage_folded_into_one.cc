@@ -1,12 +1,14 @@
+
 template<typename T>
 struct Foo {
+  template<typename R>
   static int foo() {
     return 3;
   }
 };
 
-int a = Foo<int>::foo();
-int b = Foo<bool>::foo();
+int a = Foo<int>::foo<float>();
+int b = Foo<bool>::foo<double>();
 
 /*
 OUTPUT:
@@ -14,11 +16,11 @@ OUTPUT:
   "includes": [],
   "skipped_ranges": [],
   "usr2func": [{
-      "usr": 8340731781048851399,
+      "usr": 9034026360701857235,
       "detailed_name": "static int Foo::foo()",
       "qual_name_offset": 11,
       "short_name": "foo",
-      "spell": "3:14-3:17|3:3-5:4|1026|-1",
+      "spell": "4:14-4:17|4:3-6:4|1026|-1",
       "bases": [],
       "vars": [],
       "callees": [],
@@ -27,7 +29,7 @@ OUTPUT:
       "storage": 0,
       "declarations": [],
       "derived": [],
-      "uses": ["8:19-8:22|36|-1", "9:20-9:23|36|-1"]
+      "uses": ["9:19-9:22|36|-1", "10:20-10:23|36|-1"]
     }],
   "usr2type": [{
       "usr": 53,
@@ -50,9 +52,9 @@ OUTPUT:
       "detailed_name": "struct Foo {}",
       "qual_name_offset": 7,
       "short_name": "Foo",
-      "spell": "2:8-2:11|2:1-6:2|2|-1",
+      "spell": "2:8-2:11|2:1-7:2|2|-1",
       "bases": [],
-      "funcs": [8340731781048851399],
+      "funcs": [9034026360701857235],
       "types": [],
       "vars": [],
       "alias_of": 0,
@@ -61,15 +63,15 @@ OUTPUT:
       "declarations": [],
       "derived": [],
       "instances": [],
-      "uses": ["8:9-8:12|4|-1", "9:9-9:12|4|-1"]
+      "uses": ["9:9-9:12|4|-1", "10:9-10:12|4|-1"]
     }],
   "usr2var": [{
       "usr": 12028309045033782423,
       "detailed_name": "int b",
       "qual_name_offset": 4,
       "short_name": "b",
-      "hover": "int b = Foo<bool>::foo()",
-      "spell": "9:5-9:6|9:1-9:25|2|-1",
+      "hover": "int b = Foo<bool>::foo<double>()",
+      "spell": "10:5-10:6|10:1-10:33|2|-1",
       "type": 53,
       "kind": 13,
       "parent_kind": 0,
@@ -81,8 +83,8 @@ OUTPUT:
       "detailed_name": "int a",
       "qual_name_offset": 4,
       "short_name": "a",
-      "hover": "int a = Foo<int>::foo()",
-      "spell": "8:5-8:6|8:1-8:24|2|-1",
+      "hover": "int a = Foo<int>::foo<float>()",
+      "spell": "9:5-9:6|9:1-9:31|2|-1",
       "type": 53,
       "kind": 13,
       "parent_kind": 0,
