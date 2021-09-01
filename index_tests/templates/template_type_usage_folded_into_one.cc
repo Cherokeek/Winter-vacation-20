@@ -44,4 +44,14 @@ OUTPUT:
       "usr": 16721564935990383768,
       "detailed_name": "Foo<int> a",
       "qual_name_offset": 9,
-     
+      "short_name": "a",
+      "spell": "4:10-4:11|4:1-4:11|2|-1",
+      "type": 10528472276654770367,
+      "kind": 13,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
