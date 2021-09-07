@@ -33,4 +33,30 @@ OUTPUT:
       "spell": "2:3-2:9|2:3-2:28|1026|-1",
       "bases": [],
       "funcs": [],
-      "types"
+      "types": [],
+      "vars": [{
+          "L": 3348817847649945564,
+          "R": 0
+        }, {
+          "L": 4821094820988543895,
+          "R": 32
+        }, {
+          "L": 15292551660437765731,
+          "R": 64
+        }],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 5,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }, {
+      "usr": 17937907487590875128,
+      "detailed_name": "union vector3 {}",
+      "qual_name_offset": 6,
+      "short_name": "vector3",
+      "spell": "1:7-1:14|1:1-4:2|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [14
