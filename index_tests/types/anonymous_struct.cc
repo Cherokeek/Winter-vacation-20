@@ -59,4 +59,30 @@ OUTPUT:
       "spell": "1:7-1:14|1:1-4:2|2|-1",
       "bases": [],
       "funcs": [],
-      "types": [14
+      "types": [1428566502523368801],
+      "vars": [{
+          "L": 1963212417280098348,
+          "R": 0
+        }, {
+          "L": 3348817847649945564,
+          "R": 0
+        }, {
+          "L": 4821094820988543895,
+          "R": 32
+        }, {
+          "L": 15292551660437765731,
+          "R": 64
+        }],
+      "alias_of": 0,
+      "kind": 5,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }],
+  "usr2var": [{
+      "usr": 1963212417280098348,
+      "detailed_name": "float vector3::v[3]",
+      "qual_name_offset": 6,
+      "sh
