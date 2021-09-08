@@ -85,4 +85,26 @@ OUTPUT:
       "usr": 1963212417280098348,
       "detailed_name": "float vector3::v[3]",
       "qual_name_offset": 6,
-      "sh
+      "short_name": "v",
+      "spell": "3:9-3:10|3:3-3:13|1026|-1",
+      "type": 0,
+      "kind": 8,
+      "parent_kind": 5,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 3348817847649945564,
+      "detailed_name": "float vector3::(anon struct)::x",
+      "qual_name_offset": 6,
+      "short_name": "x",
+      "spell": "2:18-2:19|2:12-2:19|1026|-1",
+      "type": 82,
+      "kind": 8,
+      "parent_kind": 23,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 4821094820988543895,
+      "detailed_name": "float vecto
