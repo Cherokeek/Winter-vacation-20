@@ -107,4 +107,24 @@ OUTPUT:
       "uses": []
     }, {
       "usr": 4821094820988543895,
-      "detailed_name": "float vecto
+      "detailed_name": "float vector3::(anon struct)::y",
+      "qual_name_offset": 6,
+      "short_name": "y",
+      "spell": "2:21-2:22|2:12-2:22|1026|-1",
+      "type": 82,
+      "kind": 8,
+      "parent_kind": 23,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 15292551660437765731,
+      "detailed_name": "float vector3::(anon struct)::z",
+      "qual_name_offset": 6,
+      "short_name": "z",
+      "spell": "2:24-2:25|2:12-2:25|1026|-1",
+      "type": 82,
+      "kind": 8,
+      "parent_kind": 23,
+      "storage": 0,
+      "declarati
