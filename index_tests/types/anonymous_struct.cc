@@ -127,4 +127,8 @@ OUTPUT:
       "kind": 8,
       "parent_kind": 23,
       "storage": 0,
-      "declarati
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
