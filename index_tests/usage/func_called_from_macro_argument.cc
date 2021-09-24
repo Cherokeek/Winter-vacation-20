@@ -33,3 +33,28 @@ OUTPUT:
       "spell": "5:6-5:12|5:1-7:2|2|-1",
       "bases": [],
       "vars": [],
+      "callees": ["6:14-6:20|3787803219955606747|3|16420"],
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
+    }],
+  "usr2type": [],
+  "usr2var": [{
+      "usr": 16326993795872073150,
+      "detailed_name": "MACRO_CALL",
+      "qual_name_offset": 0,
+      "short_name": "MACRO_CALL",
+      "hover": "#define MACRO_CALL(e) e",
+      "spell": "1:9-1:19|1:9-1:24|2|-1",
+      "type": 0,
+      "kind": 255,
+      "parent_kind": 1,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["6:3-6:13|64|-1"]
+    }]
+}
+*/
