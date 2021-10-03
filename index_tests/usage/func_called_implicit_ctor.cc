@@ -73,4 +73,9 @@ OUTPUT:
       "parent_kind": 0,
       "declarations": [],
       "derived": [],
-      "
+      "instances": [],
+      "uses": ["2:3-2:10|4|-1", "7:1-7:8|4|-1"]
+    }],
+  "usr2var": []
+}
+*/
