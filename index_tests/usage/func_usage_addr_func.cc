@@ -40,4 +40,27 @@ OUTPUT:
       "parent_kind": 0,
       "storage": 0,
       "declarations": [],
-      "derived": 
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 12924914488846929470,
+      "detailed_name": "void consume(void (*)())",
+      "qual_name_offset": 5,
+      "short_name": "consume",
+      "spell": "1:6-1:13|1:1-1:28|2|-1",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": ["7:3-7:10|16420|-1"]
+    }],
+  "usr2type": [],
+  "usr2var": [{
+      "usr": 16088407831770615719,
+      "detailed_name": "void (*x)()",
+      "qual_name_offset": 7,
+      "short_na
