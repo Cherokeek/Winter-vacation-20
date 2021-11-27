@@ -63,4 +63,15 @@ OUTPUT:
       "usr": 16088407831770615719,
       "detailed_name": "void (*x)()",
       "qual_name_offset": 7,
-      "short_na
+      "short_name": "x",
+      "hover": "void (*x)() = &used",
+      "spell": "6:10-6:11|6:3-6:22|2|-1",
+      "type": 0,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
