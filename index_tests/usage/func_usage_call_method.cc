@@ -26,4 +26,25 @@ OUTPUT:
       "storage": 0,
       "declarations": [],
       "derived": [],
-      
+      "uses": []
+    }, {
+      "usr": 18417145003926999463,
+      "detailed_name": "void Foo::Used()",
+      "qual_name_offset": 5,
+      "short_name": "Used",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 6,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["2:8-2:12|2:3-2:14|1025|-1"],
+      "derived": [],
+      "uses": ["7:6-7:10|16420|-1"]
+    }],
+  "usr2type": [{
+      "usr": 15041163540773201510,
+      "detailed_name": "struct Foo {}",
+      "qual_name_offset": 7,
+      "short_name": "Foo",
+      "spell
