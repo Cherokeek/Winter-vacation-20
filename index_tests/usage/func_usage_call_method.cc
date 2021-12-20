@@ -68,4 +68,11 @@ OUTPUT:
       "hover": "Foo *f = nullptr",
       "spell": "6:8-6:9|6:3-6:19|2|-1",
       "type": 15041163540773201510,
-      "kind": 1
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["7:3-7:4|12|-1"]
+    }]
+}
+*/
