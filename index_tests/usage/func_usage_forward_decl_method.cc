@@ -56,4 +56,22 @@ OUTPUT:
       "parent_kind": 0,
       "declarations": [],
       "derived": [],
-      "instances": [1622983232101099960
+      "instances": [16229832321010999607],
+      "uses": ["6:3-6:6|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 16229832321010999607,
+      "detailed_name": "Foo *f",
+      "qual_name_offset": 5,
+      "short_name": "f",
+      "hover": "Foo *f = nullptr",
+      "spell": "6:8-6:9|6:3-6:19|2|-1",
+      "type": 15041163540773201510,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["7:3-7:4|12|-1"]
+    }]
+}
+*/
