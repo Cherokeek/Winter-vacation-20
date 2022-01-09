@@ -34,4 +34,26 @@ OUTPUT:
       "bases": [],
       "vars": [],
       "callees": [],
-      
+      "kind": 6,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["2:8-2:11|2:3-2:13|1025|-1"],
+      "derived": [],
+      "uses": ["7:6-7:9|16420|-1"]
+    }],
+  "usr2type": [{
+      "usr": 15041163540773201510,
+      "detailed_name": "struct Foo {}",
+      "qual_name_offset": 7,
+      "short_name": "Foo",
+      "spell": "1:8-1:11|1:1-3:2|2|-1",
+      "bases": [],
+      "funcs": [17922201480358737771],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [1622983232101099960
