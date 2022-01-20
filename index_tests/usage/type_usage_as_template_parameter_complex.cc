@@ -62,4 +62,29 @@ ClassDecl Foo
     TypeRef struct S2
 #endif
 class Foo {
-  unique_pt
+  unique_ptr<S1, S2>* foo();
+};
+
+#if false
+CXXMethod foo
+  TemplateRef unique_ptr
+  TypeRef struct S1
+  TypeRef struct S2
+  TypeRef class Foo
+  CompoundStmt
+    ReturnStmt
+      UnexposedExpr
+        CXXNullPtrLiteralExpr
+#endif
+unique_ptr<S1, S2>* Foo::foo() { return nullptr; }
+
+/*
+OUTPUT:
+{
+  "includes": [],
+  "skipped_ranges": ["7:1-15:1", "17:1-33:1", "35:1-40:1", "42:1-53:1", "57:1-64:1", "68:1-79:1"],
+  "usr2func": [{
+      "usr": 1246637699196435450,
+      "detailed_name": "unique_ptr<unique_ptr<S1, S2>, S2> *as_return_type(unique_ptr<S1, S2> *)",
+      "qual_name_offset": 36,
+      "short_na
