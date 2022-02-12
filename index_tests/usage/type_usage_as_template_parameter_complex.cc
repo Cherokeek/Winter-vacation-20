@@ -110,3 +110,26 @@ OUTPUT:
       "kind": 12,
       "parent_kind": 0,
       "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 17922201480358737771,
+      "detailed_name": "unique_ptr<S1, S2> *Foo::foo()",
+      "qual_name_offset": 20,
+      "short_name": "foo",
+      "spell": "79:26-79:29|79:1-79:51|1026|-1",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 6,
+      "parent_kind": 5,
+      "storage": 0,
+      "declarations": ["65:23-65:26|65:3-65:28|1025|-1"],
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 18320186404467436976,
+      "detailed_name": "void empty()",
+      "qual_name_offset": 5,
+      "s
