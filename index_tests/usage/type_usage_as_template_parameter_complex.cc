@@ -156,4 +156,23 @@ OUTPUT:
       "alias_of": 0,
       "kind": 23,
       "parent_kind": 0,
-      "declarations": ["4:8-4:10|4:1-4:10
+      "declarations": ["4:8-4:10|4:1-4:10|1|-1"],
+      "derived": [],
+      "instances": [],
+      "uses": ["15:30-15:32|4|-1", "33:23-33:25|4|-1", "33:63-33:65|4|-1", "54:25-54:27|4|-1", "65:14-65:16|4|-1", "79:12-79:14|4|-1"]
+    }, {
+      "usr": 12728490517004312484,
+      "detailed_name": "struct S2",
+      "qual_name_offset": 7,
+      "short_name": "S2",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": ["5:8-5:10|5:1-5:10|1|-1"],
+      "derived": [],
+      "instances": [],
+      "uses": ["15:34-15:36|4|-1", "15:39-15:41|4|-1", "33:27-3
