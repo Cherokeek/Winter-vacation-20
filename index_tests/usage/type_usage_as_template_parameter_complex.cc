@@ -208,4 +208,23 @@ OUTPUT:
       "declarations": [],
       "derived": [],
       "instances": [],
-      "uses": 
+      "uses": ["79:21-79:24|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 500112618220246,
+      "detailed_name": "unique_ptr<unique_ptr<S1, S2>, S2> *local",
+      "qual_name_offset": 36,
+      "short_name": "local",
+      "spell": "54:39-54:44|54:3-54:44|2|-1",
+      "type": 14209198335088845323,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 2933643612409209903,
+      "detailed_name": "extern unique_ptr<unique_ptr<S1, S2>, S2> f",
+      "qual_name_offset": 42,
+      "short_name": "f",
+      "type": 1
