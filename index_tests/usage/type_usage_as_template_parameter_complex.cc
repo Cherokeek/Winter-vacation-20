@@ -227,4 +227,12 @@ OUTPUT:
       "detailed_name": "extern unique_ptr<unique_ptr<S1, S2>, S2> f",
       "qual_name_offset": 42,
       "short_name": "f",
-      "type": 1
+      "type": 14209198335088845323,
+      "kind": 13,
+      "parent_kind": 0,
+      "storage": 1,
+      "declarations": ["15:43-15:44|15:1-15:44|1|-1"],
+      "uses": []
+    }]
+}
+*/
