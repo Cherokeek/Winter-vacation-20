@@ -45,4 +45,18 @@ OUTPUT:
       "instances": [],
       "uses": ["6:19-6:20|4|-1"]
     }],
-  
+  "usr2var": [{
+      "usr": 3398408600781120939,
+      "detailed_name": "static unique_ptr<S> foo",
+      "qual_name_offset": 21,
+      "short_name": "foo",
+      "spell": "6:22-6:25|6:1-6:25|2|-1",
+      "type": 3286534761799572592,
+      "kind": 13,
+      "parent_kind": 0,
+      "storage": 2,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
