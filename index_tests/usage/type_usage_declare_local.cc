@@ -35,4 +35,27 @@ OUTPUT:
       "spell": "2:8-2:23|2:1-2:26|2|-1",
       "bases": [],
       "funcs": [],
-      "types": 
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [2580122838476012357],
+      "uses": ["6:3-6:18|4|-1"]
+    }, {
+      "usr": 13749354388332789217,
+      "detailed_name": "struct ForwardType",
+      "qual_name_offset": 7,
+      "short_name": "ForwardType",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": ["1:8-1:19|1:1-1:19|1|-1"],
+      "derived": [],
+      "instances": [16374832
