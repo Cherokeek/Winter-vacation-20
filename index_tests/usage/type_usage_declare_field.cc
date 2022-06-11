@@ -79,4 +79,20 @@ OUTPUT:
       "kind": 8,
       "parent_kind": 23,
       "storage": 0,
-      "declarations": 
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 14727441168849658842,
+      "detailed_name": "ImplementedType Foo::b",
+      "qual_name_offset": 16,
+      "short_name": "b",
+      "spell": "6:19-6:20|6:3-6:20|1026|-1",
+      "type": 8508299082070213750,
+      "kind": 8,
+      "parent_kind": 23,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
