@@ -55,4 +55,28 @@ OUTPUT:
       "funcs": [],
       "types": [],
       "vars": [{
-          
+          "L": 14314859014962085433,
+          "R": 0
+        }, {
+          "L": 14727441168849658842,
+          "R": 64
+        }],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }],
+  "usr2var": [{
+      "usr": 14314859014962085433,
+      "detailed_name": "ForwardType *Foo::a",
+      "qual_name_offset": 13,
+      "short_name": "a",
+      "spell": "5:16-5:17|5:3-5:17|1026|-1",
+      "type": 13749354388332789217,
+      "kind": 8,
+      "parent_kind": 23,
+      "storage": 0,
+      "declarations": 
