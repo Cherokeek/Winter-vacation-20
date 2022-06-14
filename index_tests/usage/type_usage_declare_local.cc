@@ -79,4 +79,12 @@ OUTPUT:
       "qual_name_offset": 13,
       "short_name": "a",
       "spell": "5:16-5:17|5:3-5:17|2|-1",
-      "type": 13749
+      "type": 13749354388332789217,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
