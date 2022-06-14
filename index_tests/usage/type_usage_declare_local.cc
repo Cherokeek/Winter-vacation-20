@@ -58,4 +58,25 @@ OUTPUT:
       "parent_kind": 0,
       "declarations": ["1:8-1:19|1:1-1:19|1|-1"],
       "derived": [],
-      "instances": [16374832
+      "instances": [16374832544037266261],
+      "uses": ["5:3-5:14|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 2580122838476012357,
+      "detailed_name": "ImplementedType b",
+      "qual_name_offset": 16,
+      "short_name": "b",
+      "spell": "6:19-6:20|6:3-6:20|2|-1",
+      "type": 8508299082070213750,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 16374832544037266261,
+      "detailed_name": "ForwardType *a",
+      "qual_name_offset": 13,
+      "short_name": "a",
+      "spell": "5:16-5:17|5:3-5:17|2|-1",
+      "type": 13749
