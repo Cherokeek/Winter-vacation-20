@@ -38,3 +38,27 @@ OUTPUT:
       "bases": [],
       "funcs": [],
       "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": ["1:8-1:11|1:1-1:11|1|-1"],
+      "derived": [],
+      "instances": [13823260660189154978],
+      "uses": ["3:10-3:13|4|-1", "3:18-3:21|4|-1", "4:10-4:13|4|-1", "4:18-4:21|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 13823260660189154978,
+      "detailed_name": "Foo *f",
+      "qual_name_offset": 5,
+      "short_name": "f",
+      "spell": "4:15-4:16|4:10-4:16|1026|-1",
+      "type": 15041163540773201510,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
