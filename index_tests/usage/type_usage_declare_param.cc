@@ -62,4 +62,26 @@ OUTPUT:
       "usr": 11055777568039014776,
       "detailed_name": "ImplementedType a",
       "qual_name_offset": 16,
-   
+      "short_name": "a",
+      "spell": "4:42-4:43|4:26-4:43|1026|-1",
+      "type": 8508299082070213750,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 13058491096576226774,
+      "detailed_name": "ForwardType *f",
+      "qual_name_offset": 13,
+      "short_name": "f",
+      "spell": "4:23-4:24|4:10-4:24|1026|-1",
+      "type": 13749354388332789217,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
