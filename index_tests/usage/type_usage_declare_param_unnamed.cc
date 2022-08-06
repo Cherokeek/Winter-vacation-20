@@ -23,4 +23,21 @@ OUTPUT:
     }],
   "usr2type": [{
       "usr": 13749354388332789217,
-      "detailed_name": "struct ForwardTyp
+      "detailed_name": "struct ForwardType",
+      "qual_name_offset": 7,
+      "short_name": "ForwardType",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": ["1:8-1:19|1:1-1:19|1|-1"],
+      "derived": [],
+      "instances": [],
+      "uses": ["2:10-2:21|4|-1"]
+    }],
+  "usr2var": []
+}
+*/
