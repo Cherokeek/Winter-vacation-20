@@ -88,4 +88,27 @@ OUTPUT:
       "short_name": "a5",
       "hover": "const Type *const a5 = nullptr",
       "spell": "7:21-7:23|7:3-7:33|2|-1",
-      "type": 13487927231218
+      "type": 13487927231218873822,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 15429032129697337561,
+      "detailed_name": "Type a2",
+      "qual_name_offset": 5,
+      "short_name": "a2",
+      "spell": "4:8-4:10|4:3-4:10|2|-1",
+      "type": 13487927231218873822,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 17228576662112939520,
+      "detailed_name": "const Type &a1",
+      "qual_name_offset": 12,
+      "short_name": "a1",
+      "spell": "3:32-3:34|3:20-3:34|1026|-1"
