@@ -47,4 +47,27 @@ OUTPUT:
     }],
   "usr2var": [{
       "usr": 5004072032239834773,
-      "detail
+      "detailed_name": "const Type *a4",
+      "qual_name_offset": 12,
+      "short_name": "a4",
+      "spell": "6:15-6:17|6:3-6:17|2|-1",
+      "type": 13487927231218873822,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 6081981442495435784,
+      "detailed_name": "Type *a3",
+      "qual_name_offset": 6,
+      "short_name": "a3",
+      "spell": "5:9-5:11|5:3-5:11|2|-1",
+      "type": 13487927231218873822,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+   
