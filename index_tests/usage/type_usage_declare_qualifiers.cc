@@ -70,4 +70,22 @@ OUTPUT:
       "declarations": [],
       "uses": []
     }, {
-   
+      "usr": 7997456978847868736,
+      "detailed_name": "Type &a0",
+      "qual_name_offset": 6,
+      "short_name": "a0",
+      "spell": "3:16-3:18|3:10-3:18|1026|-1",
+      "type": 13487927231218873822,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 14939253431683105646,
+      "detailed_name": "const Type *const a5",
+      "qual_name_offset": 18,
+      "short_name": "a5",
+      "hover": "const Type *const a5 = nullptr",
+      "spell": "7:21-7:23|7:3-7:33|2|-1",
+      "type": 13487927231218
