@@ -111,4 +111,13 @@ OUTPUT:
       "detailed_name": "const Type &a1",
       "qual_name_offset": 12,
       "short_name": "a1",
-      "spell": "3:32-3:34|3:20-3:34|1026|-1"
+      "spell": "3:32-3:34|3:20-3:34|1026|-1",
+      "type": 13487927231218873822,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
