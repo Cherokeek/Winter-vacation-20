@@ -78,3 +78,26 @@ OUTPUT:
   "usr2type": [{
       "usr": 1544499294580512394,
       "detailed_name": "using Foo1 = Foo *",
+      "qual_name_offset": 6,
+      "short_name": "Foo1",
+      "spell": "2:7-2:11|2:1-2:18|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 15041163540773201510,
+      "kind": 252,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["4:14-4:18|4|-1", "8:14-8:18|4|-1"]
+    }, {
+      "usr": 2638219001294786365,
+      "detailed_name": "using Foo4 = int",
+      "qual_name_offset": 6,
+      "short_name": "Foo4",
+      "spell": "5:7-5:11|5:1-5:17|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types"
