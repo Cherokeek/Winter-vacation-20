@@ -53,4 +53,28 @@ OUTPUT:
       "bases": [],
       "vars": [],
       "callees": [],
-      "kind": 1
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
+    }, {
+      "usr": 14986366321326974406,
+      "detailed_name": "void accept3(Foo3 *)",
+      "qual_name_offset": 5,
+      "short_name": "accept3",
+      "spell": "10:6-10:13|10:1-10:23|2|-1",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
+    }],
+  "usr2type": [{
+      "usr": 1544499294580512394,
+      "detailed_name": "using Foo1 = Foo *",
