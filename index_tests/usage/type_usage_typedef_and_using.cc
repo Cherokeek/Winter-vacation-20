@@ -124,4 +124,25 @@ OUTPUT:
       "declarations": ["1:8-1:11|1:1-1:11|1|-1"],
       "derived": [],
       "instances": [],
-      "uses": ["2:14-2:17|4|-1", "3:9-3:12|4|-1", "7:13-7:1
+      "uses": ["2:14-2:17|4|-1", "3:9-3:12|4|-1", "7:13-7:16|4|-1"]
+    }, {
+      "usr": 15466821155413653804,
+      "detailed_name": "typedef Foo Foo2",
+      "qual_name_offset": 12,
+      "short_name": "Foo2",
+      "spell": "3:13-3:17|3:1-3:17|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 15041163540773201510,
+      "kind": 252,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["9:14-9:18|4|-1"]
+    }, {
+      "usr": 17897026942631673064,
+      "detailed_name": "using Foo3 = Foo1",
+      "qual
