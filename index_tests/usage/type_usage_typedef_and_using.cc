@@ -145,4 +145,21 @@ OUTPUT:
     }, {
       "usr": 17897026942631673064,
       "detailed_name": "using Foo3 = Foo1",
-      "qual
+      "qual_name_offset": 6,
+      "short_name": "Foo3",
+      "spell": "4:7-4:11|4:1-4:18|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 1544499294580512394,
+      "kind": 252,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["10:14-10:18|4|-1"]
+    }],
+  "usr2var": []
+}
+*/
