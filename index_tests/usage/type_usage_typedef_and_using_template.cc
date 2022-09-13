@@ -53,4 +53,14 @@ OUTPUT:
       "funcs": [],
       "types": [],
       "vars": [],
- 
+      "alias_of": 10528472276654770367,
+      "kind": 252,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": []
+    }],
+  "usr2var": []
+}
+*/
