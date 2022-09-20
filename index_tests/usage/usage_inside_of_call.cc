@@ -43,4 +43,28 @@ OUTPUT:
       "vars": [],
       "callees": [],
       "kind": 12,
-    
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["3:5-3:8|3:1-3:10|1|-1"],
+      "derived": [],
+      "uses": ["14:14-14:17|16420|-1"]
+    }, {
+      "usr": 18319417758892371313,
+      "detailed_name": "void called(int a)",
+      "qual_name_offset": 5,
+      "short_name": "called",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["1:6-1:12|1:1-1:19|1|-1"],
+      "derived": [],
+      "uses": ["14:3-14:9|16420|-1"]
+    }],
+  "usr2type": [{
+      "usr": 53,
+      "detailed_name": "",
+      "qual_name_offset": 0,
+      "short_name": "
