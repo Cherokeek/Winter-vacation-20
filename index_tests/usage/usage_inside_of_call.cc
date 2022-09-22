@@ -131,4 +131,12 @@ OUTPUT:
       "qual_name_offset": 11,
       "short_name": "static_var",
       "spell": "10:10-10:20|10:1-10:24|1026|-1",
-      "
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 23,
+      "storage": 2,
+      "declarations": ["6:14-6:24|6:3-6:24|1025|-1"],
+      "uses": ["14:45-14:55|12|-1"]
+    }]
+}
+*/
