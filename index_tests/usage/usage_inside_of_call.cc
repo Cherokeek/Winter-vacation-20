@@ -112,4 +112,23 @@ OUTPUT:
       "parent_kind": 12,
       "storage": 0,
       "declarations": [],
-      "uses": ["14:10-14:11|
+      "uses": ["14:10-14:11|12|-1"]
+    }, {
+      "usr": 9648311402855509901,
+      "detailed_name": "int Foo::field_var",
+      "qual_name_offset": 4,
+      "short_name": "field_var",
+      "spell": "7:7-7:16|7:3-7:16|1026|-1",
+      "type": 53,
+      "kind": 8,
+      "parent_kind": 23,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["14:28-14:37|12|-1"]
+    }, {
+      "usr": 11489549839875479478,
+      "detailed_name": "static int Foo::static_var",
+      "qual_name_offset": 11,
+      "short_name": "static_var",
+      "spell": "10:10-10:20|10:1-10:24|1026|-1",
+      "
