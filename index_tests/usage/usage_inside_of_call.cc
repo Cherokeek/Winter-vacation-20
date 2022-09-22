@@ -90,4 +90,26 @@ OUTPUT:
       "types": [],
       "vars": [{
           "L": 9648311402855509901,
-        
+          "R": 0
+        }],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["10:5-10:8|4|-1", "14:22-14:25|4|-1", "14:40-14:43|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 8039186520399841081,
+      "detailed_name": "int a",
+      "qual_name_offset": 4,
+      "short_name": "a",
+      "hover": "int a = 5",
+      "spell": "13:7-13:8|13:3-13:12|2|-1",
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["14:10-14:11|
