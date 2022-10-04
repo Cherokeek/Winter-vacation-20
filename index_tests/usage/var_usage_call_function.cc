@@ -53,4 +53,10 @@ OUTPUT:
       "spell": "4:8-4:9|4:3-4:19|2|-1",
       "type": 0,
       "kind": 13,
-      "parent_kind"
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["5:3-5:4|16428|-1"]
+    }]
+}
+*/
