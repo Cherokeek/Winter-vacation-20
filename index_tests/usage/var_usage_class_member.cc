@@ -49,4 +49,24 @@ OUTPUT:
       "parent_kind": 0,
       "storage": 0,
       "declarations": ["8:6-8:12|8:1-8:18|1|-1"],
-     
+      "derived": [],
+      "uses": ["16:3-16:9|16420|-1"]
+    }, {
+      "usr": 17175780305784503374,
+      "detailed_name": "void accept(int)",
+      "qual_name_offset": 5,
+      "short_name": "accept",
+      "bases": [],
+      "vars": [],
+      "callees": [],
+      "kind": 12,
+      "parent_kind": 0,
+      "storage": 0,
+      "declarations": ["7:6-7:12|7:1-7:17|1|-1"],
+      "derived": [],
+      "uses": ["14:3-14:9|16420|-1", "15:3-15:9|16420|-1", "17:3-17:9|16420|-1"]
+    }],
+  "usr2type": [{
+      "usr": 53,
+      "detailed_name": "",
+      "qual_name_off
