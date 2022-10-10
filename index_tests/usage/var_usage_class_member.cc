@@ -92,4 +92,29 @@ OUTPUT:
       "funcs": [],
       "types": [],
       "vars": [{
-          "L": 422015001796
+          "L": 4220150017963593039,
+          "R": 0
+        }, {
+          "L": 3873837747174060388,
+          "R": 32
+        }],
+      "alias_of": 0,
+      "kind": 5,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [14669930844300034456],
+      "uses": ["11:3-11:6|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 3873837747174060388,
+      "detailed_name": "int Foo::y",
+      "qual_name_offset": 4,
+      "short_name": "y",
+      "spell": "4:7-4:8|4:3-4:8|1026|-1",
+      "type": 53,
+      "kind": 8,
+      "parent_kind": 5,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["17
