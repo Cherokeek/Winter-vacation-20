@@ -117,4 +117,23 @@ OUTPUT:
       "parent_kind": 5,
       "storage": 0,
       "declarations": [],
-      "uses": ["17
+      "uses": ["17:12-17:13|12|-1"]
+    }, {
+      "usr": 4220150017963593039,
+      "detailed_name": "int Foo::x",
+      "qual_name_offset": 4,
+      "short_name": "x",
+      "spell": "3:7-3:8|3:3-3:8|1026|-1",
+      "type": 53,
+      "kind": 8,
+      "parent_kind": 5,
+      "storage": 0,
+      "declarations": [],
+      "uses": ["12:5-12:6|20|-1", "13:5-13:6|4|-1", "14:12-14:13|12|-1", "15:12-15:13|12|-1", "16:13-16:14|132|-1"]
+    }, {
+      "usr": 14669930844300034456,
+      "detailed_name": "Foo f",
+      "qual_name_offset": 4,
+      "short_name": "f",
+      "spell": "11:7-11:8|11:3-11:8|2|-1",
+      "type": 15041163540
