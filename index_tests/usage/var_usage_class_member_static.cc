@@ -44,4 +44,30 @@ OUTPUT:
       "uses": ["8:3-8:9|16420|-1"]
     }],
   "usr2type": [{
-      "usr
+      "usr": 53,
+      "detailed_name": "",
+      "qual_name_offset": 0,
+      "short_name": "",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 0,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [8599782646965457351],
+      "uses": []
+    }, {
+      "usr": 15041163540773201510,
+      "detailed_name": "struct Foo {}",
+      "qual_name_offset": 7,
+      "short_name": "Foo",
+      "spell": "1:8-1:11|1:1-3:2|2|-1",
+      "bases": [],
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+   
