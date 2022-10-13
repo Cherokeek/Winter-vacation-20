@@ -70,4 +70,24 @@ OUTPUT:
       "types": [],
       "vars": [],
       "alias_of": 0,
-   
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [],
+      "uses": ["8:10-8:13|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 8599782646965457351,
+      "detailed_name": "static int Foo::x",
+      "qual_name_offset": 11,
+      "short_name": "x",
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 23,
+      "storage": 2,
+      "declarations": ["2:14-2:15|2:3-2:15|1025|-1"],
+      "uses": ["8:15-8:16|12|-1"]
+    }]
+}
+*/
