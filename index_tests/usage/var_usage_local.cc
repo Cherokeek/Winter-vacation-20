@@ -1,5 +1,7 @@
-void foo(int a) {
-  a += 10;
+
+void foo() {
+  int x;
+  x = 3;
 }
 /*
 OUTPUT:
@@ -7,13 +9,13 @@ OUTPUT:
   "includes": [],
   "skipped_ranges": [],
   "usr2func": [{
-      "usr": 11998306017310352355,
-      "detailed_name": "void foo(int a)",
+      "usr": 4259594751088586730,
+      "detailed_name": "void foo()",
       "qual_name_offset": 5,
       "short_name": "foo",
-      "spell": "1:6-1:9|1:1-3:2|2|-1",
+      "spell": "1:6-1:9|1:1-4:2|2|-1",
       "bases": [],
-      "vars": [10063793875496522529],
+      "vars": [14014650769929566957],
       "callees": [],
       "kind": 12,
       "parent_kind": 0,
@@ -36,21 +38,21 @@ OUTPUT:
       "parent_kind": 0,
       "declarations": [],
       "derived": [],
-      "instances": [10063793875496522529],
+      "instances": [14014650769929566957],
       "uses": []
     }],
   "usr2var": [{
-      "usr": 10063793875496522529,
-      "detailed_name": "int a",
+      "usr": 14014650769929566957,
+      "detailed_name": "int x",
       "qual_name_offset": 4,
-      "short_name": "a",
-      "spell": "1:14-1:15|1:10-1:15|1026|-1",
+      "short_name": "x",
+      "spell": "2:7-2:8|2:3-2:8|2|-1",
       "type": 53,
-      "kind": 253,
+      "kind": 13,
       "parent_kind": 12,
       "storage": 0,
       "declarations": [],
-      "uses": ["2:3-2:4|4|-1"]
+      "uses": ["3:3-3:4|20|-1"]
     }]
 }
 */
