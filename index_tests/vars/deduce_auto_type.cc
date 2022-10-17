@@ -34,4 +34,23 @@ OUTPUT:
       "bases": [],
       "funcs": [],
       "types": [],
-      "va
+      "vars": [],
+      "alias_of": 0,
+      "kind": 5,
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [10601729374837386290, 18422884837902130475],
+      "uses": ["3:16-3:19|4|-1", "4:17-4:20|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 10601729374837386290,
+      "detailed_name": "Foo *x",
+      "qual_name_offset": 5,
+      "short_name": "x",
+      "hover": "Foo *x = new Foo()",
+      "spell": "3:8-3:9|3:3-3:21|2|-1",
+      "type": 15041163540773201510,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0
