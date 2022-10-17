@@ -53,4 +53,22 @@ OUTPUT:
       "type": 15041163540773201510,
       "kind": 13,
       "parent_kind": 12,
-      "storage": 0
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 18422884837902130475,
+      "detailed_name": "Foo *y",
+      "qual_name_offset": 5,
+      "short_name": "y",
+      "hover": "Foo *y = new Foo()",
+      "spell": "4:9-4:10|4:3-4:22|2|-1",
+      "type": 15041163540773201510,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
