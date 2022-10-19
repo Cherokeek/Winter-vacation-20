@@ -29,4 +29,25 @@ OUTPUT:
       "qual_name_offset": 7,
       "short_name": "Foo",
       "bases": [],
-      "funcs":
+      "funcs": [],
+      "types": [],
+      "vars": [],
+      "alias_of": 0,
+      "kind": 23,
+      "parent_kind": 0,
+      "declarations": ["1:8-1:11|1:1-1:11|1|-1"],
+      "derived": [],
+      "instances": [8730439006497971620, 2525014371090380500],
+      "uses": ["3:10-3:13|4|-1", "3:19-3:22|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 2525014371090380500,
+      "detailed_name": "Foo *p1",
+      "qual_name_offset": 5,
+      "short_name": "p1",
+      "spell": "3:24-3:26|3:19-3:26|1026|-1",
+      "type": 15041163540773201510,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declar
