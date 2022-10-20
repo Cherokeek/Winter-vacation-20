@@ -50,4 +50,20 @@ OUTPUT:
       "kind": 253,
       "parent_kind": 12,
       "storage": 0,
-      "declar
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 8730439006497971620,
+      "detailed_name": "Foo *p0",
+      "qual_name_offset": 5,
+      "short_name": "p0",
+      "spell": "3:15-3:17|3:10-3:17|1026|-1",
+      "type": 15041163540773201510,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
