@@ -57,4 +57,13 @@ OUTPUT:
       "qual_name_offset": 4,
       "short_name": "p",
       "hover": "int p = 0",
-      "spell": "2:9
+      "spell": "2:9-2:10|2:5-2:14|2|-1",
+      "type": 53,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
