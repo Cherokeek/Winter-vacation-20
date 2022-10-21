@@ -33,4 +33,28 @@ OUTPUT:
       "vars": [],
       "alias_of": 0,
       "kind": 0,
-      "
+      "parent_kind": 0,
+      "declarations": [],
+      "derived": [],
+      "instances": [5875271969926422921, 11404600766177939811],
+      "uses": []
+    }],
+  "usr2var": [{
+      "usr": 5875271969926422921,
+      "detailed_name": "int p",
+      "qual_name_offset": 4,
+      "short_name": "p",
+      "spell": "1:14-1:15|1:10-1:15|1026|-1",
+      "type": 53,
+      "kind": 253,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }, {
+      "usr": 11404600766177939811,
+      "detailed_name": "int p",
+      "qual_name_offset": 4,
+      "short_name": "p",
+      "hover": "int p = 0",
+      "spell": "2:9
