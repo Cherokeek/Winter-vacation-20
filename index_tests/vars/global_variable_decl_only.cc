@@ -1,4 +1,5 @@
-static int global = 0;
+
+extern int global;
 /*
 OUTPUT:
 {
@@ -19,21 +20,19 @@ OUTPUT:
       "parent_kind": 0,
       "declarations": [],
       "derived": [],
-      "instances": [6834525061342585382],
+      "instances": [9937941849651546906],
       "uses": []
     }],
   "usr2var": [{
-      "usr": 6834525061342585382,
-      "detailed_name": "static int global",
+      "usr": 9937941849651546906,
+      "detailed_name": "extern int global",
       "qual_name_offset": 11,
       "short_name": "global",
-      "hover": "static int global = 0",
-      "spell": "1:12-1:18|1:1-1:22|2|-1",
       "type": 53,
       "kind": 13,
       "parent_kind": 0,
-      "storage": 2,
-      "declarations": [],
+      "storage": 1,
+      "declarations": ["1:12-1:18|1:1-1:18|1|-1"],
       "uses": []
     }]
 }
