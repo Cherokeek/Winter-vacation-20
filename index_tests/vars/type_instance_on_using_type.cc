@@ -58,4 +58,22 @@ OUTPUT:
       "kind": 252,
       "parent_kind": 0,
       "declarations": [],
- 
+      "derived": [],
+      "instances": [6975456769752895964],
+      "uses": ["4:3-4:4|4|-1"]
+    }],
+  "usr2var": [{
+      "usr": 6975456769752895964,
+      "detailed_name": "F a",
+      "qual_name_offset": 2,
+      "short_name": "a",
+      "spell": "4:5-4:6|4:3-4:6|2|-1",
+      "type": 7434820806199665424,
+      "kind": 13,
+      "parent_kind": 12,
+      "storage": 0,
+      "declarations": [],
+      "uses": []
+    }]
+}
+*/
