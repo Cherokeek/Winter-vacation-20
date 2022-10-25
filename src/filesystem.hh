@@ -10,4 +10,5 @@
 #include <string>
 
 void getFilesInFolder(std::string folder, bool recursive,
-                      bo
+                      bool add_folder_to_path,
+                      const std::function<void(const std::string &)> &handler);
