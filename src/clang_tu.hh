@@ -35,4 +35,14 @@ Range fromTokenRange(const clang::SourceManager &sm,
                      const clang::LangOptions &lang, clang::SourceRange sr,
                      clang::FileID *fid = nullptr);
 
-Range fromTokenRangeDefaulted(const clang::SourceManager &s
+Range fromTokenRangeDefaulted(const clang::SourceManager &sm,
+                              const clang::LangOptions &lang,
+                              clang::SourceRange sr, clang::FileID fid,
+                              Range range);
+
+std::unique_ptr<clang::CompilerInvocation>
+buildCompilerInvocation(const std::string &main, std::vector<const char *> args,
+                        llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem> VFS);
+
+const char *clangBuiltinTypeName(int);
+} // namespace ccls
