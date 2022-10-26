@@ -1199,3 +1199,313 @@ public:
       void Initialize(ASTContext &ctx) override { this->ctx = &ctx; }
       bool shouldSkipFunctionBody(Decl *d) override {
         const SourceManager &sm = ctx->getSourceManager();
+        FileID fid = sm.getFileID(sm.getExpansionLoc(d->getLocation()));
+        return !(g_config->index.multiVersion && param.useMultiVersion(fid)) &&
+               !param.consumeFile(fid);
+      }
+    };
+
+    std::shared_ptr<Preprocessor> pp = ci.getPreprocessorPtr();
+    pp->addPPCallbacks(
+        std::make_unique<IndexPPCallbacks>(pp->getSourceManager(), param));
+    std::vector<std::unique_ptr<ASTConsumer>> consumers;
+    consumers.push_back(std::make_unique<SkipProcessed>(param));
+#if LLVM_VERSION_MAJOR >= 10 // rC370337
+    consumers.push_back(index::createIndexingASTConsumer(
+        dataConsumer, indexOpts, std::move(pp)));
+#endif
+    return std::make_unique<MultiplexConsumer>(std::move(consumers));
+  }
+};
+
+class IndexDiags : public DiagnosticConsumer {
+public:
+  llvm::SmallString<64> message;
+  void HandleDiagnostic(DiagnosticsEngine::Level level,
+    const clang::Diagnostic &info) override {
+    DiagnosticConsumer::HandleDiagnostic(level, info);
+    if (message.empty())
+      info.FormatDiagnostic(message);
+  }
+};
+} // namespace
+
+const int IndexFile::kMajorVersion = 21;
+const int IndexFile::kMinorVersion = 0;
+
+IndexFile::IndexFile(const std::string &path, const std::string &contents,
+                     bool no_linkage)
+    : path(path), no_linkage(no_linkage), file_contents(contents) {}
+
+IndexFunc &IndexFile::toFunc(Usr usr) {
+  auto [it, inserted] = usr2func.try_emplace(usr);
+  if (inserted)
+    it->second.usr = usr;
+  return it->second;
+}
+
+IndexType &IndexFile::toType(Usr usr) {
+  auto [it, inserted] = usr2type.try_emplace(usr);
+  if (inserted)
+    it->second.usr = usr;
+  return it->second;
+}
+
+IndexVar &IndexFile::toVar(Usr usr) {
+  auto [it, inserted] = usr2var.try_emplace(usr);
+  if (inserted)
+    it->second.usr = usr;
+  return it->second;
+}
+
+std::string IndexFile::toString() {
+  return ccls::serialize(SerializeFormat::Json, *this);
+}
+
+template <typename T> void uniquify(std::vector<T> &a) {
+  std::unordered_set<T> seen;
+  size_t n = 0;
+  for (size_t i = 0; i < a.size(); i++)
+    if (seen.insert(a[i]).second)
+      a[n++] = a[i];
+  a.resize(n);
+}
+
+namespace idx {
+void init() {
+  multiVersionMatcher = new GroupMatch(g_config->index.multiVersionWhitelist,
+                                       g_config->index.multiVersionBlacklist);
+}
+
+IndexResult
+index(SemaManager *manager, WorkingFiles *wfiles, VFS *vfs,
+      const std::string &opt_wdir, const std::string &main,
+      const std::vector<const char *> &args,
+      const std::vector<std::pair<std::string, std::string>> &remapped,
+      bool no_linkage, bool &ok) {
+  ok = true;
+  auto pch = std::make_shared<PCHContainerOperations>();
+  llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem> fs =
+      llvm::vfs::getRealFileSystem();
+  std::shared_ptr<CompilerInvocation> ci =
+      buildCompilerInvocation(main, args, fs);
+  // e.g. .s
+  if (!ci)
+    return {};
+  ok = false;
+  // -fparse-all-comments enables documentation in the indexer and in
+  // code completion.
+  ci->getLangOpts()->CommentOpts.ParseAllComments =
+      g_config->index.comments > 1;
+  ci->getLangOpts()->RetainCommentsFromSystemHeaders = true;
+  std::string buf = wfiles->getContent(main);
+  std::vector<std::unique_ptr<llvm::MemoryBuffer>> bufs;
+  if (buf.size())
+    for (auto &[filename, content] : remapped) {
+      bufs.push_back(llvm::MemoryBuffer::getMemBuffer(content));
+      ci->getPreprocessorOpts().addRemappedFile(filename, bufs.back().get());
+    }
+
+  IndexDiags dc;
+  auto clang = std::make_unique<CompilerInstance>(pch);
+  clang->setInvocation(std::move(ci));
+  clang->createDiagnostics(&dc, false);
+  clang->getDiagnostics().setIgnoreAllWarnings(true);
+  clang->setTarget(TargetInfo::CreateTargetInfo(
+      clang->getDiagnostics(), clang->getInvocation().TargetOpts));
+  if (!clang->hasTarget())
+    return {};
+  clang->getPreprocessorOpts().RetainRemappedFileBuffers = true;
+#if LLVM_VERSION_MAJOR >= 9 // rC357037
+  clang->createFileManager(fs);
+#else
+  clang->setVirtualFileSystem(fs);
+  clang->createFileManager();
+#endif
+  clang->setSourceManager(new SourceManager(clang->getDiagnostics(),
+                                            clang->getFileManager(), true));
+
+  IndexParam param(*vfs, no_linkage);
+
+  index::IndexingOptions indexOpts;
+  indexOpts.SystemSymbolFilter =
+      index::IndexingOptions::SystemSymbolFilterKind::All;
+  if (no_linkage) {
+    indexOpts.IndexFunctionLocals = true;
+    indexOpts.IndexImplicitInstantiation = true;
+#if LLVM_VERSION_MAJOR >= 9
+
+    indexOpts.IndexParametersInDeclarations =
+        g_config->index.parametersInDeclarations;
+    indexOpts.IndexTemplateParameters = true;
+#endif
+  }
+
+#if LLVM_VERSION_MAJOR >= 10 // rC370337
+  auto action = std::make_unique<IndexFrontendAction>(
+      std::make_shared<IndexDataConsumer>(param), indexOpts, param);
+#else
+  auto dataConsumer = std::make_shared<IndexDataConsumer>(param);
+  auto action = createIndexingAction(
+      dataConsumer, indexOpts,
+      std::make_unique<IndexFrontendAction>(dataConsumer, indexOpts, param));
+#endif
+
+  std::string reason;
+  {
+    llvm::CrashRecoveryContext crc;
+    auto parse = [&]() {
+      if (!action->BeginSourceFile(*clang, clang->getFrontendOpts().Inputs[0]))
+        return;
+#if LLVM_VERSION_MAJOR >= 9 // rL364464
+      if (llvm::Error e = action->Execute()) {
+        reason = llvm::toString(std::move(e));
+        return;
+      }
+#else
+      if (!action->Execute())
+        return;
+#endif
+      action->EndSourceFile();
+      ok = true;
+    };
+    if (!crc.RunSafely(parse)) {
+      LOG_S(ERROR) << "clang crashed for " << main;
+      return {};
+    }
+  }
+  if (!ok) {
+    LOG_S(ERROR) << "failed to index " << main
+                 << (reason.empty() ? "" : ": " + reason);
+    return {};
+  }
+
+  IndexResult result;
+  result.n_errs = (int)dc.getNumErrors();
+  // clang 7 does not implement operator std::string.
+  result.first_error = std::string(dc.message.data(), dc.message.size());
+  for (auto &it : param.uid2file) {
+    if (!it.second.db)
+      continue;
+    std::unique_ptr<IndexFile> &entry = it.second.db;
+    entry->import_file = main;
+    entry->args = args;
+    for (auto &[_, it] : entry->uid2lid_and_path)
+      if (it.first >= 0)
+        entry->lid2path.emplace_back(it.first, std::move(it.second));
+    entry->uid2lid_and_path.clear();
+    for (auto &it : entry->usr2func) {
+      // e.g. declaration + out-of-line definition
+      uniquify(it.second.derived);
+      uniquify(it.second.uses);
+    }
+    for (auto &it : entry->usr2type) {
+      uniquify(it.second.derived);
+      uniquify(it.second.uses);
+      // e.g. declaration + out-of-line definition
+      uniquify(it.second.def.bases);
+      uniquify(it.second.def.funcs);
+    }
+    for (auto &it : entry->usr2var)
+      uniquify(it.second.uses);
+
+    // Update dependencies for the file.
+    for (auto &[_, file] : param.uid2file) {
+      const std::string &path = file.path;
+      if (path.empty())
+        continue;
+      if (path == entry->path)
+        entry->mtime = file.mtime;
+      else if (path != entry->import_file)
+        entry->dependencies[llvm::CachedHashStringRef(intern(path))] =
+            file.mtime;
+    }
+    result.indexes.push_back(std::move(entry));
+  }
+
+  return result;
+}
+} // namespace idx
+
+void reflect(JsonReader &vis, SymbolRef &v) {
+  std::string t = vis.getString();
+  char *s = const_cast<char *>(t.c_str());
+  v.range = Range::fromString(s);
+  s = strchr(s, '|');
+  v.usr = strtoull(s + 1, &s, 10);
+  v.kind = static_cast<Kind>(strtol(s + 1, &s, 10));
+  v.role = static_cast<Role>(strtol(s + 1, &s, 10));
+}
+void reflect(JsonReader &vis, Use &v) {
+  std::string t = vis.getString();
+  char *s = const_cast<char *>(t.c_str());
+  v.range = Range::fromString(s);
+  s = strchr(s, '|');
+  v.role = static_cast<Role>(strtol(s + 1, &s, 10));
+  v.file_id = static_cast<int>(strtol(s + 1, &s, 10));
+}
+void reflect(JsonReader &vis, DeclRef &v) {
+  std::string t = vis.getString();
+  char *s = const_cast<char *>(t.c_str());
+  v.range = Range::fromString(s);
+  s = strchr(s, '|') + 1;
+  v.extent = Range::fromString(s);
+  s = strchr(s, '|');
+  v.role = static_cast<Role>(strtol(s + 1, &s, 10));
+  v.file_id = static_cast<int>(strtol(s + 1, &s, 10));
+}
+
+void reflect(JsonWriter &vis, SymbolRef &v) {
+  char buf[99];
+  snprintf(buf, sizeof buf, "%s|%" PRIu64 "|%d|%d", v.range.toString().c_str(),
+           v.usr, int(v.kind), int(v.role));
+  std::string s(buf);
+  reflect(vis, s);
+}
+void reflect(JsonWriter &vis, Use &v) {
+  char buf[99];
+  snprintf(buf, sizeof buf, "%s|%d|%d", v.range.toString().c_str(), int(v.role),
+           v.file_id);
+  std::string s(buf);
+  reflect(vis, s);
+}
+void reflect(JsonWriter &vis, DeclRef &v) {
+  char buf[99];
+  snprintf(buf, sizeof buf, "%s|%s|%d|%d", v.range.toString().c_str(),
+           v.extent.toString().c_str(), int(v.role), v.file_id);
+  std::string s(buf);
+  reflect(vis, s);
+}
+
+void reflect(BinaryReader &vis, SymbolRef &v) {
+  reflect(vis, v.range);
+  reflect(vis, v.usr);
+  reflect(vis, v.kind);
+  reflect(vis, v.role);
+}
+void reflect(BinaryReader &vis, Use &v) {
+  reflect(vis, v.range);
+  reflect(vis, v.role);
+  reflect(vis, v.file_id);
+}
+void reflect(BinaryReader &vis, DeclRef &v) {
+  reflect(vis, static_cast<Use &>(v));
+  reflect(vis, v.extent);
+}
+
+void reflect(BinaryWriter &vis, SymbolRef &v) {
+  reflect(vis, v.range);
+  reflect(vis, v.usr);
+  reflect(vis, v.kind);
+  reflect(vis, v.role);
+}
+void reflect(BinaryWriter &vis, Use &v) {
+  reflect(vis, v.range);
+  reflect(vis, v.role);
+  reflect(vis, v.file_id);
+}
+void reflect(BinaryWriter &vis, DeclRef &v) {
+  reflect(vis, static_cast<Use &>(v));
+  reflect(vis, v.extent);
+}
+} // namespace ccls
