@@ -289,3 +289,62 @@ struct IndexFile {
   int64_t mtime = 0;
   LanguageId language = LanguageId::C;
   bool no_linkage;
+
+  // uid2lid_and_path is used to generate lid2path, but not serialized.
+  std::unordered_map<clang::FileID, std::pair<int, std::string>>
+      uid2lid_and_path;
+  std::vector<std::pair<int, std::string>> lid2path;
+
+  // The path to the translation unit cc file which caused the creation of this
+  // IndexFile. When parsing a translation unit we generate many IndexFile
+  // instances (ie, each header has a separate one). When the user edits a
+  // header we need to lookup the original translation unit and reindex that.
+  std::string import_file;
+
+  // Source ranges that were not processed.
+  std::vector<Range> skipped_ranges;
+
+  std::vector<IndexInclude> includes;
+  llvm::DenseMap<llvm::CachedHashStringRef, int64_t> dependencies;
+  std::unordered_map<Usr, IndexFunc> usr2func;
+  std::unordered_map<Usr, IndexType> usr2type;
+  std::unordered_map<Usr, IndexVar> usr2var;
+
+  // File contents at the time of index. Not serialized.
+  std::string file_contents;
+
+  IndexFile(const std::string &path, const std::string &contents,
+            bool no_linkage);
+
+  IndexFunc &toFunc(Usr usr);
+  IndexType &toType(Usr usr);
+  IndexVar &toVar(Usr usr);
+
+  std::string toString();
+};
+
+struct IndexResult {
+  std::vector<std::unique_ptr<IndexFile>> indexes;
+  int n_errs = 0;
+  std::string first_error;
+};
+
+struct SemaManager;
+struct WorkingFiles;
+struct VFS;
+
+namespace idx {
+void init();
+IndexResult
+index(SemaManager *complete, WorkingFiles *wfiles, VFS *vfs,
+      const std::string &opt_wdir, const std::string &file,
+      const std::vector<const char *> &args,
+      const std::vector<std::pair<std::string, std::string>> &remapped,
+      bool all_linkages, bool &ok);
+} // namespace idx
+} // namespace ccls
+
+MAKE_HASHABLE(ccls::SymbolRef, t.range, t.usr, t.kind, t.role);
+MAKE_HASHABLE(ccls::ExtentRef, t.range, t.usr, t.kind, t.role, t.extent);
+MAKE_HASHABLE(ccls::Use, t.range, t.file_id)
+MAKE_HASHABLE(ccls::DeclRef, t.range, t.file_id)
