@@ -61,4 +61,28 @@ void DocumentUri::setPath(const std::string &path) {
   // http://www.ecma-international.org/ecma-262/6.0/#sec-uri-syntax-and-semantics
   std::string t;
   t.reserve(8 + raw_uri.size());
-  // TODO: pr
+  // TODO: proper fix
+#if defined(_WIN32)
+  t += "file:///";
+#else
+  t += "file://";
+#endif
+
+  // clang-format off
+  for (char c : raw_uri)
+    switch (c) {
+    case ' ': t += "%20"; break;
+    case '#': t += "%23"; break;
+    case '$': t += "%24"; break;
+    case '&': t += "%26"; break;
+    case '(': t += "%28"; break;
+    case ')': t += "%29"; break;
+    case '+': t += "%2B"; break;
+    case ',': t += "%2C"; break;
+    case ';': t += "%3B"; break;
+    case '?': t += "%3F"; break;
+    case '@': t += "%40"; break;
+    default: t += c; break;
+    }
+  // clang-format on
+  raw_ur
