@@ -85,4 +85,26 @@ void DocumentUri::setPath(const std::string &path) {
     default: t += c; break;
     }
   // clang-format on
-  raw_ur
+  raw_uri = std::move(t);
+}
+
+std::string DocumentUri::getPath() const {
+  if (raw_uri.compare(0, 7, "file://")) {
+    LOG_S(WARNING)
+        << "Received potentially bad URI (not starting with file://): "
+        << raw_uri;
+    return raw_uri;
+  }
+  std::string ret;
+#ifdef _WIN32
+  // Skipping the initial "/" on Windows
+  size_t i = 8;
+#else
+  size_t i = 7;
+#endif
+  auto from_hex = [](unsigned char c) {
+    return c - '0' < 10 ? c - '0' : (c | 32) - 'a' + 10;
+  };
+  for (; i < raw_uri.size(); i++) {
+    if (i + 3 <= raw_uri.size() && raw_uri[i] == '%') {
+      ret.push_back(from_hex(raw_uri[i + 1]) * 
