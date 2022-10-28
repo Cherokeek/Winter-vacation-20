@@ -107,4 +107,23 @@ std::string DocumentUri::getPath() const {
   };
   for (; i < raw_uri.size(); i++) {
     if (i + 3 <= raw_uri.size() && raw_uri[i] == '%') {
-      ret.push_back(from_hex(raw_uri[i + 1]) * 
+      ret.push_back(from_hex(raw_uri[i + 1]) * 16 + from_hex(raw_uri[i + 2]));
+      i += 2;
+    } else
+      ret.push_back(raw_uri[i]);
+  }
+#ifdef _WIN32
+  std::replace(ret.begin(), ret.end(), '\\', '/');
+  if (ret.size() > 1 && ret[0] >= 'a' && ret[0] <= 'z' && ret[1] == ':') {
+    ret[0] = toupper(ret[0]);
+  }
+#endif
+  if (g_config)
+    normalizeFolder(ret);
+  return ret;
+}
+
+std::string Position::toString() const {
+  return std::to_string(line) + ":" + std::to_string(character);
+}
+} // namespace ccls
