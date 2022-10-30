@@ -39,4 +39,15 @@ OptionCategory C("ccls options");
 opt<bool> opt_help("h", desc("Alias for -help"), cat(C));
 opt<int> opt_verbose("v", desc("verbosity, from -3 (fatal) to 2 (verbose)"),
                      init(0), cat(C));
-opt<std::string> opt_test_index("test-index", ValueOptional, i
+opt<std::string> opt_test_index("test-index", ValueOptional, init("!"),
+                                desc("run index tests"), cat(C));
+
+opt<std::string> opt_index("index",
+                           desc("standalone mode: index a project and exit"),
+                           value_desc("root"), cat(C));
+list<std::string> opt_init("init", desc("extra initialization options in JSON"),
+                           cat(C));
+opt<std::string> opt_log_file("log-file", desc("stderr or log file"),
+                              value_desc("file"), init("stderr"), cat(C));
+opt<bool> opt_log_file_append("log-file-append", desc("append to log file"),
+                              cat(C
