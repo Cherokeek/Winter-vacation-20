@@ -50,4 +50,27 @@ list<std::string> opt_init("init", desc("extra initialization options in JSON"),
 opt<std::string> opt_log_file("log-file", desc("stderr or log file"),
                               value_desc("file"), init("stderr"), cat(C));
 opt<bool> opt_log_file_append("log-file-append", desc("append to log file"),
-                              cat(C
+                              cat(C));
+
+void closeLog() { fclose(ccls::log::file); }
+
+} // namespace
+
+int main(int argc, char **argv) {
+  traceMe();
+  sys::PrintStackTraceOnErrorSignal(argv[0]);
+  cl::SetVersionPrinter([](raw_ostream &os) {
+    os << clang::getClangToolFullVersion("ccls version " CCLS_VERSION "\nclang")
+       << "\n";
+  });
+
+  cl::HideUnrelatedOptions(C);
+
+  ParseCommandLineOptions(argc, argv,
+                          "C/C++/Objective-C language server\n\n"
+                          "See more on https://github.com/MaskRay/ccls/wiki");
+
+  if (opt_help) {
+    PrintHelpMessage();
+    return 0;
+  
