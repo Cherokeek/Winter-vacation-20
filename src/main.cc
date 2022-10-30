@@ -73,4 +73,23 @@ int main(int argc, char **argv) {
   if (opt_help) {
     PrintHelpMessage();
     return 0;
-  
+  }
+  ccls::log::verbosity = ccls::log::Verbosity(opt_verbose.getValue());
+
+  pipeline::init();
+  const char *env = getenv("CCLS_CRASH_RECOVERY");
+  if (!env || strcmp(env, "0") != 0)
+    CrashRecoveryContext::Enable();
+
+  bool language_server = true;
+
+  if (opt_log_file.size()) {
+    ccls::log::file =
+        opt_log_file == "stderr"
+            ? stderr
+            : fopen(opt_log_file.c_str(), opt_log_file_append ? "ab" : "wb");
+    if (!ccls::log::file) {
+      fprintf(stderr, "failed to open %s\n", opt_log_file.c_str());
+      return 2;
+    }
+    se
