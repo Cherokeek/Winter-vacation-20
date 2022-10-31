@@ -124,4 +124,22 @@ int main(int argc, char **argv) {
           fprintf(stderr, "Failed to parse --init %s, expected %s\n",
                   static_cast<JsonReader &>(json_reader).getPath().c_str(),
                   e.what());
-          return 
+          return 1;
+        }
+      }
+    }
+
+    sys::ChangeStdinToBinary();
+    sys::ChangeStdoutToBinary();
+    if (opt_index.size()) {
+      SmallString<256> root(opt_index);
+      sys::fs::make_absolute(root);
+      pipeline::standalone(std::string(root.data(), root.size()));
+    } else {
+      // The thread that reads from stdin and dispatchs commands to the main
+      // thread.
+      pipeline::launchStdin();
+      // The thread that writes responses from the main thread to stdout.
+      pipeline::launchStdout();
+      // Main thread which also spawns indexer threads upon the "initialize"
+      // req
