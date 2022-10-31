@@ -110,4 +110,18 @@ int main(int argc, char **argv) {
       g_init_options = opt_init;
       rapidjson::Document reader;
       for (const std::string &str : g_init_options) {
-        rapidjson::ParseResult ok = reader
+        rapidjson::ParseResult ok = reader.Parse(str.c_str());
+        if (!ok) {
+          fprintf(stderr, "Failed to parse --init as JSON: %s (%zd)\n",
+                  rapidjson::GetParseError_En(ok.Code()), ok.Offset());
+          return 1;
+        }
+        JsonReader json_reader{&reader};
+        try {
+          Config config;
+          reflect(json_reader, config);
+        } catch (std::invalid_argument &e) {
+          fprintf(stderr, "Failed to parse --init %s, expected %s\n",
+                  static_cast<JsonReader &>(json_reader).getPath().c_str(),
+                  e.what());
+          return 
