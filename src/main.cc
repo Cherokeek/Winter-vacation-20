@@ -142,4 +142,10 @@ int main(int argc, char **argv) {
       // The thread that writes responses from the main thread to stdout.
       pipeline::launchStdout();
       // Main thread which also spawns indexer threads upon the "initialize"
-      // req
+      // request.
+      pipeline::mainLoop();
+    }
+  }
+
+  return 0;
+}
