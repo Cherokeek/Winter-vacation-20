@@ -92,4 +92,22 @@ int main(int argc, char **argv) {
       fprintf(stderr, "failed to open %s\n", opt_log_file.c_str());
       return 2;
     }
-    se
+    setbuf(ccls::log::file, NULL);
+    atexit(closeLog);
+  }
+
+  if (opt_test_index != "!") {
+    language_server = false;
+    if (!ccls::runIndexTests(opt_test_index,
+                             sys::Process::StandardInIsUserInput()))
+      return 1;
+  }
+
+  if (language_server) {
+    if (!opt_init.empty()) {
+      // We check syntax error here but override client-side
+      // initializationOptions in messages/initialize.cc
+      g_init_options = opt_init;
+      rapidjson::Document reader;
+      for (const std::string &str : g_init_options) {
+        rapidjson::ParseResult ok = reader
