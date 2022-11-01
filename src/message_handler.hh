@@ -28,4 +28,28 @@ void replyError(const RequestId &id,
 struct CodeActionParam {
   TextDocumentIdentifier textDocument;
   lsRange range;
-  str
+  struct Context {
+    std::vector<Diagnostic> diagnostics;
+  } context;
+};
+struct EmptyParam {};
+struct DidOpenTextDocumentParam {
+  TextDocumentItem textDocument;
+};
+struct RenameParam {
+  TextDocumentIdentifier textDocument;
+  Position position;
+  std::string newName;
+};
+struct TextDocumentParam {
+  TextDocumentIdentifier textDocument;
+};
+struct TextDocumentPositionParam {
+  TextDocumentIdentifier textDocument;
+  Position position;
+};
+struct TextDocumentEdit {
+  VersionedTextDocumentIdentifier textDocument;
+  std::vector<TextEdit> edits;
+};
+REFLECT_STRUCT(TextDocumentEdit, textDocument, edits);
