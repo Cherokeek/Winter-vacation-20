@@ -53,3 +53,31 @@ struct TextDocumentEdit {
   std::vector<TextEdit> edits;
 };
 REFLECT_STRUCT(TextDocumentEdit, textDocument, edits);
+struct WorkspaceEdit {
+  std::vector<TextDocumentEdit> documentChanges;
+};
+REFLECT_STRUCT(WorkspaceEdit, documentChanges);
+
+struct CallHierarchyItem {
+  std::string name;
+  SymbolKind kind;
+  std::string detail;
+  DocumentUri uri;
+  lsRange range;
+  lsRange selectionRange;
+  std::string data;
+};
+REFLECT_STRUCT(CallHierarchyItem, name, kind, detail, uri, range,
+               selectionRange, data);
+
+struct CallsParam {
+  CallHierarchyItem item;
+};
+
+// completion
+enum class CompletionTriggerKind {
+  Invoked = 1,
+  TriggerCharacter = 2,
+  TriggerForIncompleteCompletions = 3,
+};
+struct Completio
