@@ -110,4 +110,29 @@ enum class CompletionItemKind {
   EnumMember = 20,
   Constant = 21,
   Struct = 22,
-  Even
+  Event = 23,
+  Operator = 24,
+  TypeParameter = 25,
+};
+enum class InsertTextFormat { PlainText = 1, Snippet = 2 };
+struct CompletionItem {
+  std::string label;
+  CompletionItemKind kind = CompletionItemKind::Text;
+  std::string detail;
+  std::string documentation;
+  std::string sortText;
+  std::string filterText;
+  InsertTextFormat insertTextFormat = InsertTextFormat::PlainText;
+  TextEdit textEdit;
+  std::vector<TextEdit> additionalTextEdits;
+
+  std::vector<std::string> parameters_;
+  int score_;
+  unsigned priority_;
+  int quote_kind_ = 0;
+};
+
+// formatting
+struct FormattingOptions {
+  int tabSize;
+  bool i
