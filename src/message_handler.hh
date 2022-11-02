@@ -165,3 +165,28 @@ struct DidChangeWatchedFilesParam {
     FileChangeType type;
   };
   std::vector<Event> changes;
+};
+struct DidChangeWorkspaceFoldersParam {
+  struct Event {
+    std::vector<WorkspaceFolder> added, removed;
+  } event;
+};
+struct WorkspaceSymbolParam {
+  std::string query;
+
+  // ccls extensions
+  std::vector<std::string> folders;
+};
+REFLECT_STRUCT(WorkspaceFolder, uri, name);
+
+inline void reflect(JsonReader &vis, DocumentUri &v) {
+  reflect(vis, v.raw_uri);
+}
+inline void reflect(JsonWriter &vis, DocumentUri &v) {
+  reflect(vis, v.raw_uri);
+}
+inline void reflect(JsonReader &vis, VersionedTextDocumentIdentifier &v) {
+  REFLECT_MEMBER(uri);
+  REFLECT_MEMBER(version);
+}
+inline void reflect(JsonWriter &vis, VersionedTextDocu
