@@ -135,4 +135,33 @@ struct CompletionItem {
 // formatting
 struct FormattingOptions {
   int tabSize;
-  bool i
+  bool insertSpaces;
+};
+struct DocumentFormattingParam {
+  TextDocumentIdentifier textDocument;
+  FormattingOptions options;
+};
+struct DocumentOnTypeFormattingParam {
+  TextDocumentIdentifier textDocument;
+  Position position;
+  std::string ch;
+  FormattingOptions options;
+};
+struct DocumentRangeFormattingParam {
+  TextDocumentIdentifier textDocument;
+  lsRange range;
+  FormattingOptions options;
+};
+
+// workspace
+enum class FileChangeType {
+  Created = 1,
+  Changed = 2,
+  Deleted = 3,
+};
+struct DidChangeWatchedFilesParam {
+  struct Event {
+    DocumentUri uri;
+    FileChangeType type;
+  };
+  std::vector<Event> changes;
