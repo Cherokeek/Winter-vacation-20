@@ -189,4 +189,22 @@ inline void reflect(JsonReader &vis, VersionedTextDocumentIdentifier &v) {
   REFLECT_MEMBER(uri);
   REFLECT_MEMBER(version);
 }
-inline void reflect(JsonWriter &vis, VersionedTextDocu
+inline void reflect(JsonWriter &vis, VersionedTextDocumentIdentifier &v) {
+  vis.startObject();
+  REFLECT_MEMBER(uri);
+  vis.key("version");
+  reflect(vis, v.version);
+  vis.endObject();
+}
+
+REFLECT_UNDERLYING(ErrorCode);
+REFLECT_STRUCT(ResponseError, code, message);
+REFLECT_STRUCT(Position, line, character);
+REFLECT_STRUCT(lsRange, start, end);
+REFLECT_STRUCT(Location, uri, range);
+REFLECT_STRUCT(LocationLink, targetUri, targetRange, targetSelectionRange);
+REFLECT_UNDERLYING_B(SymbolKind);
+REFLECT_STRUCT(TextDocumentIdentifier, uri);
+REFLECT_STRUCT(TextDocumentItem, uri, languageId, version, text);
+REFLECT_STRUCT(TextEdit, range, newText);
+REFLECT_STRUCT(WorkDoneProgress, kind, ti
