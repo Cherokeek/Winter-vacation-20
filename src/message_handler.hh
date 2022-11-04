@@ -258,4 +258,17 @@ struct MessageHandler {
                                                    bool allow_unopened = false);
 
 private:
-  void bind(const char *method, void (MessageHandler::*h
+  void bind(const char *method, void (MessageHandler::*handler)(JsonReader &));
+  template <typename Param>
+  void bind(const char *method, void (MessageHandler::*handler)(Param &));
+  void bind(const char *method,
+            void (MessageHandler::*handler)(JsonReader &, ReplyOnce &));
+  template <typename Param>
+  void bind(const char *method,
+            void (MessageHandler::*handler)(Param &, ReplyOnce &));
+
+  void ccls_call(JsonReader &, ReplyOnce &);
+  void ccls_fileInfo(JsonReader &, ReplyOnce &);
+  void ccls_info(EmptyParam &, ReplyOnce &);
+  void ccls_inheritance(JsonReader &, ReplyOnce &);
+  void ccls_member(JsonReader 
