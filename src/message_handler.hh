@@ -227,4 +227,22 @@ struct ReplyOnce {
     if (id.valid())
       pipeline::reply(id, [&](JsonWriter &w) { reflect(w, result); });
   }
-  
+  void error(ErrorCode code, std::string message) const {
+    ResponseError err{code, std::move(message)};
+    if (id.valid())
+      pipeline::replyError(id, [&](JsonWriter &w) { reflect(w, err); });
+  }
+  void notOpened(std::string_view path);
+  void replyLocationLink(std::vector<LocationLink> &result);
+};
+
+struct MessageHandler {
+  SemaManager *manager = nullptr;
+  DB *db = nullptr;
+  IncludeComplete *include_complete = nullptr;
+  Project *project = nullptr;
+  VFS *vfs = nullptr;
+  WorkingFiles *wfiles = nullptr;
+
+  llvm::StringMap<std::function<void(JsonReader &)>> method2notification;
+  llvm::Strin
