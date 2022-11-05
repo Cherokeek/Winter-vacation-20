@@ -271,4 +271,17 @@ private:
   void ccls_fileInfo(JsonReader &, ReplyOnce &);
   void ccls_info(EmptyParam &, ReplyOnce &);
   void ccls_inheritance(JsonReader &, ReplyOnce &);
-  void ccls_member(JsonReader 
+  void ccls_member(JsonReader &, ReplyOnce &);
+  void ccls_navigate(JsonReader &, ReplyOnce &);
+  void ccls_reload(JsonReader &);
+  void ccls_vars(JsonReader &, ReplyOnce &);
+  void callHierarchy_incomingCalls(CallsParam &param, ReplyOnce &);
+  void callHierarchy_outgoingCalls(CallsParam &param, ReplyOnce &);
+  void exit(EmptyParam &);
+  void initialize(JsonReader &, ReplyOnce &);
+  void initialized(EmptyParam &);
+  void shutdown(EmptyParam &, ReplyOnce &);
+  void textDocument_codeAction(CodeActionParam &, ReplyOnce &);
+  void textDocument_codeLens(TextDocumentParam &, ReplyOnce &);
+  void textDocument_completion(CompletionParam &, ReplyOnce &);
+  v
