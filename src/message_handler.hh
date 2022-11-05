@@ -284,4 +284,12 @@ private:
   void textDocument_codeAction(CodeActionParam &, ReplyOnce &);
   void textDocument_codeLens(TextDocumentParam &, ReplyOnce &);
   void textDocument_completion(CompletionParam &, ReplyOnce &);
-  v
+  void textDocument_declaration(TextDocumentPositionParam &, ReplyOnce &);
+  void textDocument_definition(TextDocumentPositionParam &, ReplyOnce &);
+  void textDocument_didChange(TextDocumentDidChangeParam &);
+  void textDocument_didClose(TextDocumentParam &);
+  void textDocument_didOpen(DidOpenTextDocumentParam &);
+  void textDocument_didSave(TextDocumentParam &);
+  void textDocument_documentHighlight(TextDocumentPositionParam &, ReplyOnce &);
+  void textDocument_documentLink(TextDocumentParam &, ReplyOnce &);
+  void textDocument_documentSymbol(JsonReader &, ReplyOn
