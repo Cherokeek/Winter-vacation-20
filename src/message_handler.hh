@@ -292,4 +292,14 @@ private:
   void textDocument_didSave(TextDocumentParam &);
   void textDocument_documentHighlight(TextDocumentPositionParam &, ReplyOnce &);
   void textDocument_documentLink(TextDocumentParam &, ReplyOnce &);
-  void textDocument_documentSymbol(JsonReader &, ReplyOn
+  void textDocument_documentSymbol(JsonReader &, ReplyOnce &);
+  void textDocument_foldingRange(TextDocumentParam &, ReplyOnce &);
+  void textDocument_formatting(DocumentFormattingParam &, ReplyOnce &);
+  void textDocument_hover(TextDocumentPositionParam &, ReplyOnce &);
+  void textDocument_implementation(TextDocumentPositionParam &, ReplyOnce &);
+  void textDocument_onTypeFormatting(DocumentOnTypeFormattingParam &,
+                                     ReplyOnce &);
+  void textDocument_prepareCallHierarchy(TextDocumentPositionParam &,
+                                         ReplyOnce &);
+  void textDocument_rangeFormatting(DocumentRangeFormattingParam &,
+           
