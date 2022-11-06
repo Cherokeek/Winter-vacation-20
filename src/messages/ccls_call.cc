@@ -21,4 +21,22 @@ enum class CallType : uint8_t {
 };
 REFLECT_UNDERLYING(CallType);
 
-bool operator&(CallType lhs, Ca
+bool operator&(CallType lhs, CallType rhs) {
+  return uint8_t(lhs) & uint8_t(rhs);
+}
+
+struct Param : TextDocumentPositionParam {
+  // If id is specified, expand a node; otherwise textDocument+position should
+  // be specified for building the root and |levels| of nodes below.
+  Usr usr;
+  std::string id;
+
+  // true: callee tree (functions called by this function); false: caller tree
+  // (where this function is called)
+  bool callee = false;
+  // Base: include base functions; All: include both base and derived
+  // functions.
+  CallType callType = CallType::All;
+  bool qualified = true;
+  int levels = 1;
+  bool hierarchy = fals
