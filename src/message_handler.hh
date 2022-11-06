@@ -311,4 +311,10 @@ private:
   void workspace_didChangeWatchedFiles(DidChangeWatchedFilesParam &);
   void workspace_didChangeWorkspaceFolders(DidChangeWorkspaceFoldersParam &);
   void workspace_executeCommand(JsonReader &, ReplyOnce &);
-  void workspace_symb
+  void workspace_symbol(WorkspaceSymbolParam &, ReplyOnce &);
+};
+
+void emitSkippedRanges(WorkingFile *wfile, QueryFile &file);
+
+void emitSemanticHighlight(DB *db, WorkingFile *wfile, QueryFile &file);
+} // namespace ccls
