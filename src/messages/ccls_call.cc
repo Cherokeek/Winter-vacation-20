@@ -39,4 +39,26 @@ struct Param : TextDocumentPositionParam {
   CallType callType = CallType::All;
   bool qualified = true;
   int levels = 1;
-  bool hierarchy = fals
+  bool hierarchy = false;
+};
+REFLECT_STRUCT(Param, textDocument, position, id, callee, callType, qualified,
+               levels, hierarchy);
+
+struct Out_cclsCall {
+  Usr usr;
+  std::string id;
+  std::string_view name;
+  Location location;
+  CallType callType = CallType::Direct;
+  int numChildren;
+  // Empty if the |levels| limit is reached.
+  std::vector<Out_cclsCall> children;
+  bool operator==(const Out_cclsCall &o) const {
+    return location == o.location;
+  }
+  bool operator<(const Out_cclsCall &o) const { return location < o.location; }
+};
+REFLECT_STRUCT(Out_cclsCall, id, name, location, callType, numChildren,
+               children);
+
+struct Out_inc
