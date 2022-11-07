@@ -61,4 +61,24 @@ struct Out_cclsCall {
 REFLECT_STRUCT(Out_cclsCall, id, name, location, callType, numChildren,
                children);
 
-struct Out_inc
+struct Out_incomingCall {
+  CallHierarchyItem from;
+  std::vector<lsRange> fromRanges;
+};
+REFLECT_STRUCT(Out_incomingCall, from, fromRanges);
+
+struct Out_outgoingCall {
+  CallHierarchyItem to;
+  std::vector<lsRange> fromRanges;
+};
+REFLECT_STRUCT(Out_outgoingCall, to, fromRanges);
+
+bool expand(MessageHandler *m, Out_cclsCall *entry, bool callee,
+            CallType call_type, bool qualified, int levels) {
+  const QueryFunc &func = m->db->getFunc(entry->usr);
+  const QueryFunc::Def *def = func.anyDef();
+  entry->numChildren = 0;
+  if (!def)
+    return false;
+  auto handle = [&](SymbolRef sym, int file_id, CallType call_type1) {
+    en
