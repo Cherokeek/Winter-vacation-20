@@ -97,4 +97,16 @@ bool expand(MessageHandler *m, Out_cclsCall *entry, bool callee,
   auto handle_uses = [&](const QueryFunc &func, CallType call_type) {
     if (callee) {
       if (const auto *def = func.anyDef())
-        for (Sym
+        for (SymbolRef sym : def->callees)
+          if (sym.kind == Kind::Func)
+            handle(sym, def->file_id, call_type);
+    } else {
+      for (Use use : func.uses) {
+        const QueryFile &file1 = m->db->files[use.file_id];
+        Maybe<ExtentRef> best;
+        for (auto [sym, refcnt] : file1.symbol2refcnt)
+          if (refcnt > 0 && sym.extent.valid() && sym.kind == Kind::Func &&
+              sym.extent.start <= use.range.start &&
+              use.range.end <= sym.extent.end &&
+              (!best || best->extent.start < sym.extent.start))
+            best = sy
