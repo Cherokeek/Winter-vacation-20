@@ -81,4 +81,20 @@ bool expand(MessageHandler *m, Out_cclsCall *entry, bool callee,
   if (!def)
     return false;
   auto handle = [&](SymbolRef sym, int file_id, CallType call_type1) {
-    en
+    entry->numChildren++;
+    if (levels > 0) {
+      Out_cclsCall entry1;
+      entry1.id = std::to_string(sym.usr);
+      entry1.usr = sym.usr;
+      if (auto loc = getLsLocation(m->db, m->wfiles,
+                                   Use{{sym.range, sym.role}, file_id}))
+        entry1.location = *loc;
+      entry1.callType = call_type1;
+      if (expand(m, &entry1, callee, call_type, qualified, levels - 1))
+        entry->children.push_back(std::move(entry1));
+    }
+  };
+  auto handle_uses = [&](const QueryFunc &func, CallType call_type) {
+    if (callee) {
+      if (const auto *def = func.anyDef())
+        for (Sym
