@@ -131,4 +131,23 @@ bool expand(MessageHandler *m, Out_cclsCall *entry, bool callee,
       if (auto *def1 = func1.anyDef()) {
         eachDefinedFunc(m->db, def1->bases, [&](QueryFunc &func2) {
           if (!seen.count(func2.usr)) {
-            seen.i
+            seen.insert(func2.usr);
+            stack.push_back(&func2);
+            handle_uses(func2, CallType::Base);
+          }
+        });
+      }
+    }
+  }
+
+  // Callers/callees of derived functions.
+  if (call_type & CallType::Derived) {
+    stack.push_back(&func);
+    while (stack.size()) {
+      const QueryFunc &func1 = *stack.back();
+      stack.pop_back();
+      eachDefinedFunc(m->db, func1.derived, [&](QueryFunc &func2) {
+        if (!seen.count(func2.usr)) {
+          seen.insert(func2.usr);
+          stack.push_back(&func2);
+          handle_uses(func2, CallType::Deri
