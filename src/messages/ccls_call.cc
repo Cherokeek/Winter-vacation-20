@@ -109,4 +109,26 @@ bool expand(MessageHandler *m, Out_cclsCall *entry, bool callee,
               sym.extent.start <= use.range.start &&
               use.range.end <= sym.extent.end &&
               (!best || best->extent.start < sym.extent.start))
-            best = sy
+            best = sym;
+        if (best)
+          handle(*best, use.file_id, call_type);
+      }
+    }
+  };
+
+  std::unordered_set<Usr> seen;
+  seen.insert(func.usr);
+  std::vector<const QueryFunc *> stack;
+  entry->name = def->name(qualified);
+  handle_uses(func, CallType::Direct);
+
+  // Callers/callees of base functions.
+  if (call_type & CallType::Base) {
+    stack.push_back(&func);
+    while (stack.size()) {
+      const QueryFunc &func1 = *stack.back();
+      stack.pop_back();
+      if (auto *def1 = func1.anyDef()) {
+        eachDefinedFunc(m->db, def1->bases, [&](QueryFunc &func2) {
+          if (!seen.count(func2.usr)) {
+            seen.i
