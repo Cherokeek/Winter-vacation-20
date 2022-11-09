@@ -150,4 +150,27 @@ bool expand(MessageHandler *m, Out_cclsCall *entry, bool callee,
         if (!seen.count(func2.usr)) {
           seen.insert(func2.usr);
           stack.push_back(&func2);
-          handle_uses(func2, CallType::Deri
+          handle_uses(func2, CallType::Derived);
+        }
+      });
+    }
+  }
+
+  std::sort(entry->children.begin(), entry->children.end());
+  entry->children.erase(
+      std::unique(entry->children.begin(), entry->children.end()),
+      entry->children.end());
+  return true;
+}
+
+std::optional<Out_cclsCall> buildInitial(MessageHandler *m, Usr root_usr,
+                                         bool callee, CallType call_type,
+                                         bool qualified, int levels) {
+  const auto *def = m->db->getFunc(root_usr).anyDef();
+  if (!def)
+    return {};
+
+  Out_cclsCall entry;
+  entry.id = std::to_string(root_usr);
+  entry.usr = root_usr;
+  entry.callType = CallType
