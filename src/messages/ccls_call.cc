@@ -173,4 +173,26 @@ std::optional<Out_cclsCall> buildInitial(MessageHandler *m, Usr root_usr,
   Out_cclsCall entry;
   entry.id = std::to_string(root_usr);
   entry.usr = root_usr;
-  entry.callType = CallType
+  entry.callType = CallType::Direct;
+  if (def->spell) {
+    if (auto loc = getLsLocation(m->db, m->wfiles, *def->spell))
+      entry.location = *loc;
+  }
+  expand(m, &entry, callee, call_type, qualified, levels);
+  return entry;
+}
+} // namespace
+
+void MessageHandler::ccls_call(JsonReader &reader, ReplyOnce &reply) {
+  Param param;
+  reflect(reader, param);
+  std::optional<Out_cclsCall> result;
+  if (param.id.size()) {
+    try {
+      param.usr = std::stoull(param.id);
+    } catch (...) {
+      return;
+    }
+    result.emplace();
+    result->id = std::to_string(param.usr);
+    result->usr = param.u
