@@ -213,4 +213,27 @@ void MessageHandler::ccls_call(JsonReader &reader, ReplyOnce &reply) {
     }
   }
 
-  
+  if (param.hierarchy)
+    reply(result);
+  else
+    reply(flattenHierarchy(result));
+}
+
+void MessageHandler::textDocument_prepareCallHierarchy(
+    TextDocumentPositionParam &param, ReplyOnce &reply) {
+  std::string path = param.textDocument.uri.getPath();
+  auto [file, wf] = findOrFail(path, reply);
+  if (!file)
+    return;
+
+  std::vector<CallHierarchyItem> result;
+  for (SymbolRef sym : findSymbolsAtLocation(wf, file, param.position)) {
+    if (sym.kind != Kind::Func)
+      continue;
+    const auto *def = db->getFunc(sym.usr).anyDef();
+    if (!def)
+      continue;
+    auto r = getLsRange(wf, sym.range);
+    if (!r)
+      continue;
+    CallHiera
