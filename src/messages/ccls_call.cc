@@ -195,4 +195,22 @@ void MessageHandler::ccls_call(JsonReader &reader, ReplyOnce &reply) {
     }
     result.emplace();
     result->id = std::to_string(param.usr);
-    result->usr = param.u
+    result->usr = param.usr;
+    result->callType = CallType::Direct;
+    if (db->hasFunc(param.usr))
+      expand(this, &*result, param.callee, param.callType, param.qualified,
+             param.levels);
+  } else {
+    auto [file, wf] = findOrFail(param.textDocument.uri.getPath(), reply);
+    if (!wf)
+      return;
+    for (SymbolRef sym : findSymbolsAtLocation(wf, file, param.position)) {
+      if (sym.kind == Kind::Func) {
+        result = buildInitial(this, sym.usr, param.callee, param.callType,
+                              param.qualified, param.levels);
+        break;
+      }
+    }
+  }
+
+  
