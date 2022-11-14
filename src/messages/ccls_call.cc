@@ -236,4 +236,22 @@ void MessageHandler::textDocument_prepareCallHierarchy(
     auto r = getLsRange(wf, sym.range);
     if (!r)
       continue;
-    CallHiera
+    CallHierarchyItem &item = result.emplace_back();
+    item.name = def->name(false);
+    item.kind = def->kind;
+    item.detail = def->name(true);
+    item.uri = DocumentUri::fromPath(path);
+    item.range = item.selectionRange = *r;
+    item.data = std::to_string(sym.usr);
+  }
+  reply(result);
+}
+
+static lsRange toLsRange(Range r) {
+  return {{r.start.line, r.start.column}, {r.end.line, r.end.column}};
+}
+
+static void
+add(std::map<SymbolIdx, std::pair<int, std::vector<lsRange>>> &sym2ranges,
+    SymbolRef sym, int file_id) {
+  auto [it, inserted] = sym2ranges.try_emplace(Symbol
