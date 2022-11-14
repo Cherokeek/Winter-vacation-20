@@ -254,4 +254,21 @@ static lsRange toLsRange(Range r) {
 static void
 add(std::map<SymbolIdx, std::pair<int, std::vector<lsRange>>> &sym2ranges,
     SymbolRef sym, int file_id) {
-  auto [it, inserted] = sym2ranges.try_emplace(Symbol
+  auto [it, inserted] = sym2ranges.try_emplace(SymbolIdx{sym.usr, sym.kind});
+  if (inserted)
+    it->second.first = file_id;
+  if (it->second.first == file_id)
+    it->second.second.push_back(toLsRange(sym.range));
+}
+
+template <typename Out>
+static std::vector<Out> toCallResult(
+    DB *db,
+    const std::map<SymbolIdx, std::pair<int, std::vector<lsRange>>> &sym2ranges) {
+  std::vector<Out> result;
+  for (auto &[sym, ranges] : sym2ranges) {
+    CallHierarchyItem item;
+    item.uri = getLsDocumentUri(db, ranges.first);
+    auto r = ranges.second[0];
+    item.range = {{uint16_t(r.start.line), int16_t(r.start.character)},
+      
