@@ -271,4 +271,27 @@ static std::vector<Out> toCallResult(
     item.uri = getLsDocumentUri(db, ranges.first);
     auto r = ranges.second[0];
     item.range = {{uint16_t(r.start.line), int16_t(r.start.character)},
-      
+                  {uint16_t(r.end.line), int16_t(r.end.character)}};
+    item.selectionRange = item.range;
+    switch (sym.kind) {
+    default:
+      continue;
+    case Kind::Func: {
+      auto idx = db->func_usr[sym.usr];
+      const QueryFunc &func = db->funcs[idx];
+      const QueryFunc::Def *def = func.anyDef();
+      if (!def)
+        continue;
+      item.name = def->name(false);
+      item.kind = def->kind;
+      item.detail = def->name(true);
+      item.data = std::to_string(sym.usr);
+    }
+    }
+
+    result.push_back({std::move(item), std::move(ranges.second)});
+  }
+  return result;
+}
+
+void MessageHandler::callHierarchy_inc
