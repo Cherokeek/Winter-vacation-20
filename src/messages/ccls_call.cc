@@ -330,4 +330,10 @@ void MessageHandler::callHierarchy_outgoingCalls(CallsParam &param,
   const QueryFunc &func = db->getFunc(usr);
   std::map<SymbolIdx, std::pair<int, std::vector<lsRange>>> sym2ranges;
   if (const auto *def = func.anyDef())
-    for (SymbolRef sym : def->c
+    for (SymbolRef sym : def->callees)
+      if (sym.kind == Kind::Func) {
+        add(sym2ranges, sym, def->file_id);
+      }
+  reply(toCallResult<Out_outgoingCall>(db, sym2ranges));
+}
+} // namespace ccls
