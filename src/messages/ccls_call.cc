@@ -310,4 +310,24 @@ void MessageHandler::callHierarchy_incomingCalls(CallsParam &param,
     for (auto [sym, refcnt] : file.symbol2refcnt)
       if (refcnt > 0 && sym.extent.valid() && sym.kind == Kind::Func &&
           sym.extent.start <= use.range.start &&
-          use.range.end <= sym.extent.e
+          use.range.end <= sym.extent.end &&
+          (!best || best->extent.start < sym.extent.start))
+        best = sym;
+    if (best)
+      add(sym2ranges, *best, use.file_id);
+  }
+  reply(toCallResult<Out_incomingCall>(db, sym2ranges));
+}
+
+void MessageHandler::callHierarchy_outgoingCalls(CallsParam &param,
+                                                 ReplyOnce &reply) {
+  Usr usr;
+  try {
+    usr = std::stoull(param.item.data);
+  } catch (...) {
+    return;
+  }
+  const QueryFunc &func = db->getFunc(usr);
+  std::map<SymbolIdx, std::pair<int, std::vector<lsRange>>> sym2ranges;
+  if (const auto *def = func.anyDef())
+    for (SymbolRef sym : def->c
