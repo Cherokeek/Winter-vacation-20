@@ -294,4 +294,20 @@ static std::vector<Out> toCallResult(
   return result;
 }
 
-void MessageHandler::callHierarchy_inc
+void MessageHandler::callHierarchy_incomingCalls(CallsParam &param,
+                                                 ReplyOnce &reply) {
+  Usr usr;
+  try {
+    usr = std::stoull(param.item.data);
+  } catch (...) {
+    return;
+  }
+  const QueryFunc &func = db->getFunc(usr);
+  std::map<SymbolIdx, std::pair<int, std::vector<lsRange>>> sym2ranges;
+  for (Use use : func.uses) {
+    const QueryFile &file = db->files[use.file_id];
+    Maybe<ExtentRef> best;
+    for (auto [sym, refcnt] : file.symbol2refcnt)
+      if (refcnt > 0 && sym.extent.valid() && sym.kind == Kind::Func &&
+          sym.extent.start <= use.range.start &&
+          use.range.end <= sym.extent.e
