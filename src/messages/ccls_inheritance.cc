@@ -49,4 +49,23 @@ template <typename Q>
 bool expandHelper(MessageHandler *m, Out_cclsInheritance *entry, bool derived,
                   bool qualified, int levels, Q &entity) {
   const auto *def = entity.anyDef();
-  if (def) 
+  if (def) {
+    entry->name = def->name(qualified);
+    if (def->spell) {
+      if (auto loc = getLsLocation(m->db, m->wfiles, *def->spell))
+        entry->location = *loc;
+    } else if (entity.declarations.size()) {
+      if (auto loc = getLsLocation(m->db, m->wfiles, entity.declarations[0]))
+        entry->location = *loc;
+    }
+  } else if (!derived) {
+    entry->numChildren = 0;
+    return false;
+  }
+  std::unordered_set<Usr> seen;
+  if (derived) {
+    if (levels > 0) {
+      for (auto usr : entity.derived) {
+        if (!seen.insert(usr).second)
+          continue;
+        Out_ccls
