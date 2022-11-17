@@ -33,4 +33,20 @@ struct Out_cclsInheritance {
   Kind kind;
   std::string_view name;
   Location location;
-  // For unexpanded nodes, this is an upper 
+  // For unexpanded nodes, this is an upper bound because some entities may be
+  // undefined. If it is 0, there are no members.
+  int numChildren;
+  // Empty if the |levels| limit is reached.
+  std::vector<Out_cclsInheritance> children;
+};
+REFLECT_STRUCT(Out_cclsInheritance, id, kind, name, location, numChildren,
+               children);
+
+bool expand(MessageHandler *m, Out_cclsInheritance *entry, bool derived,
+            bool qualified, int levels);
+
+template <typename Q>
+bool expandHelper(MessageHandler *m, Out_cclsInheritance *entry, bool derived,
+                  bool qualified, int levels, Q &entity) {
+  const auto *def = entity.anyDef();
+  if (def) 
