@@ -103,4 +103,20 @@ bool expand(MessageHandler *m, Out_cclsInheritance *entry, bool derived,
     return expandHelper(m, entry, derived, qualified, levels,
                         m->db->getFunc(entry->usr));
   else
-    return expandHelper(m, entry, d
+    return expandHelper(m, entry, derived, qualified, levels,
+                        m->db->getType(entry->usr));
+}
+
+std::optional<Out_cclsInheritance> buildInitial(MessageHandler *m,
+                                                SymbolRef sym, bool derived,
+                                                bool qualified, int levels) {
+  Out_cclsInheritance entry;
+  entry.id = std::to_string(sym.usr);
+  entry.usr = sym.usr;
+  entry.kind = sym.kind;
+  expand(m, &entry, derived, qualified, levels);
+  return entry;
+}
+
+void inheritance(MessageHandler *m, Param &param, ReplyOnce &reply) {
+  std::optional<Out_cclsInheritance> res
