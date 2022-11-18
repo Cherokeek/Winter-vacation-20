@@ -85,4 +85,22 @@ bool expandHelper(MessageHandler *m, Out_cclsInheritance *entry, bool derived,
           continue;
         Out_cclsInheritance entry1;
         entry1.id = std::to_string(usr);
-  
+        entry1.usr = usr;
+        entry1.kind = entry->kind;
+        if (expand(m, &entry1, derived, qualified, levels - 1))
+          entry->children.push_back(std::move(entry1));
+      }
+      entry->numChildren = int(entry->children.size());
+    } else
+      entry->numChildren = int(def->bases.size());
+  }
+  return true;
+}
+
+bool expand(MessageHandler *m, Out_cclsInheritance *entry, bool derived,
+            bool qualified, int levels) {
+  if (entry->kind == Kind::Func)
+    return expandHelper(m, entry, derived, qualified, levels,
+                        m->db->getFunc(entry->usr));
+  else
+    return expandHelper(m, entry, d
