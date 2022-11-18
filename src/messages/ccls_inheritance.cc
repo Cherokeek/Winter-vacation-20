@@ -68,4 +68,21 @@ bool expandHelper(MessageHandler *m, Out_cclsInheritance *entry, bool derived,
       for (auto usr : entity.derived) {
         if (!seen.insert(usr).second)
           continue;
-        Out_ccls
+        Out_cclsInheritance entry1;
+        entry1.id = std::to_string(usr);
+        entry1.usr = usr;
+        entry1.kind = entry->kind;
+        if (expand(m, &entry1, derived, qualified, levels - 1))
+          entry->children.push_back(std::move(entry1));
+      }
+      entry->numChildren = int(entry->children.size());
+    } else
+      entry->numChildren = int(entity.derived.size());
+  } else {
+    if (levels > 0) {
+      for (auto usr : def->bases) {
+        if (!seen.insert(usr).second)
+          continue;
+        Out_cclsInheritance entry1;
+        entry1.id = std::to_string(usr);
+  
