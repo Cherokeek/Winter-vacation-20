@@ -137,4 +137,28 @@ void inheritance(MessageHandler *m, Param &param, ReplyOnce &reply) {
   } else {
     auto [file, wf] = m->findOrFail(param.textDocument.uri.getPath(), reply);
     if (!wf) {
-      return
+      return;
+    }
+    for (SymbolRef sym : findSymbolsAtLocation(wf, file, param.position))
+      if (sym.kind == Kind::Func || sym.kind == Kind::Type) {
+        result =
+            buildInitial(m, sym, param.derived, param.qualified, param.levels);
+        break;
+      }
+  }
+
+  if (param.hierarchy)
+    reply(result);
+  else
+    reply(flattenHierarchy(result));
+}
+} // namespace
+
+void MessageHandler::ccls_inheritance(JsonReader &reader, ReplyOnce &reply) {
+  Param param;
+  reflect(reader, param);
+  inheritance(this, param, reply);
+}
+
+void MessageHandler::textDocument_implementation(
+    TextDocumentPositionParam &param, Reply
