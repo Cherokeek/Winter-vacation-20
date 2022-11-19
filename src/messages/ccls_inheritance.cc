@@ -119,4 +119,22 @@ std::optional<Out_cclsInheritance> buildInitial(MessageHandler *m,
 }
 
 void inheritance(MessageHandler *m, Param &param, ReplyOnce &reply) {
-  std::optional<Out_cclsInheritance> res
+  std::optional<Out_cclsInheritance> result;
+  if (param.id.size()) {
+    try {
+      param.usr = std::stoull(param.id);
+    } catch (...) {
+      return;
+    }
+    result.emplace();
+    result->id = std::to_string(param.usr);
+    result->usr = param.usr;
+    result->kind = param.kind;
+    if (!(((param.kind == Kind::Func && m->db->hasFunc(param.usr)) ||
+           (param.kind == Kind::Type && m->db->hasType(param.usr))) &&
+          expand(m, &*result, param.derived, param.qualified, param.levels)))
+      result.reset();
+  } else {
+    auto [file, wf] = m->findOrFail(param.textDocument.uri.getPath(), reply);
+    if (!wf) {
+      return
