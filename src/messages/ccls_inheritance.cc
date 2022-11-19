@@ -161,4 +161,11 @@ void MessageHandler::ccls_inheritance(JsonReader &reader, ReplyOnce &reply) {
 }
 
 void MessageHandler::textDocument_implementation(
-    TextDocumentPositionParam &param, Reply
+    TextDocumentPositionParam &param, ReplyOnce &reply) {
+  Param param1;
+  param1.textDocument = param.textDocument;
+  param1.position = param.position;
+  param1.derived = true;
+  inheritance(this, param1, reply);
+}
+} // namespace ccls
