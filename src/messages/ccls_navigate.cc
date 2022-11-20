@@ -43,4 +43,20 @@ void MessageHandler::ccls_navigate(JsonReader &reader, ReplyOnce &reply) {
   Maybe<Range> res;
   switch (param.direction[0]) {
   case 'D': {
-    Maybe<Range> pare
+    Maybe<Range> parent = findParent(file, pos);
+    for (auto [sym, refcnt] : file->symbol2refcnt)
+      if (refcnt > 0 && pos < sym.extent.start &&
+          (!parent || sym.extent.end <= parent->end) &&
+          (!res || sym.extent.start < res->start))
+        res = sym.extent;
+    break;
+  }
+  case 'L':
+    for (auto [sym, refcnt] : file->symbol2refcnt)
+      if (refcnt > 0 && sym.extent.valid() && sym.extent.end <= pos &&
+          (!res || (res->end == sym.extent.end ? sym.extent.start < res->start
+                                               : res->end < sym.extent.end)))
+        res = sym.extent;
+    break;
+  case 'R': {
+    Maybe<Range> parent 
