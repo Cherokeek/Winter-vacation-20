@@ -22,4 +22,25 @@ Maybe<Range> findParent(QueryFile *file, Pos pos) {
                          ? parent->end < sym.extent.end
                          : parent->start < sym.extent.start)))
       parent = sym.extent;
-  
+  return parent;
+}
+} // namespace
+
+void MessageHandler::ccls_navigate(JsonReader &reader, ReplyOnce &reply) {
+  Param param;
+  reflect(reader, param);
+  auto [file, wf] = findOrFail(param.textDocument.uri.getPath(), reply);
+  if (!wf) {
+    return;
+  }
+  Position ls_pos = param.position;
+  if (wf->index_lines.size())
+    if (auto line =
+            wf->getIndexPosFromBufferPos(ls_pos.line, &ls_pos.character, false))
+      ls_pos.line = *line;
+  Pos pos{(uint16_t)ls_pos.line, (int16_t)ls_pos.character};
+
+  Maybe<Range> res;
+  switch (param.direction[0]) {
+  case 'D': {
+    Maybe<Range> pare
