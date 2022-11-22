@@ -76,4 +76,18 @@ void MessageHandler::ccls_navigate(JsonReader &reader, ReplyOnce &reply) {
   case 'U':
   default:
     for (auto [sym, refcnt] : file->symbol2refcnt)
- 
+      if (refcnt > 0 && sym.extent.valid() && sym.extent.start < pos &&
+          pos < sym.extent.end && (!res || res->start < sym.extent.start))
+        res = sym.extent;
+    break;
+  }
+  std::vector<Location> result;
+  if (res)
+    if (auto ls_range = getLsRange(wf, *res)) {
+      Location &ls_loc = result.emplace_back();
+      ls_loc.uri = param.textDocument.uri;
+      ls_loc.range = *ls_range;
+    }
+  reply(result);
+}
+} // namespace ccls
