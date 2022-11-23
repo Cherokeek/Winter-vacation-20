@@ -15,4 +15,31 @@
 #include <llvm/Config/llvm-config.h>
 #include <llvm/Support/Threading.h>
 
-#include <rapidjson/
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+
+#include <stdexcept>
+#include <stdlib.h>
+#include <thread>
+
+namespace ccls {
+using namespace llvm;
+
+extern std::vector<std::string> g_init_options;
+
+namespace {
+enum class TextDocumentSyncKind { None = 0, Full = 1, Incremental = 2 };
+REFLECT_UNDERLYING(TextDocumentSyncKind)
+
+bool didChangeWatchedFiles;
+
+struct ServerCap {
+  struct SaveOptions {
+    bool includeText = false;
+  };
+  struct TextDocumentSyncOptions {
+    bool openClose = true;
+    TextDocumentSyncKind change = TextDocumentSyncKind::Incremental;
+    bool willSave = false;
+    bool willSaveWaitUntil = false;
+    SaveOpti
