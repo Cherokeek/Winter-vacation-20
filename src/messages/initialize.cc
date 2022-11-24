@@ -42,4 +42,18 @@ struct ServerCap {
     TextDocumentSyncKind change = TextDocumentSyncKind::Incremental;
     bool willSave = false;
     bool willSaveWaitUntil = false;
-    SaveOpti
+    SaveOptions save;
+  } textDocumentSync;
+
+  // The server provides hover support.
+  bool hoverProvider = true;
+  struct CompletionOptions {
+    bool resolveProvider = false;
+
+    // The characters that trigger completion automatically.
+    // vscode doesn't support trigger character sequences, so we use ':'
+    // for
+    // '::' and '>' for '->'. See
+    // https://github.com/Microsoft/language-server-protocol/issues/138.
+    std::vector<const char *> triggerCharacters = {".", ":",  ">", "#",
+                                                   "<", "\
