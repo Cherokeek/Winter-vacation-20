@@ -56,4 +56,22 @@ struct ServerCap {
     // '::' and '>' for '->'. See
     // https://github.com/Microsoft/language-server-protocol/issues/138.
     std::vector<const char *> triggerCharacters = {".", ":",  ">", "#",
-                                                   "<", "\
+                                                   "<", "\"", "/"};
+  } completionProvider;
+  struct SignatureHelpOptions {
+    std::vector<const char *> triggerCharacters = {"(", ","};
+  } signatureHelpProvider;
+  bool declarationProvider = true;
+  bool definitionProvider = true;
+  bool typeDefinitionProvider = true;
+  bool implementationProvider = true;
+  bool referencesProvider = true;
+  bool documentHighlightProvider = true;
+  bool documentSymbolProvider = true;
+  bool workspaceSymbolProvider = true;
+  struct CodeActionOptions {
+    std::vector<const char *> codeActionKinds = {"quickfix"};
+  } codeActionProvider;
+  struct CodeLensOptions {
+    bool resolveProvider = false;
+  } codeLe
