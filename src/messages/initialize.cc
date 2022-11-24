@@ -74,4 +74,21 @@ struct ServerCap {
   } codeActionProvider;
   struct CodeLensOptions {
     bool resolveProvider = false;
-  } codeLe
+  } codeLensProvider;
+  bool documentFormattingProvider = true;
+  bool documentRangeFormattingProvider = true;
+  Config::ServerCap::DocumentOnTypeFormattingOptions
+      documentOnTypeFormattingProvider;
+  bool renameProvider = true;
+  struct DocumentLinkOptions {
+    bool resolveProvider = true;
+  } documentLinkProvider;
+  bool foldingRangeProvider = true;
+  // The server provides execute command support.
+  struct ExecuteCommandOptions {
+    std::vector<const char *> commands = {ccls_xref};
+  } executeCommandProvider;
+  bool callHierarchyProvider = true;
+  Config::ServerCap::Workspace workspace;
+};
+REFLECT_STR
