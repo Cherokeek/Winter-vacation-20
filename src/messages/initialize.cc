@@ -91,4 +91,14 @@ struct ServerCap {
   bool callHierarchyProvider = true;
   Config::ServerCap::Workspace workspace;
 };
-REFLECT_STR
+REFLECT_STRUCT(ServerCap::CodeActionOptions, codeActionKinds);
+REFLECT_STRUCT(ServerCap::CodeLensOptions, resolveProvider);
+REFLECT_STRUCT(ServerCap::CompletionOptions, resolveProvider,
+               triggerCharacters);
+REFLECT_STRUCT(ServerCap::DocumentLinkOptions, resolveProvider);
+REFLECT_STRUCT(ServerCap::ExecuteCommandOptions, commands);
+REFLECT_STRUCT(ServerCap::SaveOptions, includeText);
+REFLECT_STRUCT(ServerCap::SignatureHelpOptions, triggerCharacters);
+REFLECT_STRUCT(ServerCap::TextDocumentSyncOptions, openClose, change, willSave,
+               willSaveWaitUntil, save);
+REFLECT_STRUCT(ServerCap, textDocumentSync, hoverProvider,
