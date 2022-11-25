@@ -101,4 +101,13 @@ REFLECT_STRUCT(ServerCap::SaveOptions, includeText);
 REFLECT_STRUCT(ServerCap::SignatureHelpOptions, triggerCharacters);
 REFLECT_STRUCT(ServerCap::TextDocumentSyncOptions, openClose, change, willSave,
                willSaveWaitUntil, save);
-REFLECT_STRUCT(ServerCap, textDocumentSync, hoverProvider,
+REFLECT_STRUCT(ServerCap, textDocumentSync, hoverProvider, completionProvider,
+               signatureHelpProvider, declarationProvider, definitionProvider,
+               implementationProvider, typeDefinitionProvider,
+               referencesProvider, documentHighlightProvider,
+               documentSymbolProvider, workspaceSymbolProvider,
+               codeActionProvider, codeLensProvider, documentFormattingProvider,
+               documentRangeFormattingProvider,
+               documentOnTypeFormattingProvider, renameProvider,
+               documentLinkProvider, foldingRangeProvider,
+               executeCommandProvider, callHierarchyProvid
