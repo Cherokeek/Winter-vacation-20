@@ -110,4 +110,24 @@ REFLECT_STRUCT(ServerCap, textDocumentSync, hoverProvider, completionProvider,
                documentRangeFormattingProvider,
                documentOnTypeFormattingProvider, renameProvider,
                documentLinkProvider, foldingRangeProvider,
-               executeCommandProvider, callHierarchyProvid
+               executeCommandProvider, callHierarchyProvider, workspace);
+
+struct DynamicReg {
+  bool dynamicRegistration = false;
+};
+REFLECT_STRUCT(DynamicReg, dynamicRegistration);
+
+// Workspace specific client capabilities.
+struct WorkspaceClientCap {
+  // The client supports applying batch edits to the workspace.
+  std::optional<bool> applyEdit;
+
+  struct WorkspaceEdit {
+    // The client supports versioned document changes in `WorkspaceEdit`s
+    std::optional<bool> documentChanges;
+  };
+
+  // Capabilities specific to `WorkspaceEdit`s
+  std::optional<WorkspaceEdit> workspaceEdit;
+  DynamicReg didChangeConfiguration;
+  DynamicReg didChangeWatchedFiles;
