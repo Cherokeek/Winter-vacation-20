@@ -131,3 +131,20 @@ struct WorkspaceClientCap {
   std::optional<WorkspaceEdit> workspaceEdit;
   DynamicReg didChangeConfiguration;
   DynamicReg didChangeWatchedFiles;
+  DynamicReg symbol;
+  DynamicReg executeCommand;
+};
+
+REFLECT_STRUCT(WorkspaceClientCap::WorkspaceEdit, documentChanges);
+REFLECT_STRUCT(WorkspaceClientCap, applyEdit, workspaceEdit,
+               didChangeConfiguration, didChangeWatchedFiles, symbol,
+               executeCommand);
+
+// Text document specific client capabilities.
+struct TextDocumentClientCap {
+  struct Completion {
+    struct CompletionItem {
+      // Client supports snippets as insert text.
+      //
+      // A snippet can define tab stops and placeholders with `$1`, `$2`
+      // and `
