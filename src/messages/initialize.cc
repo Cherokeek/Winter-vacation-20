@@ -147,4 +147,25 @@ struct TextDocumentClientCap {
       // Client supports snippets as insert text.
       //
       // A snippet can define tab stops and placeholders with `$1`, `$2`
-      // and `
+      // and `${3:foo}`. `$0` defines the final tab stop, it defaults to
+      // the end of the snippet. Placeholders with equal identifiers are linked,
+      // that is typing in one will update others too.
+      bool snippetSupport = false;
+    } completionItem;
+  } completion;
+
+  // Ignore declaration, implementation, typeDefinition
+  struct LinkSupport {
+    bool linkSupport = false;
+  } definition;
+
+  struct DocumentSymbol {
+    bool hierarchicalDocumentSymbolSupport = false;
+  } documentSymbol;
+
+  struct PublishDiagnostics {
+    bool relatedInformation = false;
+  } publishDiagnostics;
+};
+
+REFLECT_STRUCT(TextD
