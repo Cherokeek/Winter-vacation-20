@@ -168,4 +168,18 @@ struct TextDocumentClientCap {
   } publishDiagnostics;
 };
 
-REFLECT_STRUCT(TextD
+REFLECT_STRUCT(TextDocumentClientCap::Completion::CompletionItem,
+               snippetSupport);
+REFLECT_STRUCT(TextDocumentClientCap::Completion, completionItem);
+REFLECT_STRUCT(TextDocumentClientCap::DocumentSymbol,
+               hierarchicalDocumentSymbolSupport);
+REFLECT_STRUCT(TextDocumentClientCap::LinkSupport, linkSupport);
+REFLECT_STRUCT(TextDocumentClientCap::PublishDiagnostics, relatedInformation);
+REFLECT_STRUCT(TextDocumentClientCap, completion, definition, documentSymbol,
+               publishDiagnostics);
+
+struct ClientCap {
+  WorkspaceClientCap workspace;
+  TextDocumentClientCap textDocument;
+};
+REFLE
