@@ -225,4 +225,22 @@ struct InitializeResult {
   ServerCap capabilities;
   struct ServerInfo {
     const char *name = "ccls";
-    const char *version =
+    const char *version = CCLS_VERSION;
+  } serverInfo;
+  const char *offsetEncoding = "utf-32";
+};
+REFLECT_STRUCT(InitializeResult::ServerInfo, name, version);
+REFLECT_STRUCT(InitializeResult, capabilities, serverInfo, offsetEncoding);
+
+struct FileSystemWatcher {
+  std::string globPattern = "**/*";
+};
+struct DidChangeWatchedFilesRegistration {
+  std::string id = "didChangeWatchedFiles";
+  std::string method = "workspace/didChangeWatchedFiles";
+  struct Option {
+    std::vector<FileSystemWatcher> watchers = {{}};
+  } registerOptions;
+};
+struct RegistrationParam {
+  std::vector<DidChangeWatchedFilesRegistration> registrations
