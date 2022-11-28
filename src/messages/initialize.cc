@@ -182,4 +182,26 @@ struct ClientCap {
   WorkspaceClientCap workspace;
   TextDocumentClientCap textDocument;
 };
-REFLE
+REFLECT_STRUCT(ClientCap, workspace, textDocument);
+
+struct InitializeParam {
+  // The rootUri of the workspace. Is null if no
+  // folder is open. If both `rootPath` and `rootUri` are set
+  // `rootUri` wins.
+  std::optional<DocumentUri> rootUri;
+
+  Config initializationOptions;
+  ClientCap capabilities;
+
+  enum class Trace {
+    // NOTE: serialized as a string, one of 'off' | 'messages' | 'verbose';
+    Off,      // off
+    Messages, // messages
+    Verbose   // verbose
+  };
+  Trace trace = Trace::Off;
+
+  std::vector<WorkspaceFolder> workspaceFolders;
+};
+
+void reflect(JsonReader
