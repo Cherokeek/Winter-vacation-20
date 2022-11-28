@@ -204,4 +204,25 @@ struct InitializeParam {
   std::vector<WorkspaceFolder> workspaceFolders;
 };
 
-void reflect(JsonReader
+void reflect(JsonReader &reader, InitializeParam::Trace &value) {
+  if (!reader.m->IsString()) {
+    value = InitializeParam::Trace::Off;
+    return;
+  }
+  std::string v = reader.m->GetString();
+  if (v == "off")
+    value = InitializeParam::Trace::Off;
+  else if (v == "messages")
+    value = InitializeParam::Trace::Messages;
+  else if (v == "verbose")
+    value = InitializeParam::Trace::Verbose;
+}
+
+// initializationOptions is deserialized separately.
+REFLECT_STRUCT(InitializeParam, rootUri, capabilities, trace, workspaceFolders);
+
+struct InitializeResult {
+  ServerCap capabilities;
+  struct ServerInfo {
+    const char *name = "ccls";
+    const char *version =
