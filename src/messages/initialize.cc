@@ -243,4 +243,20 @@ struct DidChangeWatchedFilesRegistration {
   } registerOptions;
 };
 struct RegistrationParam {
-  std::vector<DidChangeWatchedFilesRegistration> registrations
+  std::vector<DidChangeWatchedFilesRegistration> registrations = {{}};
+};
+REFLECT_STRUCT(FileSystemWatcher, globPattern);
+REFLECT_STRUCT(DidChangeWatchedFilesRegistration::Option, watchers);
+REFLECT_STRUCT(DidChangeWatchedFilesRegistration, id, method, registerOptions);
+REFLECT_STRUCT(RegistrationParam, registrations);
+
+void *indexer(void *arg_) {
+  MessageHandler *h;
+  int idx;
+  auto *arg = static_cast<std::pair<MessageHandler *, int> *>(arg_);
+  std::tie(h, idx) = *arg;
+  delete arg;
+  std::string name = "indexer" + std::to_string(idx);
+  set_thread_name(name.c_str());
+  // Don't lower priority on __APPLE__. getpriority(2) says "When setting a
+  // thread into background state the scheduling priority is set to lowes
