@@ -259,4 +259,19 @@ void *indexer(void *arg_) {
   std::string name = "indexer" + std::to_string(idx);
   set_thread_name(name.c_str());
   // Don't lower priority on __APPLE__. getpriority(2) says "When setting a
-  // thread into background state the scheduling priority is set to lowes
+  // thread into background state the scheduling priority is set to lowest
+  // value, disk and network IO are throttled."
+#if LLVM_ENABLE_THREADS && LLVM_VERSION_MAJOR >= 9 && !defined(__APPLE__)
+  set_thread_priority(ThreadPriority::Background);
+#endif
+  pipeline::indexer_Main(h->manager, h->vfs, h->project, h->wfiles);
+  pipeline::threadLeave();
+  return nullptr;
+}
+} // namespace
+
+void do_initialize(MessageHandler *m, InitializeParam &param,
+                   ReplyOnce &reply) {
+  std::string project_path = normalizePath(param.rootUri->getPath());
+  LOG_S(INFO) << "initialize in directory " << project_path << " with uri "
+ 
