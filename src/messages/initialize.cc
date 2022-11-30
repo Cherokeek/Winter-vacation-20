@@ -293,4 +293,20 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
     }
 
     rapidjson::StringBuffer output;
-    rapidjson::Writer<rapidjson::StringBuffer> writ
+    rapidjson::Writer<rapidjson::StringBuffer> writer(output);
+    JsonWriter json_writer(&writer);
+    reflect(json_writer, *g_config);
+    LOG_S(INFO) << "initializationOptions: " << output.GetString();
+
+    if (g_config->cache.directory.size()) {
+      SmallString<256> path(g_config->cache.directory);
+      sys::fs::make_absolute(project_path, path);
+      // Use upper case for the Driver letter on Windows.
+      g_config->cache.directory = normalizePath(path.str());
+      ensureEndsInSlash(g_config->cache.directory);
+    }
+  }
+
+  // Client capabilities
+  const auto &capabilities = param.capabilities;
+  g_config->client.hierarchicalDocumentSymbolSup
