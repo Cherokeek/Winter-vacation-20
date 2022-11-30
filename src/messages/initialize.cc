@@ -274,4 +274,23 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
                    ReplyOnce &reply) {
   std::string project_path = normalizePath(param.rootUri->getPath());
   LOG_S(INFO) << "initialize in directory " << project_path << " with uri "
- 
+              << param.rootUri->raw_uri;
+
+  {
+    g_config = new Config(param.initializationOptions);
+    rapidjson::Document reader;
+    for (const std::string &str : g_init_options) {
+      reader.Parse(str.c_str());
+      if (!reader.HasParseError()) {
+        JsonReader json_reader{&reader};
+        try {
+          reflect(json_reader, *g_config);
+        } catch (std::invalid_argument &) {
+          // This will not trigger because parse error is handled in
+          // MessageRegistry::Parse in lsp.cc
+        }
+      }
+    }
+
+    rapidjson::StringBuffer output;
+    rapidjson::Writer<rapidjson::StringBuffer> writ
