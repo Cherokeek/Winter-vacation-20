@@ -322,4 +322,18 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
       capabilities.workspace.didChangeWatchedFiles.dynamicRegistration;
 
   if (!g_config->client.snippetSupport)
-    g_config-
+    g_config->completion.duplicateOptional = false;
+
+  // Ensure there is a resource directory.
+  if (g_config->clang.resourceDir.empty())
+    g_config->clang.resourceDir = getDefaultResourceDirectory();
+  doPathMapping(g_config->clang.resourceDir);
+  LOG_S(INFO) << "use -resource-dir=" << g_config->clang.resourceDir;
+
+  // Send initialization before starting indexers, so we don't send a
+  // status update too early.
+  {
+    InitializeResult result;
+    auto &c = result.capabilities;
+    c.documentOnTypeFormattingProvider =
+        g_config->capabilities.documentOnTypeFormattingPr
