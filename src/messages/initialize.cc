@@ -309,4 +309,17 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
 
   // Client capabilities
   const auto &capabilities = param.capabilities;
-  g_config->client.hierarchicalDocumentSymbolSup
+  g_config->client.hierarchicalDocumentSymbolSupport &=
+      capabilities.textDocument.documentSymbol
+          .hierarchicalDocumentSymbolSupport;
+  g_config->client.linkSupport &=
+      capabilities.textDocument.definition.linkSupport;
+  g_config->client.snippetSupport &=
+      capabilities.textDocument.completion.completionItem.snippetSupport;
+  g_config->client.diagnosticsRelatedInformation &=
+      capabilities.textDocument.publishDiagnostics.relatedInformation;
+  didChangeWatchedFiles =
+      capabilities.workspace.didChangeWatchedFiles.dynamicRegistration;
+
+  if (!g_config->client.snippetSupport)
+    g_config-
