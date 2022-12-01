@@ -336,4 +336,20 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
     InitializeResult result;
     auto &c = result.capabilities;
     c.documentOnTypeFormattingProvider =
-        g_config->capabilities.documentOnTypeFormattingPr
+        g_config->capabilities.documentOnTypeFormattingProvider;
+    c.foldingRangeProvider = g_config->capabilities.foldingRangeProvider;
+    c.workspace = g_config->capabilities.workspace;
+    reply(result);
+  }
+
+  // Set project root.
+  ensureEndsInSlash(project_path);
+  g_config->fallbackFolder = project_path;
+  auto &workspaceFolders = g_config->workspaceFolders;
+  for (const WorkspaceFolder &wf : param.workspaceFolders) {
+    std::string path = wf.uri.getPath();
+    ensureEndsInSlash(path);
+    std::string real = realPath(path) + '/';
+    workspaceFolders.emplace_back(path, real);
+  }
+  if (workspaceFolders.empty
