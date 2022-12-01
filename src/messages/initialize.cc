@@ -352,4 +352,19 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
     std::string real = realPath(path) + '/';
     workspaceFolders.emplace_back(path, real);
   }
-  if (workspaceFolders.empty
+  if (workspaceFolders.empty()) {
+    std::string real = realPath(project_path) + '/';
+    workspaceFolders.emplace_back(project_path, real);
+  }
+  std::sort(workspaceFolders.begin(), workspaceFolders.end(),
+            [](auto &l, auto &r) { return l.first.size() > r.first.size(); });
+  for (auto &[folder, real] : workspaceFolders)
+    if (real == folder)
+      LOG_S(INFO) << "workspace folder: " << folder;
+    else
+      LOG_S(INFO) << "workspace folder: " << folder << " -> " << real;
+
+  if (g_config->cache.directory.empty())
+    g_config->cache.retainInMemory = 1;
+  else if (!g_config->cache.hierarchicalPath)
+    for (auto &
