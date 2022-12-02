@@ -399,4 +399,22 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
   m->manager->sessions.setCapacity(g_config->session.maxNum);
 }
 
-void MessageHandler::initialize(J
+void MessageHandler::initialize(JsonReader &reader, ReplyOnce &reply) {
+  InitializeParam param;
+  reflect(reader, param);
+  auto it = reader.m->FindMember("initializationOptions");
+  if (it != reader.m->MemberEnd() && it->value.IsObject()) {
+    JsonReader m1(&it->value);
+    try {
+      reflect(m1, param.initializationOptions);
+    } catch (std::invalid_argument &) {
+      reader.path_.push_back("initializationOptions");
+      reader.path_.insert(reader.path_.end(), m1.path_.begin(), m1.path_.end());
+      throw;
+    }
+  }
+  if (!param.rootUri) {
+    reply.error(ErrorCode::InvalidRequest, "expected rootUri");
+    return;
+  }
+  do_initialize(this, param, reply)
