@@ -367,4 +367,19 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
   if (g_config->cache.directory.empty())
     g_config->cache.retainInMemory = 1;
   else if (!g_config->cache.hierarchicalPath)
-    for (auto &
+    for (auto &[folder, _] : workspaceFolders) {
+      // Create two cache directories for files inside and outside of the
+      // project.
+      std::string escaped = escapeFileName(folder.substr(0, folder.size() - 1));
+      sys::fs::create_directories(g_config->cache.directory + escaped);
+      sys::fs::create_directories(g_config->cache.directory + '@' + escaped);
+    }
+
+  idx::init();
+  for (auto &[folder, _] : workspaceFolders)
+    m->project->load(folder);
+
+  // Start indexer threads. Start this after loading the project, as that
+  // may take a long time. Indexer threads will emit status/progress
+  // reports.
+  if (g_config->index.th
