@@ -382,4 +382,21 @@ void do_initialize(MessageHandler *m, InitializeParam &param,
   // Start indexer threads. Start this after loading the project, as that
   // may take a long time. Indexer threads will emit status/progress
   // reports.
-  if (g_config->index.th
+  if (g_config->index.threads == 0)
+    g_config->index.threads = (int)std::thread::hardware_concurrency();
+
+  LOG_S(INFO) << "start " << g_config->index.threads << " indexers";
+  for (int i = 0; i < g_config->index.threads; i++)
+    spawnThread(indexer, new std::pair<MessageHandler *, int>{m, i});
+
+  // Start scanning include directories before dispatching project
+  // files, because that takes a long time.
+  m->include_complete->rescan();
+
+  LOG_S(INFO) << "dispatch initial index requests";
+  m->project->index(m->wfiles, reply.id);
+
+  m->manager->sessions.setCapacity(g_config->session.maxNum);
+}
+
+void MessageHandler::initialize(J
