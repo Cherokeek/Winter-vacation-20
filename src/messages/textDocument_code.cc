@@ -37,4 +37,29 @@ void MessageHandler::textDocument_codeAction(CodeActionParam &param,
          }))) {
       CodeAction &cmd = result.emplace_back();
       cmd.title = "FixIt: " + diag.message;
-      auto &edit =
+      auto &edit = cmd.edit.documentChanges.emplace_back();
+      edit.textDocument.uri = param.textDocument.uri;
+      edit.textDocument.version = wf->version;
+      edit.edits = diag.fixits_;
+    }
+  reply(result);
+}
+
+namespace {
+struct Cmd_xref {
+  Usr usr;
+  Kind kind;
+  std::string field;
+};
+struct Command {
+  std::string title;
+  std::string command;
+  std::vector<std::string> arguments;
+};
+struct CodeLens {
+  lsRange range;
+  std::optional<Command> command;
+};
+REFLECT_STRUCT(Cmd_xref, usr, kind, field);
+REFLECT_STRUCT(Command, title, command, arguments);
+REFLECT_STRUCT(CodeLens, r
