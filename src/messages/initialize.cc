@@ -417,4 +417,28 @@ void MessageHandler::initialize(JsonReader &reader, ReplyOnce &reply) {
     reply.error(ErrorCode::InvalidRequest, "expected rootUri");
     return;
   }
-  do_initialize(this, param, reply)
+  do_initialize(this, param, reply);
+}
+
+void standaloneInitialize(MessageHandler &handler, const std::string &root) {
+  InitializeParam param;
+  param.rootUri = DocumentUri::fromPath(root);
+  ReplyOnce reply{handler};
+  do_initialize(&handler, param, reply);
+}
+
+void MessageHandler::initialized(EmptyParam &) {
+  if (didChangeWatchedFiles) {
+    RegistrationParam param;
+    pipeline::request("client/registerCapability", param);
+  }
+}
+
+void MessageHandler::shutdown(EmptyParam &, ReplyOnce &reply) {
+  reply(JsonNull{});
+}
+
+void MessageHandler::exit(EmptyParam &) {
+  pipeline::g_quit.store(true, std::memory_order_relaxed);
+}
+} // namespace ccls
