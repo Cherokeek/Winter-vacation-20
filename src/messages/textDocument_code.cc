@@ -113,4 +113,18 @@ void MessageHandler::textDocument_codeLens(TextDocumentParam &param,
       const QueryFunc::Def *def = func.anyDef();
       if (!def)
         continue;
-      std::vector<Use> base_uses = getUsesForAllBases(d
+      std::vector<Use> base_uses = getUsesForAllBases(db, func);
+      std::vector<Use> derived_uses = getUsesForAllDerived(db, func);
+      add("ref", {sym.usr, Kind::Func, "uses"}, sym.range, func.uses.size(),
+          base_uses.empty());
+      if (base_uses.size())
+        add("b.ref", {sym.usr, Kind::Func, "bases uses"}, sym.range,
+            base_uses.size());
+      if (derived_uses.size())
+        add("d.ref", {sym.usr, Kind::Func, "derived uses"}, sym.range,
+            derived_uses.size());
+      if (base_uses.empty())
+        add("base", {sym.usr, Kind::Func, "bases"}, sym.range,
+            def->bases.size());
+      add("derived", {sym.usr, Kind::Func, "derived"}, sym.range,
+  
