@@ -62,4 +62,23 @@ struct CodeLens {
 };
 REFLECT_STRUCT(Cmd_xref, usr, kind, field);
 REFLECT_STRUCT(Command, title, command, arguments);
-REFLECT_STRUCT(CodeLens, r
+REFLECT_STRUCT(CodeLens, range, command);
+
+template <typename T> std::string toString(T &v) {
+  rapidjson::StringBuffer output;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(output);
+  JsonWriter json_writer(&writer);
+  reflect(json_writer, v);
+  return output.GetString();
+}
+
+struct CommonCodeLensParams {
+  std::vector<CodeLens> *result;
+  DB *db;
+  WorkingFile *wfile;
+};
+} // namespace
+
+void MessageHandler::textDocument_codeLens(TextDocumentParam &param,
+                                           ReplyOnce &reply) {
+  auto [file, wf] = findOrFail(param.textDocume
