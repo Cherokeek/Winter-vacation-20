@@ -81,4 +81,20 @@ struct CommonCodeLensParams {
 
 void MessageHandler::textDocument_codeLens(TextDocumentParam &param,
                                            ReplyOnce &reply) {
-  auto [file, wf] = findOrFail(param.textDocume
+  auto [file, wf] = findOrFail(param.textDocument.uri.getPath(), reply);
+  if (!wf)
+    return;
+
+  std::vector<CodeLens> result;
+  auto add = [&, wf = wf](const char *singular, Cmd_xref show, Range range,
+                          int num, bool force_display = false) {
+    if (!num && !force_display)
+      return;
+    std::optional<lsRange> ls_range = getLsRange(wf, range);
+    if (!ls_range)
+      return;
+    CodeLens &code_lens = result.emplace_back();
+    code_lens.range = *ls_range;
+    code_lens.command = Command();
+    code_lens.command->command = std::string(ccls_xref);
+    bool plural = num > 1 && singular[strlen(si
