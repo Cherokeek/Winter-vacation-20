@@ -97,4 +97,20 @@ void MessageHandler::textDocument_codeLens(TextDocumentParam &param,
     code_lens.range = *ls_range;
     code_lens.command = Command();
     code_lens.command->command = std::string(ccls_xref);
-    bool plural = num > 1 && singular[strlen(si
+    bool plural = num > 1 && singular[strlen(singular) - 1] != 'd';
+    code_lens.command->title =
+        llvm::formatv("{0} {1}{2}", num, singular, plural ? "s" : "").str();
+    code_lens.command->arguments.push_back(toString(show));
+  };
+
+  std::unordered_set<Range> seen;
+  for (auto [sym, refcnt] : file->symbol2refcnt) {
+    if (refcnt <= 0 || !sym.extent.valid() || !seen.insert(sym.range).second)
+      continue;
+    switch (sym.kind) {
+    case Kind::Func: {
+      QueryFunc &func = db->getFunc(sym);
+      const QueryFunc::Def *def = func.anyDef();
+      if (!def)
+        continue;
+      std::vector<Use> base_uses = getUsesForAllBases(d
