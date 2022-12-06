@@ -143,4 +143,28 @@ void MessageHandler::textDocument_codeLens(TextDocumentParam &param,
     case Kind::Var: {
       QueryVar &var = db->getVar(sym);
       const QueryVar::Def *def = var.anyDef();
-      if (!def || (def->is_local() && !g_config->codeLens.localVa
+      if (!def || (def->is_local() && !g_config->codeLens.localVariables))
+        continue;
+      add("ref", {sym.usr, Kind::Var, "uses"}, sym.range, var.uses.size(),
+          def->kind != SymbolKind::Macro);
+      break;
+    }
+    case Kind::File:
+    case Kind::Invalid:
+      llvm_unreachable("");
+    };
+  }
+
+  reply(result);
+}
+
+void MessageHandler::workspace_executeCommand(JsonReader &reader,
+                                              ReplyOnce &reply) {
+  Command param;
+  reflect(reader, param);
+  if (param.arguments.empty()) {
+    return;
+  }
+  rapidjson::Document reader1;
+  reader1.Parse(param.arguments[0].c_str());
+  JsonReader json
