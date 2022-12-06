@@ -127,4 +127,20 @@ void MessageHandler::textDocument_codeLens(TextDocumentParam &param,
         add("base", {sym.usr, Kind::Func, "bases"}, sym.range,
             def->bases.size());
       add("derived", {sym.usr, Kind::Func, "derived"}, sym.range,
-  
+          func.derived.size());
+      break;
+    }
+    case Kind::Type: {
+      QueryType &type = db->getType(sym);
+      add("ref", {sym.usr, Kind::Type, "uses"}, sym.range, type.uses.size(),
+          true);
+      add("derived", {sym.usr, Kind::Type, "derived"}, sym.range,
+          type.derived.size());
+      add("var", {sym.usr, Kind::Type, "instances"}, sym.range,
+          type.instances.size());
+      break;
+    }
+    case Kind::Var: {
+      QueryVar &var = db->getVar(sym);
+      const QueryVar::Def *def = var.anyDef();
+      if (!def || (def->is_local() && !g_config->codeLens.localVa
