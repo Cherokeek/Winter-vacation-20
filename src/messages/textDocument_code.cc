@@ -167,4 +167,21 @@ void MessageHandler::workspace_executeCommand(JsonReader &reader,
   }
   rapidjson::Document reader1;
   reader1.Parse(param.arguments[0].c_str());
-  JsonReader json
+  JsonReader json_reader{&reader1};
+  if (param.command == ccls_xref) {
+    Cmd_xref cmd;
+    reflect(json_reader, cmd);
+    std::vector<Location> result;
+    auto map = [&](auto &&uses) {
+      for (auto &use : uses)
+        if (auto loc = getLsLocation(db, wfiles, use))
+          result.push_back(std::move(*loc));
+    };
+    switch (cmd.kind) {
+    case Kind::Func: {
+      QueryFunc &func = db->getFunc(cmd.usr);
+      if (cmd.field == "bases") {
+        if (auto *def = func.anyDef())
+          map(getFuncDeclarations(db, def->bases));
+      } else if (cmd.field == "bases uses") {
+        map
