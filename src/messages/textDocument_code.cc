@@ -184,4 +184,20 @@ void MessageHandler::workspace_executeCommand(JsonReader &reader,
         if (auto *def = func.anyDef())
           map(getFuncDeclarations(db, def->bases));
       } else if (cmd.field == "bases uses") {
-        map
+        map(getUsesForAllBases(db, func));
+      } else if (cmd.field == "derived") {
+        map(getFuncDeclarations(db, func.derived));
+      } else if (cmd.field == "derived uses") {
+        map(getUsesForAllDerived(db, func));
+      } else if (cmd.field == "uses") {
+        map(func.uses);
+      }
+      break;
+    }
+    case Kind::Type: {
+      QueryType &type = db->getType(cmd.usr);
+      if (cmd.field == "derived") {
+        map(getTypeDeclarations(db, type.derived));
+      } else if (cmd.field == "instances") {
+        map(getVarDeclarations(db, type.instances, 7));
+      } else if (cmd.field 
