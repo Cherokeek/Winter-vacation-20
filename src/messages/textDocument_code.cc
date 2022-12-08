@@ -200,4 +200,21 @@ void MessageHandler::workspace_executeCommand(JsonReader &reader,
         map(getTypeDeclarations(db, type.derived));
       } else if (cmd.field == "instances") {
         map(getVarDeclarations(db, type.instances, 7));
-      } else if (cmd.field 
+      } else if (cmd.field == "uses") {
+        map(type.uses);
+      }
+      break;
+    }
+    case Kind::Var: {
+      QueryVar &var = db->getVar(cmd.usr);
+      if (cmd.field == "uses")
+        map(var.uses);
+      break;
+    }
+    default:
+      break;
+    }
+    reply(result);
+  }
+}
+} // namespace ccls
