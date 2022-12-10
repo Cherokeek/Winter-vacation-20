@@ -77,4 +77,16 @@ struct ParseIncludeLineResult {
   std::string keyword;
   std::string quote;
   std::string pattern;
-  std::smatch m
+  std::smatch match;
+};
+
+ParseIncludeLineResult ParseIncludeLine(const std::string &line) {
+  static const std::regex pattern("(\\s*)"       // [1]: spaces before '#'
+                                  "#"            //
+                                  "(\\s*)"       // [2]: spaces after '#'
+                                  "([^\\s\"<]*)" // [3]: "include"
+                                  "(\\s*)"       // [4]: spaces before quote
+                                  "([\"<])?"     // [5]: the first quote char
+                                  "([^\\s\">]*)" // [6]: path of file
+                                  "[\">]?"       //
+             
