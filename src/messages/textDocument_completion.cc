@@ -55,4 +55,26 @@ void decorateIncludePaths(const std::smatch &match,
   if (match[3].compare("include") == 0 && quote != '\0')
     spaces_after_include = match[4].str();
 
-  std::string p
+  std::string prefix =
+      match[1].str() + '#' + match[2].str() + "include" + spaces_after_include;
+  std::string suffix = match[7].str();
+
+  for (CompletionItem &item : *items) {
+    char quote0, quote1;
+    if (quote != '"')
+      quote0 = '<', quote1 = '>';
+    else
+      quote0 = quote1 = '"';
+
+    item.textEdit.newText =
+        prefix + quote0 + item.textEdit.newText + quote1 + suffix;
+    item.label = prefix + quote0 + item.label + quote1 + suffix;
+  }
+}
+
+struct ParseIncludeLineResult {
+  bool ok;
+  std::string keyword;
+  std::string quote;
+  std::string pattern;
+  std::smatch m
