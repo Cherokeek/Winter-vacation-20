@@ -89,4 +89,16 @@ ParseIncludeLineResult ParseIncludeLine(const std::string &line) {
                                   "([\"<])?"     // [5]: the first quote char
                                   "([^\\s\">]*)" // [6]: path of file
                                   "[\">]?"       //
-             
+                                  "(.*)");       // [7]: suffix after quote char
+  std::smatch match;
+  bool ok = std::regex_match(line, match, pattern);
+  return {ok, match[3], match[5], match[6], match};
+}
+#endif
+
+// Pre-filters completion responses before sending to vscode. This results in a
+// significantly snappier completion experience as vscode is easily overloaded
+// when given 1000+ completion items.
+void filterCandidates(CompletionList &result, const std::string &complete_text,
+                      Position begin_pos, Position end_pos,
+                      const std::string &buffer_line) {
