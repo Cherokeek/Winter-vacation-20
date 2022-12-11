@@ -102,3 +102,21 @@ ParseIncludeLineResult ParseIncludeLine(const std::string &line) {
 void filterCandidates(CompletionList &result, const std::string &complete_text,
                       Position begin_pos, Position end_pos,
                       const std::string &buffer_line) {
+  assert(begin_pos.line == end_pos.line);
+  auto &items = result.items;
+
+  // People usually does not want to insert snippets or parenthesis when
+  // changing function or type names, e.g. "str.|()" or "std::|<int>".
+  bool has_open_paren = false;
+  for (int c = end_pos.character; c < buffer_line.size(); ++c) {
+    if (buffer_line[c] == '(' || buffer_line[c] == '<')
+      has_open_paren = true;
+    if (!isspace(buffer_line[c]))
+      break;
+  }
+
+  auto finalize = [&]() {
+    int max_num = g_config->completion.maxNum;
+    if (items.size() > max_num) {
+      items.resize(max_num);
+  
