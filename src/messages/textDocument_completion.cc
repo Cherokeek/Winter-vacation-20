@@ -138,4 +138,16 @@ void filterCandidates(CompletionList &result, const std::string &complete_text,
     }
 
     Position overwrite_begin = {begin_pos.line,
-                                begin_pos.c
+                                begin_pos.character - overwrite_len};
+    std::string sort(4, ' ');
+    for (auto &item : items) {
+      item.textEdit.range = lsRange{begin_pos, end_pos};
+      if (has_open_paren)
+        item.textEdit.newText = item.filterText;
+      // https://github.com/Microsoft/language-server-protocol/issues/543
+      // Order of textEdit and additionalTextEdits is unspecified.
+      auto &edits = item.additionalTextEdits;
+      if (overwrite_len > 0) {
+        item.textEdit.range.start = overwrite_begin;
+        std::string orig =
+            buffer_line.substr(overwrite_begin.characte
