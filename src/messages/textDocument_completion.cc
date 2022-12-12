@@ -119,4 +119,23 @@ void filterCandidates(CompletionList &result, const std::string &complete_text,
     int max_num = g_config->completion.maxNum;
     if (items.size() > max_num) {
       items.resize(max_num);
-  
+      result.isIncomplete = true;
+    }
+
+    int overwrite_len = 0;
+    for (auto &item : items) {
+      auto &edits = item.additionalTextEdits;
+      if (edits.size() && edits[0].range.end == begin_pos) {
+        Position start = edits[0].range.start, end = edits[0].range.end;
+        if (start.line == begin_pos.line) {
+          overwrite_len =
+              std::max(overwrite_len, end.character - start.character);
+        } else {
+          overwrite_len = -1;
+          break;
+        }
+      }
+    }
+
+    Position overwrite_begin = {begin_pos.line,
+                                begin_pos.c
