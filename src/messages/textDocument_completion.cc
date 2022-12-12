@@ -150,4 +150,17 @@ void filterCandidates(CompletionList &result, const std::string &complete_text,
       if (overwrite_len > 0) {
         item.textEdit.range.start = overwrite_begin;
         std::string orig =
-            buffer_line.substr(overwrite_begin.characte
+            buffer_line.substr(overwrite_begin.character, overwrite_len);
+        if (edits.size() && edits[0].range.end == begin_pos &&
+            edits[0].range.start.line == begin_pos.line) {
+          int cur_edit_len =
+              edits[0].range.end.character - edits[0].range.start.character;
+          item.textEdit.newText =
+              buffer_line.substr(overwrite_begin.character,
+                                 overwrite_len - cur_edit_len) +
+              edits[0].newText + item.textEdit.newText;
+          edits.erase(edits.begin());
+        } else {
+          item.textEdit.newText = orig + item.textEdit.newText;
+        }
+        item
