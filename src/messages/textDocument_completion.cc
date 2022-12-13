@@ -184,4 +184,17 @@ void filterCandidates(CompletionList &result, const std::string &complete_text,
     FuzzyMatcher fuzzy(complete_text, sensitive);
     for (CompletionItem &item : items) {
       const std::string &filter =
-          item.filterText.size() ? item.
+          item.filterText.size() ? item.filterText : item.label;
+      item.score_ = reverseSubseqMatch(complete_text, filter, sensitive) >= 0
+                        ? fuzzy.match(filter, true)
+                        : FuzzyMatcher::kMinScore;
+    }
+    items.erase(std::remove_if(items.begin(), items.end(),
+                               [](const CompletionItem &item) {
+                                 return item.score_ <= FuzzyMatcher::kMinScore;
+                               }),
+                items.end());
+  }
+  std::sort(items.begin(), items.end(),
+            [](const CompletionItem &lhs, const CompletionItem &rhs) {
+              int t = int(lhs
