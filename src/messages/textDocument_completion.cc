@@ -163,4 +163,25 @@ void filterCandidates(CompletionList &result, const std::string &complete_text,
         } else {
           item.textEdit.newText = orig + item.textEdit.newText;
         }
-        item
+        item.filterText = orig + item.filterText;
+      }
+      if (item.filterText == item.label)
+        item.filterText.clear();
+      for (auto i = sort.size(); i && ++sort[i - 1] == 'A';)
+        sort[--i] = ' ';
+      item.sortText = sort;
+    }
+  };
+
+  if (!g_config->completion.filterAndSort) {
+    finalize();
+    return;
+  }
+
+  if (complete_text.size()) {
+    // Fuzzy match and remove awful candidates.
+    bool sensitive = g_config->completion.caseSensitivity;
+    FuzzyMatcher fuzzy(complete_text, sensitive);
+    for (CompletionItem &item : items) {
+      const std::string &filter =
+          item.filterText.size() ? item.
