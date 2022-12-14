@@ -230,4 +230,20 @@ CompletionItemKind getCompletionKind(CodeCompletionContext::Kind k,
     case Decl::NamespaceAlias:
       return CompletionItemKind::Module;
     case Decl::ObjCCategory:
-    case Decl::Ob
+    case Decl::ObjCCategoryImpl:
+    case Decl::ObjCImplementation:
+    case Decl::ObjCInterface:
+    case Decl::ObjCProtocol:
+      return CompletionItemKind::Interface;
+    case Decl::ObjCMethod:
+      return CompletionItemKind::Method;
+    case Decl::ObjCProperty:
+      return CompletionItemKind::Property;
+    case Decl::ClassTemplate:
+      return CompletionItemKind::Class;
+    case Decl::FunctionTemplate:
+      return CompletionItemKind::Function;
+    case Decl::TypeAliasTemplate:
+      return CompletionItemKind::Class;
+    case Decl::VarTemplate:
+      if (cast<VarTemplateDecl
