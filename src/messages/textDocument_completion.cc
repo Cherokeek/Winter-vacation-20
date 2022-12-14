@@ -197,4 +197,18 @@ void filterCandidates(CompletionList &result, const std::string &complete_text,
   }
   std::sort(items.begin(), items.end(),
             [](const CompletionItem &lhs, const CompletionItem &rhs) {
-              int t = int(lhs
+              int t = int(lhs.additionalTextEdits.size() -
+                          rhs.additionalTextEdits.size());
+              if (t)
+                return t < 0;
+              if (lhs.score_ != rhs.score_)
+                return lhs.score_ > rhs.score_;
+              if (lhs.priority_ != rhs.priority_)
+                return lhs.priority_ < rhs.priority_;
+              t = lhs.textEdit.newText.compare(rhs.textEdit.newText);
+              if (t)
+                return t < 0;
+              t = lhs.label.compare(rhs.label);
+              if (t)
+                return t < 0;
+    
