@@ -211,4 +211,23 @@ void filterCandidates(CompletionList &result, const std::string &complete_text,
               t = lhs.label.compare(rhs.label);
               if (t)
                 return t < 0;
-    
+              return lhs.filterText < rhs.filterText;
+            });
+
+  // Trim result.
+  finalize();
+}
+
+CompletionItemKind getCompletionKind(CodeCompletionContext::Kind k,
+                                     const CodeCompletionResult &r) {
+  switch (r.Kind) {
+  case CodeCompletionResult::RK_Declaration: {
+    const Decl *d = r.Declaration;
+    switch (d->getKind()) {
+    case Decl::LinkageSpec:
+      return CompletionItemKind::Keyword;
+    case Decl::Namespace:
+    case Decl::NamespaceAlias:
+      return CompletionItemKind::Module;
+    case Decl::ObjCCategory:
+    case Decl::Ob
