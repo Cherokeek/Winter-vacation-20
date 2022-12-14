@@ -246,4 +246,21 @@ CompletionItemKind getCompletionKind(CodeCompletionContext::Kind k,
     case Decl::TypeAliasTemplate:
       return CompletionItemKind::Class;
     case Decl::VarTemplate:
-      if (cast<VarTemplateDecl
+      if (cast<VarTemplateDecl>(d)->getTemplatedDecl()->isConstexpr())
+        return CompletionItemKind::Constant;
+      return CompletionItemKind::Variable;
+    case Decl::TemplateTemplateParm:
+      return CompletionItemKind::TypeParameter;
+    case Decl::Enum:
+      return CompletionItemKind::Enum;
+    case Decl::CXXRecord:
+    case Decl::Record:
+      if (auto *rd = dyn_cast<RecordDecl>(d))
+        if (rd->getTagKind() == TTK_Struct)
+          return CompletionItemKind::Struct;
+      return CompletionItemKind::Class;
+    case Decl::TemplateTypeParm:
+    case Decl::TypeAlias:
+    case Decl::Typedef:
+      return CompletionItemKind::TypeParameter;
+    case Decl::
