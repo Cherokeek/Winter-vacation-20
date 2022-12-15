@@ -263,4 +263,24 @@ CompletionItemKind getCompletionKind(CodeCompletionContext::Kind k,
     case Decl::TypeAlias:
     case Decl::Typedef:
       return CompletionItemKind::TypeParameter;
-    case Decl::
+    case Decl::Using:
+    case Decl::ConstructorUsingShadow:
+      return CompletionItemKind::Keyword;
+    case Decl::Binding:
+      return CompletionItemKind::Variable;
+    case Decl::Field:
+    case Decl::ObjCIvar:
+      return CompletionItemKind::Field;
+    case Decl::Function:
+      return CompletionItemKind::Function;
+    case Decl::CXXMethod:
+      return CompletionItemKind::Method;
+    case Decl::CXXConstructor:
+      return CompletionItemKind::Constructor;
+    case Decl::CXXConversion:
+    case Decl::CXXDestructor:
+      return CompletionItemKind::Method;
+    case Decl::Var:
+    case Decl::Decomposition:
+    case Decl::ImplicitParam:
+    c
