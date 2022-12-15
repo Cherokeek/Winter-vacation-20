@@ -283,4 +283,22 @@ CompletionItemKind getCompletionKind(CodeCompletionContext::Kind k,
     case Decl::Var:
     case Decl::Decomposition:
     case Decl::ImplicitParam:
-    c
+    case Decl::ParmVar:
+    case Decl::VarTemplateSpecialization:
+    case Decl::VarTemplatePartialSpecialization:
+      if (cast<VarDecl>(d)->isConstexpr())
+        return CompletionItemKind::Constant;
+      return CompletionItemKind::Variable;
+    case Decl::EnumConstant:
+      return CompletionItemKind::EnumMember;
+    case Decl::IndirectField:
+      return CompletionItemKind::Field;
+
+    default:
+      LOG_S(WARNING) << "Unhandled " << int(d->getKind());
+      return CompletionItemKind::Text;
+    }
+    break;
+  }
+  case CodeCompletionResult::RK_Keyword:
+    return C
