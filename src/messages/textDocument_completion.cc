@@ -301,4 +301,24 @@ CompletionItemKind getCompletionKind(CodeCompletionContext::Kind k,
     break;
   }
   case CodeCompletionResult::RK_Keyword:
-    return C
+    return CompletionItemKind::Keyword;
+  case CodeCompletionResult::RK_Macro:
+    return CompletionItemKind::Reference;
+  case CodeCompletionResult::RK_Pattern:
+#if LLVM_VERSION_MAJOR >= 8
+    if (k == CodeCompletionContext::CCC_IncludedFile)
+      return CompletionItemKind::File;
+#endif
+    return CompletionItemKind::Snippet;
+  }
+}
+
+void buildItem(const CodeCompletionResult &r, const CodeCompletionString &ccs,
+               std::vector<CompletionItem> &out) {
+  assert(!out.empty());
+  auto first = out.size() - 1;
+  bool ignore = false;
+  std::string result_type;
+
+  for (const auto &chunk : ccs) {
+    Code
