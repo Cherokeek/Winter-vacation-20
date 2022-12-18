@@ -340,4 +340,20 @@ void buildItem(const CodeCompletionResult &r, const CodeCompletionString &ccs,
       text = chunk.Text;
       break;
     case CodeCompletionString::CK_ResultType:
-   
+      result_type = chunk.Text;
+      continue;
+    case CodeCompletionString::CK_CurrentParameter:
+      // This should never be present while collecting completion items.
+      llvm_unreachable("unexpected CK_CurrentParameter");
+      continue;
+    case CodeCompletionString::CK_Optional: {
+      // Duplicate last element, the recursive call will complete it.
+      if (g_config->completion.duplicateOptional) {
+        out.push_back(out.back());
+        buildItem(r, *chunk.Optional, out);
+      }
+      continue;
+    }
+    default:
+      text = chunk.Text;
+      break
