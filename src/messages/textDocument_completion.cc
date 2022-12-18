@@ -321,4 +321,23 @@ void buildItem(const CodeCompletionResult &r, const CodeCompletionString &ccs,
   std::string result_type;
 
   for (const auto &chunk : ccs) {
-    Code
+    CodeCompletionString::ChunkKind kind = chunk.Kind;
+    std::string text;
+    switch (kind) {
+    case CodeCompletionString::CK_TypedText:
+      text = chunk.Text;
+      for (auto i = first; i < out.size(); i++)
+        out[i].filterText = text;
+      break;
+    case CodeCompletionString::CK_Placeholder:
+      text = chunk.Text;
+      for (auto i = first; i < out.size(); i++)
+        out[i].parameters_.push_back(text);
+      break;
+    case CodeCompletionString::CK_Informative:
+      if (StringRef(chunk.Text).endswith("::"))
+        continue;
+      text = chunk.Text;
+      break;
+    case CodeCompletionString::CK_ResultType:
+   
