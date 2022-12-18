@@ -356,4 +356,21 @@ void buildItem(const CodeCompletionResult &r, const CodeCompletionString &ccs,
     }
     default:
       text = chunk.Text;
-      break
+      break;
+    }
+
+    for (auto i = first; i < out.size(); ++i) {
+      out[i].label += text;
+      if (ignore ||
+          (!g_config->client.snippetSupport && out[i].parameters_.size()))
+        continue;
+
+      if (kind == CodeCompletionString::CK_Placeholder) {
+        if (r.Kind == CodeCompletionResult::RK_Pattern) {
+          ignore = true;
+          continue;
+        }
+        out[i].textEdit.newText +=
+            ("${" + Twine(out[i].parameters_.size()) + ":" + text + "}").str();
+        out[i].insertTextFormat = InsertTextFormat::Snippet;
+      } else if (
