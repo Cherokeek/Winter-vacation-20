@@ -394,4 +394,20 @@ class CompletionConsumer : public CodeCompleteConsumer {
 
 public:
   bool from_cache;
-  std::vector<CompletionItem> ls_it
+  std::vector<CompletionItem> ls_items;
+
+  CompletionConsumer(const CodeCompleteOptions &opts, bool from_cache)
+      :
+#if LLVM_VERSION_MAJOR >= 9 // rC358696
+        CodeCompleteConsumer(opts),
+#else
+        CodeCompleteConsumer(opts, false),
+#endif
+        alloc(std::make_shared<clang::GlobalCodeCompletionAllocator>()),
+        cctu_info(alloc), from_cache(from_cache) {
+  }
+
+  void ProcessCodeCompleteResults(Sema &s, CodeCompletionContext context,
+                                  CodeCompletionResult *results,
+                                  unsigned numResults) override {
+    if (context.getKind() == CodeCompletionContext::
