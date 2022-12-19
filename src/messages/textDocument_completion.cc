@@ -373,4 +373,25 @@ void buildItem(const CodeCompletionResult &r, const CodeCompletionString &ccs,
         out[i].textEdit.newText +=
             ("${" + Twine(out[i].parameters_.size()) + ":" + text + "}").str();
         out[i].insertTextFormat = InsertTextFormat::Snippet;
-      } else if (
+      } else if (kind != CodeCompletionString::CK_Informative) {
+        out[i].textEdit.newText += text;
+      }
+    }
+  }
+
+  if (result_type.size())
+    for (auto i = first; i < out.size(); ++i) {
+      // ' : ' for variables,
+      // ' -> ' (trailing return type-like) for functions
+      out[i].label += (out[i].label == out[i].filterText ? " : " : " -> ");
+      out[i].label += result_type;
+    }
+}
+
+class CompletionConsumer : public CodeCompleteConsumer {
+  std::shared_ptr<clang::GlobalCodeCompletionAllocator> alloc;
+  CodeCompletionTUInfo cctu_info;
+
+public:
+  bool from_cache;
+  std::vector<CompletionItem> ls_it
