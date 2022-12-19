@@ -410,4 +410,19 @@ public:
   void ProcessCodeCompleteResults(Sema &s, CodeCompletionContext context,
                                   CodeCompletionResult *results,
                                   unsigned numResults) override {
-    if (context.getKind() == CodeCompletionContext::
+    if (context.getKind() == CodeCompletionContext::CCC_Recovery)
+      return;
+    ls_items.reserve(numResults);
+    for (unsigned i = 0; i != numResults; i++) {
+      auto &r = results[i];
+      if (r.Availability == CXAvailability_NotAccessible ||
+          r.Availability == CXAvailability_NotAvailable)
+        continue;
+      if (r.Declaration) {
+        Decl::Kind k = r.Declaration->getKind();
+        if (k == Decl::CXXDestructor)
+          continue;
+        if (k == Decl::FunctionTemplate) {
+          // Ignore CXXDeductionGuide which has empty TypedText.
+          auto *fd = cast<FunctionTemplateDecl>(r.Declaration);
+          if (fd->getTemplatedDecl()->getKind() == Decl::CXXDeductionG
