@@ -425,4 +425,20 @@ public:
         if (k == Decl::FunctionTemplate) {
           // Ignore CXXDeductionGuide which has empty TypedText.
           auto *fd = cast<FunctionTemplateDecl>(r.Declaration);
-          if (fd->getTemplatedDecl()->getKind() == Decl::CXXDeductionG
+          if (fd->getTemplatedDecl()->getKind() == Decl::CXXDeductionGuide)
+            continue;
+        }
+        if (auto *rd = dyn_cast<RecordDecl>(r.Declaration))
+          if (rd->isInjectedClassName())
+            continue;
+        auto nk = r.Declaration->getDeclName().getNameKind();
+        if (nk == DeclarationName::CXXOperatorName ||
+            nk == DeclarationName::CXXLiteralOperatorName)
+          continue;
+      }
+
+      CodeCompletionString *ccs = r.CreateCodeCompletionString(
+          s, context, getAllocator(), getCodeCompletionTUInfo(),
+          includeBriefComments());
+      CompletionItem ls_item;
+      ls_item.kind = getCompletionKind(contex
