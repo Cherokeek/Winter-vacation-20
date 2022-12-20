@@ -456,4 +456,19 @@ public:
           if (s.size()) {
             // Delete non-identifier parts.
             if (s.back() == '(' || s.back() == '<')
-      
+              s.pop_back();
+            else if (s.size() >= 2 && !s.compare(s.size() - 2, 2, "()"))
+              s.resize(s.size() - 2);
+          }
+        } else if (ls_items[j].insertTextFormat == InsertTextFormat::Snippet) {
+          if (!g_config->completion.placeholder) {
+            // foo(${1:int a}, ${2:int b}) -> foo($1)$0
+            auto p = s.find("${"), q = s.rfind('}');
+            s.replace(p, q - p + 1, "$1");
+          }
+          s += "$0";
+        }
+        ls_items[j].priority_ = ccs->getPriority();
+        if (!g_config->completion.detailedLabel) {
+          ls_items[j].detail = ls_items[j].label;
+        
