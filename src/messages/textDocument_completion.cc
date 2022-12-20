@@ -441,4 +441,19 @@ public:
           s, context, getAllocator(), getCodeCompletionTUInfo(),
           includeBriefComments());
       CompletionItem ls_item;
-      ls_item.kind = getCompletionKind(contex
+      ls_item.kind = getCompletionKind(context.getKind(), r);
+      if (const char *brief = ccs->getBriefComment())
+        ls_item.documentation = brief;
+      ls_item.detail = ccs->getParentContextName().str();
+
+      size_t first_idx = ls_items.size();
+      ls_items.push_back(ls_item);
+      buildItem(r, *ccs, ls_items);
+
+      for (size_t j = first_idx; j < ls_items.size(); j++) {
+        std::string &s = ls_items[j].textEdit.newText;
+        if (!g_config->client.snippetSupport) {
+          if (s.size()) {
+            // Delete non-identifier parts.
+            if (s.back() == '(' || s.back() == '<')
+      
