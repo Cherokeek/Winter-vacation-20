@@ -471,4 +471,22 @@ public:
         ls_items[j].priority_ = ccs->getPriority();
         if (!g_config->completion.detailedLabel) {
           ls_items[j].detail = ls_items[j].label;
-        
+          ls_items[j].label = ls_items[j].filterText;
+        }
+      }
+      for (const FixItHint &fixIt : r.FixIts) {
+        auto &ast = s.getASTContext();
+        TextEdit ls_edit =
+            ccls::toTextEdit(ast.getSourceManager(), ast.getLangOpts(), fixIt);
+        for (size_t j = first_idx; j < ls_items.size(); j++)
+          ls_items[j].additionalTextEdits.push_back(ls_edit);
+      }
+    }
+  }
+
+  CodeCompletionAllocator &getAllocator() override { return *alloc; }
+  CodeCompletionTUInfo &getCodeCompletionTUInfo() override { return cctu_info; }
+};
+} // namespace
+
+void MessageHandler::textDocument_completion(Comple
