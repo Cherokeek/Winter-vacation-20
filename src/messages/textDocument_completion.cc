@@ -489,4 +489,19 @@ public:
 };
 } // namespace
 
-void MessageHandler::textDocument_completion(Comple
+void MessageHandler::textDocument_completion(CompletionParam &param,
+                                             ReplyOnce &reply) {
+  static CompleteConsumerCache<std::vector<CompletionItem>> cache;
+  std::string path = param.textDocument.uri.getPath();
+  WorkingFile *wf = wfiles->getFile(path);
+  if (!wf) {
+    reply.notOpened(path);
+    return;
+  }
+
+  CompletionList result;
+
+  // It shouldn't be possible, but sometimes vscode will send queries out
+  // of order, ie, we get completion request before buffer content update.
+  std::string buffer_line;
+  if (param.position.line >= 0 && param.position
