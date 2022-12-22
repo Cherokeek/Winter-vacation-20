@@ -504,4 +504,21 @@ void MessageHandler::textDocument_completion(CompletionParam &param,
   // It shouldn't be possible, but sometimes vscode will send queries out
   // of order, ie, we get completion request before buffer content update.
   std::string buffer_line;
-  if (param.position.line >= 0 && param.position
+  if (param.position.line >= 0 && param.position.line < wf->buffer_lines.size())
+    buffer_line = wf->buffer_lines[param.position.line];
+
+  clang::CodeCompleteOptions ccOpts;
+  ccOpts.IncludeBriefComments = true;
+  ccOpts.IncludeCodePatterns = StringRef(buffer_line).ltrim().startswith("#");
+  ccOpts.IncludeFixIts = true;
+  ccOpts.IncludeMacros = true;
+
+  if (param.context.triggerKind == CompletionTriggerKind::TriggerCharacter &&
+      param.context.triggerCharacter) {
+    bool ok = true;
+    int col = param.position.character - 2;
+    switch ((*param.context.triggerCharacter)[0]) {
+    case '"':
+    case '/':
+    case '<':
+      ok = ccOpts.IncludeCodePatter
