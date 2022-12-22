@@ -521,4 +521,25 @@ void MessageHandler::textDocument_completion(CompletionParam &param,
     case '"':
     case '/':
     case '<':
-      ok = ccOpts.IncludeCodePatter
+      ok = ccOpts.IncludeCodePatterns; // start with #
+      break;
+    case ':':
+      ok = col >= 0 && buffer_line[col] == ':'; // ::
+      break;
+    case '>':
+      ok = col >= 0 && buffer_line[col] == '-'; // ->
+      break;
+    }
+    if (!ok) {
+      reply(result);
+      return;
+    }
+  }
+
+  std::string filter;
+  Position end_pos = param.position;
+  Position begin_pos = wf->getCompletionPosition(param.position, &filter);
+
+#if LLVM_VERSION_MAJOR < 8
+  ParseIncludeLineResult preprocess = ParseIncludeLine(buffer_line);
+  if (preprocess.ok && preprocess.keyword.compare("include"
