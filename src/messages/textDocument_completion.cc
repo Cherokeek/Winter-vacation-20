@@ -557,4 +557,21 @@ void MessageHandler::textDocument_completion(CompletionParam &param,
     }
     begin_pos.character = 0;
     end_pos.character = (int)buffer_line.size();
-    filterCandidate
+    filterCandidates(result, preprocess.pattern, begin_pos, end_pos,
+                     buffer_line);
+    decorateIncludePaths(preprocess.match, &result.items, quote);
+    reply(result);
+    return;
+  }
+#endif
+
+  SemaManager::OnComplete callback =
+      [filter, path, begin_pos, end_pos, reply,
+       buffer_line](CodeCompleteConsumer *optConsumer) {
+        if (!optConsumer)
+          return;
+        auto *consumer = static_cast<CompletionConsumer *>(optConsumer);
+        CompletionList result;
+        result.items = consumer->ls_items;
+
+        filterCandidates(result, filter, begin_pos, end_pos, buffer_line);
