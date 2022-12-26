@@ -592,4 +592,8 @@ void MessageHandler::textDocument_completion(CompletionParam &param,
     callback(&consumer);
   } else {
     manager->comp_tasks.pushBack(std::make_unique<SemaManager::CompTask>(
-        reply.id, param.textDocument.u
+        reply.id, param.textDocument.uri.getPath(), begin_pos,
+        std::make_unique<CompletionConsumer>(ccOpts, false), ccOpts, callback));
+  }
+}
+} // namespace ccls
