@@ -575,3 +575,21 @@ void MessageHandler::textDocument_completion(CompletionParam &param,
         result.items = consumer->ls_items;
 
         filterCandidates(result, filter, begin_pos, end_pos, buffer_line);
+        reply(result);
+        if (!consumer->from_cache) {
+          cache.withLock([&]() {
+            cache.path = path;
+            cache.line = buffer_line;
+            cache.position = begin_pos;
+            cache.result = consumer->ls_items;
+          });
+        }
+      };
+
+  if (cache.isCacheValid(path, buffer_line, begin_pos)) {
+    CompletionConsumer consumer(ccOpts, true);
+    cache.withLock([&]() { consumer.ls_items = cache.result; });
+    callback(&consumer);
+  } else {
+    manager->comp_tasks.pushBack(std::make_unique<SemaManager::CompTask>(
+        reply.id, param.textDocument.u
