@@ -41,4 +41,20 @@ void MessageHandler::textDocument_didOpen(DidOpenTextDocumentParam &param) {
   include_complete->addFile(wf->filename);
 
   // Submit new index request if it is not a header file or there is no
-  // pending index reque
+  // pending index request.
+  auto [lang, header] = lookupExtension(path);
+  if ((lang != LanguageId::Unknown && !header) ||
+      pipeline::stats.completed == pipeline::stats.enqueued)
+    pipeline::index(path, {}, IndexMode::Normal, false);
+  if (header)
+    project->indexRelated(path);
+
+  manager->onView(path);
+}
+
+void MessageHandler::textDocument_didSave(TextDocumentParam &param) {
+  const std::string &path = param.textDocument.uri.getPath();
+  pipeline::index(path, {}, IndexMode::Normal, false);
+  manager->onSave(path);
+}
+} // namespace ccls
