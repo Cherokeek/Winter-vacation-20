@@ -109,3 +109,18 @@ void MessageHandler::textDocument_references(JsonReader &reader,
     if (path.size())
       for (QueryFile &file1 : db->files)
         if (file1.def)
+          for (const IndexInclude &include : file1.def->includes)
+            if (include.resolved_path == path) {
+              // Another file |file1| has the same include line.
+              Location &loc = result.emplace_back();
+              loc.uri = DocumentUri::fromPath(file1.def->path);
+              loc.range.start.line = loc.range.end.line = include.line;
+              break;
+            }
+  }
+
+  if ((int)result.size() >= g_config->xref.maxNum)
+    result.resize(g_config->xref.maxNum);
+  reply(result);
+}
+} // namespace ccls
