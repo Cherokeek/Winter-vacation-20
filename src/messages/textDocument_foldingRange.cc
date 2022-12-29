@@ -29,4 +29,12 @@ void MessageHandler::textDocument_foldingRange(TextDocumentParam &param,
     if (refcnt > 0 && sym.extent.valid() &&
         (sym.kind == Kind::Func || sym.kind == Kind::Type) &&
         (ls_range = getLsRange(wf, sym.extent))) {
-      FoldingRange &fold = result.emplac
+      FoldingRange &fold = result.emplace_back();
+      fold.startLine = ls_range->start.line;
+      fold.startCharacter = ls_range->start.character;
+      fold.endLine = ls_range->end.line;
+      fold.endCharacter = ls_range->end.character;
+    }
+  reply(result);
+}
+} // namespace ccls
