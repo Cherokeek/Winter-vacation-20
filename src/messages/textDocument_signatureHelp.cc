@@ -195,3 +195,8 @@ void MessageHandler::textDocument_signatureHelp(
   } else {
     manager->comp_tasks.pushBack(std::make_unique<SemaManager::CompTask>(
         reply.id, param.textDocument.uri.getPath(), param.position,
+        std::make_unique<SignatureHelpConsumer>(ccOpts, false), ccOpts,
+        callback));
+  }
+}
+} // namespace ccls
