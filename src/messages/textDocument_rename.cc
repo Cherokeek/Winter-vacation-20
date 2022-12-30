@@ -53,4 +53,19 @@ WorkspaceEdit buildWorkspaceEdit(DB *db, WorkingFiles *wfiles, SymbolRef sym,
 } // namespace
 
 void MessageHandler::textDocument_rename(RenameParam &param, ReplyOnce &reply) {
-  
+  auto [file, wf] = findOrFail(param.textDocument.uri.getPath(), reply);
+  if (!wf)
+    return;
+  WorkspaceEdit result;
+
+  for (SymbolRef sym : findSymbolsAtLocation(wf, file, param.position)) {
+    result = buildWorkspaceEdit(
+        db, wfiles, sym,
+        lexIdentifierAroundPos(param.position, wf->buffer_content),
+        param.newName);
+    break;
+  }
+
+  reply(result);
+}
+} // namespace ccls
