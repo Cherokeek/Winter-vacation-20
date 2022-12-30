@@ -35,4 +35,22 @@ WorkspaceEdit buildWorkspaceEdit(DB *db, WorkingFiles *wfiles, SymbolRef sym,
       if ((it->second.first = wfiles->getFile(path)))
         edit.textDocument.version = it->second.first->version;
     }
-    // TODO LoadIndexedContent if
+    // TODO LoadIndexedContent if wf is nullptr.
+    if (WorkingFile *wf = it->second.first) {
+      int start = getOffsetForPosition(loc->range.start, wf->buffer_content),
+          end = getOffsetForPosition(loc->range.end, wf->buffer_content);
+      if (wf->buffer_content.compare(start, end - start, old_text))
+        return;
+    }
+    edit.edits.push_back({loc->range, new_text});
+  });
+
+  WorkspaceEdit ret;
+  for (auto &x : path2edit)
+    ret.documentChanges.push_back(std::move(x.second.second));
+  return ret;
+}
+} // namespace
+
+void MessageHandler::textDocument_rename(RenameParam &param, ReplyOnce &reply) {
+  
