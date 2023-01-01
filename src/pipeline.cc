@@ -42,4 +42,31 @@ REFLECT_STRUCT(PublishDiagnosticParam, uri, diagnostics);
 
 constexpr char index_progress_token[] = "index";
 struct WorkDoneProgressCreateParam {
-  const char *token = index_
+  const char *token = index_progress_token;
+};
+REFLECT_STRUCT(WorkDoneProgressCreateParam, token);
+} // namespace
+
+void VFS::clear() {
+  std::lock_guard lock(mutex);
+  state.clear();
+}
+
+int VFS::loaded(const std::string &path) {
+  std::lock_guard lock(mutex);
+  return state[path].loaded;
+}
+
+bool VFS::stamp(const std::string &path, int64_t ts, int step) {
+  std::lock_guard<std::mutex> lock(mutex);
+  State &st = state[path];
+  if (st.timestamp < ts || (st.timestamp == ts && st.step < step)) {
+    st.timestamp = ts;
+    st.step = step;
+    return true;
+  } else
+    return false;
+}
+
+struct MessageHandler;
+void standaloneInitialize(MessageHandler &, const std::st
