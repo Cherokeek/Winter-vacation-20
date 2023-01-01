@@ -69,4 +69,32 @@ bool VFS::stamp(const std::string &path, int64_t ts, int step) {
 }
 
 struct MessageHandler;
-void standaloneInitialize(MessageHandler &, const std::st
+void standaloneInitialize(MessageHandler &, const std::string &root);
+
+namespace pipeline {
+
+std::atomic<bool> g_quit;
+std::atomic<int64_t> loaded_ts{0}, request_id{0};
+IndexStats stats;
+int64_t tick = 0;
+
+namespace {
+
+struct IndexRequest {
+  std::string path;
+  std::vector<const char *> args;
+  IndexMode mode;
+  bool must_exist = false;
+  RequestId id;
+  int64_t ts = tick++;
+};
+
+std::mutex thread_mtx;
+std::condition_variable no_active_threads;
+int active_threads;
+
+MultiQueueWaiter *main_waiter;
+MultiQueueWaiter *indexer_waiter;
+MultiQueueWaiter *stdout_waiter;
+ThreadedQueue<InMessage> *on_request;
+ThreadedQueue<IndexRequest> *index_req
