@@ -97,4 +97,21 @@ MultiQueueWaiter *main_waiter;
 MultiQueueWaiter *indexer_waiter;
 MultiQueueWaiter *stdout_waiter;
 ThreadedQueue<InMessage> *on_request;
-ThreadedQueue<IndexRequest> *index_req
+ThreadedQueue<IndexRequest> *index_request;
+ThreadedQueue<IndexUpdate> *on_indexed;
+ThreadedQueue<std::string> *for_stdout;
+
+struct InMemoryIndexFile {
+  std::string content;
+  IndexFile index;
+};
+std::shared_mutex g_index_mutex;
+std::unordered_map<std::string, InMemoryIndexFile> g_index;
+
+bool cacheInvalid(VFS *vfs, IndexFile *prev, const std::string &path,
+                  const std::vector<const char *> &args,
+                  const std::optional<std::string> &from) {
+  {
+    std::lock_guard<std::mutex> lock(vfs->mutex);
+    if (prev->mtime < vfs->state[path].timestamp) {
+      LOG_V(1) << "timestamp changed for " <
