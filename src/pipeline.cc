@@ -169,4 +169,18 @@ std::string getCachePath(std::string src) {
 }
 
 std::unique_ptr<IndexFile> rawCacheLoad(const std::string &path) {
-  i
+  if (g_config->cache.retainInMemory) {
+    std::shared_lock lock(g_index_mutex);
+    auto it = g_index.find(path);
+    if (it != g_index.end())
+      return std::make_unique<IndexFile>(it->second.index);
+    if (g_config->cache.directory.empty())
+      return nullptr;
+  }
+
+  std::string cache_path = getCachePath(path);
+  std::optional<std::string> file_content = readContent(cache_path);
+  std::optional<std::string> serialized_indexed_content =
+      readContent(appendSerializationFormat(cache_path));
+  if (!file_content || !serialized_indexed_content)
+    return nullptr
