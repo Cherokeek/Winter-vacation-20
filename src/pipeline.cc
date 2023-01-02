@@ -151,4 +151,22 @@ std::string getCachePath(std::string src) {
   if (g_config->cache.hierarchicalPath) {
     std::string ret = src[0] == '/' ? src.substr(1) : src;
 #ifdef _WIN32
-    std::replace(ret.begin(), ret.end(), ':',
+    std::replace(ret.begin(), ret.end(), ':', '@');
+#endif
+    return g_config->cache.directory + ret;
+  }
+  for (auto &[root, _] : g_config->workspaceFolders)
+    if (StringRef(src).startswith(root)) {
+      auto len = root.size();
+      return g_config->cache.directory +
+             escapeFileName(root.substr(0, len - 1)) + '/' +
+             escapeFileName(src.substr(len));
+    }
+  return g_config->cache.directory + '@' +
+         escapeFileName(g_config->fallbackFolder.substr(
+             0, g_config->fallbackFolder.size() - 1)) +
+         '/' + escapeFileName(src);
+}
+
+std::unique_ptr<IndexFile> rawCacheLoad(const std::string &path) {
+  i
