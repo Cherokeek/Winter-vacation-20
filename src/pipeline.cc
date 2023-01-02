@@ -114,4 +114,22 @@ bool cacheInvalid(VFS *vfs, IndexFile *prev, const std::string &path,
   {
     std::lock_guard<std::mutex> lock(vfs->mutex);
     if (prev->mtime < vfs->state[path].timestamp) {
-      LOG_V(1) << "timestamp changed for " <
+      LOG_V(1) << "timestamp changed for " << path
+               << (from ? " (via " + *from + ")" : std::string());
+      return true;
+    }
+  }
+
+  // For inferred files, allow -o a a.cc -> -o b b.cc
+  StringRef stem = sys::path::stem(path);
+  int changed = -1, size = std::min(prev->args.size(), args.size());
+  for (int i = 0; i < size; i++)
+    if (strcmp(prev->args[i], args[i]) && sys::path::stem(args[i]) != stem) {
+      changed = i;
+      break;
+    }
+  if (changed < 0 && prev->args.size() != args.size())
+    changed = size;
+  if (changed >= 0)
+    LOG_V(1) << "args changed for " << path
+             << (from ? " (via " + *from + ")" : std::string()) << "; 
