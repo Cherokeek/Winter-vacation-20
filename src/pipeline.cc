@@ -132,4 +132,23 @@ bool cacheInvalid(VFS *vfs, IndexFile *prev, const std::string &path,
     changed = size;
   if (changed >= 0)
     LOG_V(1) << "args changed for " << path
-             << (from ? " (via " + *from + ")" : std::string()) << "; 
+             << (from ? " (via " + *from + ")" : std::string()) << "; old: "
+             << (changed < prev->args.size() ? prev->args[changed] : "")
+             << "; new: " << (changed < size ? args[changed] : "");
+  return changed >= 0;
+};
+
+std::string appendSerializationFormat(const std::string &base) {
+  switch (g_config->cache.format) {
+  case SerializeFormat::Binary:
+    return base + ".blob";
+  case SerializeFormat::Json:
+    return base + ".json";
+  }
+}
+
+std::string getCachePath(std::string src) {
+  if (g_config->cache.hierarchicalPath) {
+    std::string ret = src[0] == '/' ? src.substr(1) : src;
+#ifdef _WIN32
+    std::replace(ret.begin(), ret.end(), ':',
