@@ -183,4 +183,20 @@ std::unique_ptr<IndexFile> rawCacheLoad(const std::string &path) {
   std::optional<std::string> serialized_indexed_content =
       readContent(appendSerializationFormat(cache_path));
   if (!file_content || !serialized_indexed_content)
-    return nullptr
+    return nullptr;
+
+  return ccls::deserialize(g_config->cache.format, path,
+                           *serialized_indexed_content, *file_content,
+                           IndexFile::kMajorVersion);
+}
+
+std::mutex &getFileMutex(const std::string &path) {
+  const int n_MUTEXES = 256;
+  static std::mutex mutexes[n_MUTEXES];
+  return mutexes[std::hash<std::string>()(path) % n_MUTEXES];
+}
+
+bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
+                   Project *project, VFS *vfs, const GroupMatch &matcher) {
+  std::optional<IndexRequest> opt_request = index_request->tryPopFront();
+  if (!opt_request)
