@@ -200,3 +200,27 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
                    Project *project, VFS *vfs, const GroupMatch &matcher) {
   std::optional<IndexRequest> opt_request = index_request->tryPopFront();
   if (!opt_request)
+    return false;
+  auto &request = *opt_request;
+  bool loud = request.mode != IndexMode::OnChange;
+
+  // Dummy one to trigger refresh semantic highlight.
+  if (request.path.empty()) {
+    IndexUpdate dummy;
+    dummy.refresh = true;
+    on_indexed->pushBack(std::move(dummy), false);
+    return false;
+  }
+
+  struct RAII {
+    ~RAII() { stats.completed++; }
+  } raii;
+  if (!matcher.matches(request.path)) {
+    LOG_IF_S(INFO, loud) << "skip " << request.path;
+    return false;
+  }
+
+  Project::Entry entry =
+      project->findEntry(request.path, true, request.must_exist);
+  if (request.must_exist && entry.filename.empty())
+    ret
