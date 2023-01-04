@@ -240,4 +240,23 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
     if (!write_time) {
       deleted = true;
     } else {
-      if
+      if (vfs->stamp(path_to_index, *write_time, no_linkage ? 2 : 0))
+        reparse = 1;
+      if (request.path != path_to_index) {
+        std::optional<int64_t> mtime1 = lastWriteTime(request.path);
+        if (!mtime1)
+          deleted = true;
+        else if (vfs->stamp(request.path, *mtime1, no_linkage ? 2 : 0))
+          reparse = 2;
+      }
+    }
+  }
+
+  if (g_config->index.onChange) {
+    reparse = 2;
+    std::lock_guard lock(vfs->mutex);
+    vfs->state[path_to_index].step = 0;
+    if (request.path != path_to_index)
+      vfs->state[request.path].step = 0;
+  }
+  bool track = g_config->index.trackDependency > 1
