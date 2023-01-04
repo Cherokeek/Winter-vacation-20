@@ -223,4 +223,21 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
   Project::Entry entry =
       project->findEntry(request.path, true, request.must_exist);
   if (request.must_exist && entry.filename.empty())
-    ret
+    return true;
+  if (request.args.size())
+    entry.args = request.args;
+  std::string path_to_index = entry.filename;
+  std::unique_ptr<IndexFile> prev;
+
+  bool deleted = request.mode == IndexMode::Delete,
+       no_linkage = g_config->index.initialNoLinkage ||
+                    request.mode != IndexMode::Background;
+  int reparse = 0;
+  if (deleted)
+    reparse = 2;
+  else if (!(g_config->index.onChange && wfiles->getFile(path_to_index))) {
+    std::optional<int64_t> write_time = lastWriteTime(path_to_index);
+    if (!write_time) {
+      deleted = true;
+    } else {
+      if
