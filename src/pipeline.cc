@@ -259,4 +259,21 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
     if (request.path != path_to_index)
       vfs->state[request.path].step = 0;
   }
-  bool track = g_config->index.trackDependency > 1
+  bool track = g_config->index.trackDependency > 1 ||
+               (g_config->index.trackDependency == 1 && request.ts < loaded_ts);
+  if (!reparse && !track)
+    return true;
+
+  if (reparse < 2)
+    do {
+      std::unique_lock lock(getFileMutex(path_to_index));
+      prev = rawCacheLoad(path_to_index);
+      if (!prev || prev->no_linkage < no_linkage ||
+          cacheInvalid(vfs, prev.get(), path_to_index, entry.args,
+                       std::nullopt))
+        break;
+      if (track)
+        for (const auto &dep : prev->dependencies) {
+          if (auto mtime1 = lastWriteTime(dep.first.val().str())) {
+            if (dep.second < *mtime1) {
+       
