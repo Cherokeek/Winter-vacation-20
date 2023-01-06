@@ -295,4 +295,20 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
 
       if (vfs->loaded(path_to_index))
         return true;
-      LOG_S(INFO) << "loa
+      LOG_S(INFO) << "load cache for " << path_to_index;
+      auto dependencies = prev->dependencies;
+      IndexUpdate update = IndexUpdate::createDelta(nullptr, prev.get());
+      on_indexed->pushBack(std::move(update),
+                           request.mode != IndexMode::Background);
+      {
+        std::lock_guard lock1(vfs->mutex);
+        VFS::State &st = vfs->state[path_to_index];
+        st.loaded++;
+        if (prev->no_linkage)
+          st.step = 2;
+      }
+      lock.unlock();
+
+      for (const auto &dep : dependencies) {
+        std::string path = dep.first.val().str();
+     
