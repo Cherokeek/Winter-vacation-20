@@ -311,4 +311,22 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
 
       for (const auto &dep : dependencies) {
         std::string path = dep.first.val().str();
-     
+        if (!vfs->stamp(path, dep.second, 1))
+          continue;
+        std::lock_guard lock1(getFileMutex(path));
+        prev = rawCacheLoad(path);
+        if (!prev)
+          continue;
+        {
+          std::lock_guard lock2(vfs->mutex);
+          VFS::State &st = vfs->state[path];
+          if (st.loaded)
+            continue;
+          st.loaded++;
+          st.timestamp = prev->mtime;
+          if (prev->no_linkage)
+            st.step = 3;
+        }
+        IndexUpdate update = IndexUpdate::createDelta(nullptr, prev.get());
+        on_indexed->pushBack(std::move(update),
+                             request.mode != Index
