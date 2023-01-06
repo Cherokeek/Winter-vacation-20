@@ -276,4 +276,23 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
         for (const auto &dep : prev->dependencies) {
           if (auto mtime1 = lastWriteTime(dep.first.val().str())) {
             if (dep.second < *mtime1) {
-       
+              reparse = 2;
+              LOG_V(1) << "timestamp changed for " << path_to_index << " via "
+                       << dep.first.val().str();
+              break;
+            }
+          } else {
+            reparse = 2;
+            LOG_V(1) << "timestamp changed for " << path_to_index << " via "
+                     << dep.first.val().str();
+            break;
+          }
+        }
+      if (reparse == 0)
+        return true;
+      if (reparse == 2)
+        break;
+
+      if (vfs->loaded(path_to_index))
+        return true;
+      LOG_S(INFO) << "loa
