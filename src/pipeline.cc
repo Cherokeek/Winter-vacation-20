@@ -329,4 +329,21 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
         }
         IndexUpdate update = IndexUpdate::createDelta(nullptr, prev.get());
         on_indexed->pushBack(std::move(update),
-                             request.mode != Index
+                             request.mode != IndexMode::Background);
+        if (entry.id >= 0) {
+          std::lock_guard lock2(project->mtx);
+          project->root2folder[entry.root].path2entry_index[path] = entry.id;
+        }
+      }
+      return true;
+    } while (0);
+
+  std::vector<std::unique_ptr<IndexFile>> indexes;
+  int n_errs = 0;
+  std::string first_error;
+  if (deleted) {
+    indexes.push_back(std::make_unique<IndexFile>(request.path, "", false));
+    if (request.path != path_to_index)
+      indexes.push_back(std::make_unique<IndexFile>(path_to_index, "", false));
+  } else {
+    std::vector<std::pair<std::string, std::string>> re
