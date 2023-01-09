@@ -363,4 +363,22 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
     if (!ok) {
       if (request.id.valid()) {
         ResponseError err;
-        err.code = Error
+        err.code = ErrorCode::InternalError;
+        err.message = "failed to index " + path_to_index;
+        pipeline::replyError(request.id, err);
+      }
+      return true;
+    }
+  }
+
+  if (loud || n_errs) {
+    std::string line;
+    SmallString<64> tmp;
+    SmallString<256> msg;
+    (Twine(deleted ? "delete " : "parse ") + path_to_index).toVector(msg);
+    if (n_errs)
+      msg += " error:" + std::to_string(n_errs) + ' ' + first_error;
+    if (LOG_V_ENABLED(1)) {
+      msg += "\n ";
+      for (const char *arg : entry.args)
+        (msg += ' ') += ar
