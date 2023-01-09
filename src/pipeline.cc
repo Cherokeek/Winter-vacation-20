@@ -346,4 +346,21 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
     if (request.path != path_to_index)
       indexes.push_back(std::make_unique<IndexFile>(path_to_index, "", false));
   } else {
-    std::vector<std::pair<std::string, std::string>> re
+    std::vector<std::pair<std::string, std::string>> remapped;
+    if (g_config->index.onChange) {
+      std::string content = wfiles->getContent(path_to_index);
+      if (content.size())
+        remapped.emplace_back(path_to_index, content);
+    }
+    bool ok;
+    auto result =
+        idx::index(completion, wfiles, vfs, entry.directory, path_to_index,
+                   entry.args, remapped, no_linkage, ok);
+    indexes = std::move(result.indexes);
+    n_errs = result.n_errs;
+    first_error = std::move(result.first_error);
+
+    if (!ok) {
+      if (request.id.valid()) {
+        ResponseError err;
+        err.code = Error
