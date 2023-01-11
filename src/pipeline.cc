@@ -415,4 +415,18 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
           (void)sys::fs::remove(cache_path);
           (void)sys::fs::remove(appendSerializationFormat(cache_path));
         } else {
- 
+          if (g_config->cache.hierarchicalPath)
+            sys::fs::create_directories(
+                sys::path::parent_path(cache_path, sys::path::Style::posix),
+                true);
+          writeToFile(cache_path, curr->file_contents);
+          writeToFile(appendSerializationFormat(cache_path),
+                      serialize(g_config->cache.format, *curr));
+        }
+      }
+      on_indexed->pushBack(IndexUpdate::createDelta(prev.get(), curr.get()),
+                           request.mode != IndexMode::Background);
+      {
+        std::lock_guard lock1(vfs->mutex);
+        vfs->state[path].loaded++;
+    
