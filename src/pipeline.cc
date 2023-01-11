@@ -429,4 +429,25 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
       {
         std::lock_guard lock1(vfs->mutex);
         vfs->state[path].loaded++;
-    
+      }
+      if (entry.id >= 0) {
+        std::lock_guard lock(project->mtx);
+        auto &folder = project->root2folder[entry.root];
+        for (auto &dep : curr->dependencies)
+          folder.path2entry_index[dep.first.val().str()] = entry.id;
+      }
+    }
+  }
+
+  return true;
+}
+
+void quit(SemaManager &manager) {
+  g_quit.store(true, std::memory_order_relaxed);
+  manager.quit();
+
+  { std::lock_guard lock(index_request->mutex_); }
+  indexer_waiter->cv.notify_all();
+  { std::lock_guard lock(for_stdout->mutex_); }
+  stdout_waiter->cv.notify_one();
+  
