@@ -400,4 +400,19 @@ bool indexer_Parse(SemaManager *completion, WorkingFiles *wfiles,
       std::lock_guard lock(getFileMutex(path));
       int loaded = vfs->loaded(path), retain = g_config->cache.retainInMemory;
       if (loaded)
-        prev = rawC
+        prev = rawCacheLoad(path);
+      else
+        prev.reset();
+      if (retain > 0 && retain <= loaded + 1) {
+        std::lock_guard lock(g_index_mutex);
+        auto it = g_index.insert_or_assign(
+            path, InMemoryIndexFile{curr->file_contents, *curr});
+        std::string().swap(it.first->second.index.file_contents);
+      }
+      if (g_config->cache.directory.size()) {
+        std::string cache_path = getCachePath(path);
+        if (deleted) {
+          (void)sys::fs::remove(cache_path);
+          (void)sys::fs::remove(appendSerializationFormat(cache_path));
+        } else {
+ 
