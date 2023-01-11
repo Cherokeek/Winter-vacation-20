@@ -450,4 +450,29 @@ void quit(SemaManager &manager) {
   indexer_waiter->cv.notify_all();
   { std::lock_guard lock(for_stdout->mutex_); }
   stdout_waiter->cv.notify_one();
-  
+  std::unique_lock lock(thread_mtx);
+  no_active_threads.wait(lock, [] { return !active_threads; });
+}
+
+} // namespace
+
+void threadEnter() {
+  std::lock_guard lock(thread_mtx);
+  active_threads++;
+}
+
+void threadLeave() {
+  std::lock_guard lock(thread_mtx);
+  if (!--active_threads)
+    no_active_threads.notify_one();
+}
+
+void init() {
+  main_waiter = new MultiQueueWaiter;
+  on_request = new ThreadedQueue<InMessage>(main_waiter);
+  on_indexed = new ThreadedQueue<IndexUpdate>(main_waiter);
+
+  indexer_waiter = new MultiQueueWaiter;
+  index_request = new ThreadedQueue<IndexRequest>(indexer_waiter);
+
+  stdout_waiter =
