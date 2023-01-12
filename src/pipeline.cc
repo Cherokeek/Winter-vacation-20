@@ -525,4 +525,27 @@ void launchStdin() {
   std::thread([]() {
     set_thread_name("stdin");
     std::string str;
-    const std::string_view kConten
+    const std::string_view kContentLength("Content-Length: ");
+    bool received_exit = false;
+    while (true) {
+      int len = 0;
+      str.clear();
+      while (true) {
+        int c = getchar();
+        if (c == EOF)
+          goto quit;
+        if (c == '\n') {
+          if (str.empty())
+            break;
+          if (!str.compare(0, kContentLength.size(), kContentLength))
+            len = atoi(str.c_str() + kContentLength.size());
+          str.clear();
+        } else if (c != '\r') {
+          str += c;
+        }
+      }
+
+      str.resize(len);
+      for (int i = 0; i < len; ++i) {
+        int c = getchar();
+        if 
