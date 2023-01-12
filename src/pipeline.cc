@@ -475,4 +475,21 @@ void init() {
   indexer_waiter = new MultiQueueWaiter;
   index_request = new ThreadedQueue<IndexRequest>(indexer_waiter);
 
-  stdout_waiter =
+  stdout_waiter = new MultiQueueWaiter;
+  for_stdout = new ThreadedQueue<std::string>(stdout_waiter);
+}
+
+void indexer_Main(SemaManager *manager, VFS *vfs, Project *project,
+                  WorkingFiles *wfiles) {
+  GroupMatch matcher(g_config->index.whitelist, g_config->index.blacklist);
+  while (true)
+    if (!indexer_Parse(manager, wfiles, project, vfs, matcher))
+      if (indexer_waiter->wait(g_quit, index_request))
+        break;
+}
+
+void main_OnIndexed(DB *db, WorkingFiles *wfiles, IndexUpdate *update) {
+  if (update->refresh) {
+    LOG_S(INFO)
+        << "loaded project. Refresh semantic highlight for all working file.";
+  
