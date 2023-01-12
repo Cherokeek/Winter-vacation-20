@@ -508,4 +508,21 @@ void main_OnIndexed(DB *db, WorkingFiles *wfiles, IndexUpdate *update) {
   // Update indexed content, skipped ranges, and semantic highlighting.
   if (update->files_def_update) {
     auto &def_u = *update->files_def_update;
-    if (WorkingFile *wfile = w
+    if (WorkingFile *wfile = wfiles->getFile(def_u.first.path)) {
+      // FIXME With index.onChange: true, use buffer_content only for
+      // request.path
+      wfile->setIndexContent(g_config->index.onChange ? wfile->buffer_content
+                                                      : def_u.second);
+      QueryFile &file = db->files[update->file_id];
+      emitSkippedRanges(wfile, file);
+      emitSemanticHighlight(db, wfile, file);
+    }
+  }
+}
+
+void launchStdin() {
+  threadEnter();
+  std::thread([]() {
+    set_thread_name("stdin");
+    std::string str;
+    const std::string_view kConten
