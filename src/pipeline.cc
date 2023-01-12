@@ -492,4 +492,20 @@ void main_OnIndexed(DB *db, WorkingFiles *wfiles, IndexUpdate *update) {
   if (update->refresh) {
     LOG_S(INFO)
         << "loaded project. Refresh semantic highlight for all working file.";
-  
+    std::lock_guard lock(wfiles->mutex);
+    for (auto &[f, wf] : wfiles->files) {
+      std::string path = lowerPathIfInsensitive(f);
+      if (db->name2file_id.find(path) == db->name2file_id.end())
+        continue;
+      QueryFile &file = db->files[db->name2file_id[path]];
+      emitSemanticHighlight(db, wf.get(), file);
+    }
+    return;
+  }
+
+  db->applyIndexUpdate(update);
+
+  // Update indexed content, skipped ranges, and semantic highlighting.
+  if (update->files_def_update) {
+    auto &def_u = *update->files_def_update;
+    if (WorkingFile *wfile = w
