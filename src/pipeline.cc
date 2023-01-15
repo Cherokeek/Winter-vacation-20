@@ -548,4 +548,22 @@ void launchStdin() {
       str.resize(len);
       for (int i = 0; i < len; ++i) {
         int c = getchar();
-        if 
+        if (c == EOF)
+          goto quit;
+        str[i] = c;
+      }
+
+      auto message = std::make_unique<char[]>(len);
+      std::copy(str.begin(), str.end(), message.get());
+      auto document = std::make_unique<rapidjson::Document>();
+      document->Parse(message.get(), len);
+      assert(!document->HasParseError());
+
+      JsonReader reader{document.get()};
+      if (!reader.m->HasMember("jsonrpc") ||
+          std::string((*reader.m)["jsonrpc"].GetString()) != "2.0")
+        break;
+      RequestId id;
+      std::string method;
+      reflectMember(reader, "id", id);
+      reflectMember(reader, "method", m
