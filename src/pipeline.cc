@@ -566,4 +566,16 @@ void launchStdin() {
       RequestId id;
       std::string method;
       reflectMember(reader, "id", id);
-      reflectMember(reader, "method", m
+      reflectMember(reader, "method", method);
+      if (id.valid())
+        LOG_V(2) << "receive RequestMessage: " << id.value << " " << method;
+      else
+        LOG_V(2) << "receive NotificationMessage " << method;
+      if (method.empty())
+        continue;
+      received_exit = method == "exit";
+      // g_config is not available before "initialize". Use 0 in that case.
+      on_request->pushBack(
+          {id, std::move(method), std::move(message), std::move(document),
+           chrono::steady_clock::now() +
+               chrono::milliseconds(g_config ? g_config->request.timeout : 0)});
