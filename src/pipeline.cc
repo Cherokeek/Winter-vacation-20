@@ -622,4 +622,22 @@ void mainLoop() {
   WorkingFiles wfiles;
   VFS vfs;
 
-  SemaManager ma
+  SemaManager manager(
+      &project, &wfiles,
+      [](const std::string &path, std::vector<Diagnostic> diagnostics) {
+        PublishDiagnosticParam params;
+        params.uri = DocumentUri::fromPath(path);
+        params.diagnostics = std::move(diagnostics);
+        notify("textDocument/publishDiagnostics", params);
+      },
+      [](const RequestId &id) {
+        if (id.valid()) {
+          ResponseError err;
+          err.code = ErrorCode::InternalError;
+          err.message = "drop older completion request";
+          replyError(id, err);
+        }
+      });
+
+  IncludeComplete include_complete(&project);
+  
