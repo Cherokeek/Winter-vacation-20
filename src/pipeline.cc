@@ -593,4 +593,33 @@ void launchStdin() {
       document->Parse(message.get(), str.size());
       on_request->pushBack({RequestId(), std::string("exit"),
                             std::move(message), std::move(document),
-                            chrono::steady_clock::no
+                            chrono::steady_clock::now()});
+    }
+    threadLeave();
+  }).detach();
+}
+
+void launchStdout() {
+  threadEnter();
+  std::thread([]() {
+    set_thread_name("stdout");
+
+    while (true) {
+      std::vector<std::string> messages = for_stdout->dequeueAll();
+      for (auto &s : messages) {
+        llvm::outs() << "Content-Length: " << s.size() << "\r\n\r\n" << s;
+        llvm::outs().flush();
+      }
+      if (stdout_waiter->wait(g_quit, for_stdout))
+        break;
+    }
+    threadLeave();
+  }).detach();
+}
+
+void mainLoop() {
+  Project project;
+  WorkingFiles wfiles;
+  VFS vfs;
+
+  SemaManager ma
