@@ -579,3 +579,18 @@ void launchStdin() {
           {id, std::move(method), std::move(message), std::move(document),
            chrono::steady_clock::now() +
                chrono::milliseconds(g_config ? g_config->request.timeout : 0)});
+
+      if (received_exit)
+        break;
+    }
+
+  quit:
+    if (!received_exit) {
+      const std::string_view str("{\"jsonrpc\":\"2.0\",\"method\":\"exit\"}");
+      auto message = std::make_unique<char[]>(str.size());
+      std::copy(str.begin(), str.end(), message.get());
+      auto document = std::make_unique<rapidjson::Document>();
+      document->Parse(message.get(), str.size());
+      on_request->pushBack({RequestId(), std::string("exit"),
+                            std::move(message), std::move(document),
+                            chrono::steady_clock::no
