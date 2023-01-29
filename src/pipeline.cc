@@ -640,4 +640,25 @@ void mainLoop() {
       });
 
   IncludeComplete include_complete(&project);
-  
+  DB db;
+
+  // Setup shared references.
+  MessageHandler handler;
+  handler.db = &db;
+  handler.project = &project;
+  handler.vfs = &vfs;
+  handler.wfiles = &wfiles;
+  handler.manager = &manager;
+  handler.include_complete = &include_complete;
+
+  bool work_done_created = false, in_progress = false;
+  bool has_indexed = false;
+  int64_t last_completed = 0;
+  std::deque<InMessage> backlog;
+  StringMap<std::deque<InMessage *>> path2backlog;
+  while (true) {
+    if (backlog.size()) {
+      auto now = chrono::steady_clock::now();
+      handler.overdue = true;
+      while (backlog.size()) {
+    
