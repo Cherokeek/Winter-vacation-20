@@ -661,4 +661,22 @@ void mainLoop() {
       auto now = chrono::steady_clock::now();
       handler.overdue = true;
       while (backlog.size()) {
-    
+        if (backlog[0].backlog_path.size()) {
+          if (now < backlog[0].deadline)
+            break;
+          handler.run(backlog[0]);
+          path2backlog[backlog[0].backlog_path].pop_front();
+        }
+        backlog.pop_front();
+      }
+      handler.overdue = false;
+    }
+
+    std::vector<InMessage> messages = on_request->dequeueAll();
+    bool did_work = messages.size();
+    for (InMessage &message : messages)
+      try {
+        handler.run(message);
+      } catch (NotIndexed &ex) {
+        backlog.push_back(std::move(message));
+        backlog.back().back
