@@ -716,4 +716,19 @@ void mainLoop() {
         if (!in_progress) {
           WorkDoneProgressParam param;
           param.token = index_progress_token;
-          
+          param.value.kind = "begin";
+          param.value.title = "indexing";
+          notify("$/progress", param);
+          in_progress = true;
+        }
+        int64_t last_idle = stats.last_idle.load(std::memory_order_relaxed);
+        WorkDoneProgressParam param;
+        param.token = index_progress_token;
+        param.value.kind = "report";
+        param.value.message =
+            (Twine(completed - last_idle) + "/" + Twine(enqueued - last_idle))
+                .str();
+        param.value.percentage =
+            100 * (completed - last_idle) / (enqueued - last_idle);
+        notify("$/progress", param);
+     
