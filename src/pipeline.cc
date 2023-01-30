@@ -679,4 +679,22 @@ void mainLoop() {
         handler.run(message);
       } catch (NotIndexed &ex) {
         backlog.push_back(std::move(message));
-        backlog.back().back
+        backlog.back().backlog_path = ex.path;
+        path2backlog[ex.path].push_back(&backlog.back());
+      }
+
+    bool indexed = false;
+    for (int i = 20; i--;) {
+      std::optional<IndexUpdate> update = on_indexed->tryPopFront();
+      if (!update)
+        break;
+      did_work = true;
+      indexed = true;
+      main_OnIndexed(&db, &wfiles, &*update);
+      if (update->files_def_update) {
+        auto it = path2backlog.find(update->files_def_update->first.path);
+        if (it != path2backlog.end()) {
+          for (auto &message : it->second) {
+            handler.run(*message);
+            message->backlog_path.clear();
+          }
