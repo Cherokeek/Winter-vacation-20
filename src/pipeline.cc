@@ -698,3 +698,22 @@ void mainLoop() {
             handler.run(*message);
             message->backlog_path.clear();
           }
+          path2backlog.erase(it);
+        }
+      }
+    }
+
+    int64_t completed = stats.completed.load(std::memory_order_relaxed);
+    if (completed != last_completed) {
+      if (!work_done_created) {
+        WorkDoneProgressCreateParam param;
+        request("window/workDoneProgress/create", param);
+        work_done_created = true;
+      }
+
+      int64_t enqueued = stats.enqueued.load(std::memory_order_relaxed);
+      if (completed != enqueued) {
+        if (!in_progress) {
+          WorkDoneProgressParam param;
+          param.token = index_progress_token;
+          
