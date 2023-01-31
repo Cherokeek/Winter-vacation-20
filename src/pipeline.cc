@@ -776,4 +776,24 @@ void standalone(const std::string &root) {
   handler.wfiles = &wfiles;
   handler.vfs = &vfs;
   handler.manager = &manager;
-  ha
+  handler.include_complete = &complete;
+
+  standaloneInitialize(handler, root);
+  bool tty = sys::Process::StandardOutIsDisplayed();
+
+  if (tty) {
+    int entries = 0;
+    for (auto &[_, folder] : project.root2folder)
+      entries += folder.entries.size();
+    printf("entries:   %4d\n", entries);
+  }
+  while (1) {
+    (void)on_indexed->dequeueAll();
+    int64_t enqueued = stats.enqueued, completed = stats.completed;
+    if (tty) {
+      printf("\rcompleted: %4" PRId64 "/%" PRId64, completed, enqueued);
+      fflush(stdout);
+    }
+    if (completed == enqueued)
+      break;
+    std::this_thread::sleep_for(s
