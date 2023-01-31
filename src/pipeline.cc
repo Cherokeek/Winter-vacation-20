@@ -751,4 +751,29 @@ void mainLoop() {
         freeUnusedMemory();
         has_indexed = false;
       }
-      if (back
+      if (backlog.empty())
+        main_waiter->wait(g_quit, on_indexed, on_request);
+      else
+        main_waiter->waitUntil(backlog[0].deadline, on_indexed, on_request);
+    }
+  }
+
+  quit(manager);
+}
+
+void standalone(const std::string &root) {
+  Project project;
+  WorkingFiles wfiles;
+  VFS vfs;
+  SemaManager manager(
+      nullptr, nullptr,
+      [](const std::string &, const std::vector<Diagnostic> &) {},
+      [](const RequestId &id) {});
+  IncludeComplete complete(&project);
+
+  MessageHandler handler;
+  handler.project = &project;
+  handler.wfiles = &wfiles;
+  handler.vfs = &vfs;
+  handler.manager = &manager;
+  ha
