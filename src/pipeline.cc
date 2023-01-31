@@ -731,4 +731,24 @@ void mainLoop() {
         param.value.percentage =
             100 * (completed - last_idle) / (enqueued - last_idle);
         notify("$/progress", param);
-     
+      } else if (in_progress) {
+        stats.last_idle.store(enqueued, std::memory_order_relaxed);
+        WorkDoneProgressParam param;
+        param.token = index_progress_token;
+        param.value.kind = "end";
+        notify("$/progress", param);
+        in_progress = false;
+      }
+      last_completed = completed;
+    }
+
+    if (did_work) {
+      has_indexed |= indexed;
+      if (g_quit.load(std::memory_order_relaxed))
+        break;
+    } else {
+      if (has_indexed) {
+        freeUnusedMemory();
+        has_indexed = false;
+      }
+      if (back
