@@ -818,4 +818,22 @@ void removeCache(const std::string &path) {
   }
 }
 
-std::optional<std::str
+std::optional<std::string> loadIndexedContent(const std::string &path) {
+  if (g_config->cache.directory.empty()) {
+    std::shared_lock lock(g_index_mutex);
+    auto it = g_index.find(path);
+    if (it == g_index.end())
+      return {};
+    return it->second.content;
+  }
+  return readContent(getCachePath(path));
+}
+
+void notifyOrRequest(const char *method, bool request,
+                     const std::function<void(JsonWriter &)> &fn) {
+  rapidjson::StringBuffer output;
+  rapidjson::Writer<rapidjson::StringBuffer> w(output);
+  w.StartObject();
+  w.Key("jsonrpc");
+  w.String("2.0");
+  w.Key
