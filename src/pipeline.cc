@@ -836,4 +836,24 @@ void notifyOrRequest(const char *method, bool request,
   w.StartObject();
   w.Key("jsonrpc");
   w.String("2.0");
-  w.Key
+  w.Key("method");
+  w.String(method);
+  if (request) {
+    w.Key("id");
+    w.Int64(request_id.fetch_add(1, std::memory_order_relaxed));
+  }
+  w.Key("params");
+  JsonWriter writer(&w);
+  fn(writer);
+  w.EndObject();
+  LOG_V(2) << (request ? "RequestMessage: " : "NotificationMessage: ")
+           << method;
+  for_stdout->pushBack(output.GetString());
+}
+
+static void reply(const RequestId &id, const char *key,
+                  const std::function<void(JsonWriter &)> &fn) {
+  rapidjson::StringBuffer output;
+  rapidjson::Writer<rapidjson::StringBuffer> w(output);
+  w.StartObject();
+  w.
