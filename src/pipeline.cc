@@ -796,4 +796,26 @@ void standalone(const std::string &root) {
     }
     if (completed == enqueued)
       break;
-    std::this_thread::sleep_for(s
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  }
+  if (tty)
+    puts("");
+  quit(manager);
+}
+
+void index(const std::string &path, const std::vector<const char *> &args,
+           IndexMode mode, bool must_exist, RequestId id) {
+  if (!path.empty())
+    stats.enqueued++;
+  index_request->pushBack({path, args, mode, must_exist, std::move(id)},
+                          mode != IndexMode::Background);
+}
+
+void removeCache(const std::string &path) {
+  if (g_config->cache.directory.size()) {
+    std::lock_guard lock(g_index_mutex);
+    g_index.erase(path);
+  }
+}
+
+std::optional<std::str
