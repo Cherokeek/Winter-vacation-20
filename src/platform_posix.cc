@@ -46,4 +46,25 @@ std::string normalizePath(llvm::StringRef path) {
   return {p.data(), p.size()};
 }
 
-void fre
+void freeUnusedMemory() {
+#ifdef __GLIBC__
+  malloc_trim(4 * 1024 * 1024);
+#endif
+}
+
+void traceMe() {
+  // If the environment variable is defined, wait for a debugger.
+  // In gdb, you need to invoke `signal SIGCONT` if you want ccls to continue
+  // after detaching.
+  const char *traceme = getenv("CCLS_TRACEME");
+  if (traceme)
+    raise(traceme[0] == 's' ? SIGSTOP : SIGTSTP);
+}
+
+void spawnThread(void *(*fn)(void *), void *arg) {
+  pthread_t thd;
+  pthread_attr_t attr;
+  struct rlimit rlim;
+  size_t stack_size = 4 * 1024 * 1024;
+  if (getrlimit(RLIMIT_STACK, &rlim) == 0 && rlim.rlim_cur != RLIM_INFINITY)
+    stack_size =
