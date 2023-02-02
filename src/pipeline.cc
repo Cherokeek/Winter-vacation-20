@@ -883,4 +883,9 @@ void reply(const RequestId &id, const std::function<void(JsonWriter &)> &fn) {
   reply(id, "result", fn);
 }
 
-void replyError(const RequestId 
+void replyError(const RequestId &id,
+                const std::function<void(JsonWriter &)> &fn) {
+  reply(id, "error", fn);
+}
+} // namespace pipeline
+} // namespace ccls
