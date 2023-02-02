@@ -856,4 +856,31 @@ static void reply(const RequestId &id, const char *key,
   rapidjson::StringBuffer output;
   rapidjson::Writer<rapidjson::StringBuffer> w(output);
   w.StartObject();
-  w.
+  w.Key("jsonrpc");
+  w.String("2.0");
+  w.Key("id");
+  switch (id.type) {
+  case RequestId::kNone:
+    w.Null();
+    break;
+  case RequestId::kInt:
+    w.Int64(atoll(id.value.c_str()));
+    break;
+  case RequestId::kString:
+    w.String(id.value.c_str(), id.value.size());
+    break;
+  }
+  w.Key(key);
+  JsonWriter writer(&w);
+  fn(writer);
+  w.EndObject();
+  if (id.valid())
+    LOG_V(2) << "respond to RequestMessage: " << id.value;
+  for_stdout->pushBack(output.GetString());
+}
+
+void reply(const RequestId &id, const std::function<void(JsonWriter &)> &fn) {
+  reply(id, "result", fn);
+}
+
+void replyError(const RequestId 
