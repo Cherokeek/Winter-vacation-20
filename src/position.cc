@@ -58,3 +58,24 @@ std::string Range::toString() {
   snprintf(buf, sizeof buf, "%d:%d-%d:%d", start.line + 1, start.column + 1,
            end.line + 1, end.column + 1);
   return buf;
+}
+
+void reflect(JsonReader &vis, Pos &v) { v = Pos::fromString(vis.getString()); }
+void reflect(JsonReader &vis, Range &v) {
+  v = Range::fromString(vis.getString());
+}
+
+void reflect(JsonWriter &vis, Pos &v) {
+  std::string output = v.toString();
+  vis.string(output.c_str(), output.size());
+}
+void reflect(JsonWriter &vis, Range &v) {
+  std::string output = v.toString();
+  vis.string(output.c_str(), output.size());
+}
+
+void reflect(BinaryReader &visitor, Pos &value) {
+  reflect(visitor, value.line);
+  reflect(visitor, value.column);
+}
+void reflect(B
