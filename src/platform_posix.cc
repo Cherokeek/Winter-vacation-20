@@ -67,4 +67,14 @@ void spawnThread(void *(*fn)(void *), void *arg) {
   struct rlimit rlim;
   size_t stack_size = 4 * 1024 * 1024;
   if (getrlimit(RLIMIT_STACK, &rlim) == 0 && rlim.rlim_cur != RLIM_INFINITY)
-    stack_size =
+    stack_size = rlim.rlim_cur;
+  pthread_attr_init(&attr);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+  pthread_attr_setstacksize(&attr, stack_size);
+  pipeline::threadEnter();
+  pthread_create(&thd, &attr, fn, arg);
+  pthread_attr_destroy(&attr);
+}
+} // namespace ccls
+
+#endif
