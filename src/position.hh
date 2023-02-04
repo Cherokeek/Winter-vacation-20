@@ -57,4 +57,21 @@ struct BinaryReader;
 struct BinaryWriter;
 
 void reflect(JsonReader &visitor, Pos &value);
-vo
+void reflect(JsonReader &visitor, Range &value);
+void reflect(JsonWriter &visitor, Pos &value);
+void reflect(JsonWriter &visitor, Range &value);
+void reflect(BinaryReader &visitor, Pos &value);
+void reflect(BinaryReader &visitor, Range &value);
+void reflect(BinaryWriter &visitor, Pos &value);
+void reflect(BinaryWriter &visitor, Range &value);
+} // namespace ccls
+
+namespace std {
+template <> struct hash<ccls::Range> {
+  std::size_t operator()(ccls::Range x) const {
+    union {
+      ccls::Range range;
+      uint64_t u64;
+    } u{x};
+    static_assert(sizeof(ccls::Range) == 8);
+   
