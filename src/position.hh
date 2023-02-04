@@ -32,3 +32,29 @@ struct Pos {
 };
 
 struct Range {
+  Pos start;
+  Pos end;
+
+  static Range fromString(const std::string &encoded);
+
+  bool valid() const { return start.valid(); }
+  bool contains(int line, int column) const;
+
+  std::string toString();
+
+  bool operator==(const Range &o) const {
+    return start == o.start && end == o.end;
+  }
+  bool operator<(const Range &o) const {
+    return !(start == o.start) ? start < o.start : end < o.end;
+  }
+};
+
+// reflection
+struct JsonReader;
+struct JsonWriter;
+struct BinaryReader;
+struct BinaryWriter;
+
+void reflect(JsonReader &visitor, Pos &value);
+vo
