@@ -78,4 +78,21 @@ void reflect(BinaryReader &visitor, Pos &value) {
   reflect(visitor, value.line);
   reflect(visitor, value.column);
 }
-void reflect(B
+void reflect(BinaryReader &visitor, Range &value) {
+  reflect(visitor, value.start.line);
+  reflect(visitor, value.start.column);
+  reflect(visitor, value.end.line);
+  reflect(visitor, value.end.column);
+}
+
+void reflect(BinaryWriter &vis, Pos &v) {
+  reflect(vis, v.line);
+  reflect(vis, v.column);
+}
+void reflect(BinaryWriter &vis, Range &v) {
+  reflect(vis, v.start.line);
+  reflect(vis, v.start.column);
+  reflect(vis, v.end.line);
+  reflect(vis, v.end.column);
+}
+} // namespace ccls
