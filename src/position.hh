@@ -74,4 +74,9 @@ template <> struct hash<ccls::Range> {
       uint64_t u64;
     } u{x};
     static_assert(sizeof(ccls::Range) == 8);
-   
+    return hash<uint64_t>()(u.u64);
+  }
+};
+} // namespace std
+
+MAKE_HASHABLE(ccls::Pos, t.line, t.column);
