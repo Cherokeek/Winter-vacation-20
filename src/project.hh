@@ -39,4 +39,17 @@ struct Project {
   };
 
   std::mutex mtx;
-  std::unordered_map<std::string, 
+  std::unordered_map<std::string, Folder> root2folder;
+
+  // Loads a project for the given |directory|.
+  //
+  // If |config->compilationDatabaseDirectory| is not empty, look for .ccls or
+  // compile_commands.json in it, otherwise they are retrieved in
+  // |root_directory|.
+  // For .ccls, recursive directory listing is used and files with known
+  // suffixes are indexed. .ccls files can exist in subdirectories and they
+  // will affect flags in their subtrees (relative paths are relative to the
+  // project root, not subdirectories). For compile_commands.json, its entries
+  // are indexed.
+  void load(const std::string &root);
+  void loadDirector
