@@ -52,4 +52,16 @@ struct Project {
   // project root, not subdirectories). For compile_commands.json, its entries
   // are indexed.
   void load(const std::string &root);
-  void loadDirector
+  void loadDirectory(const std::string &root, Folder &folder);
+
+  // Lookup the CompilationEntry for |filename|. If no entry was found this
+  // will infer one based on existing project structure.
+  Entry findEntry(const std::string &path, bool can_redirect, bool must_exist);
+
+  // If the client has overridden the flags, or specified them for a file
+  // that is not in the compilation_database.json make sure those changes
+  // are permanent.
+  void setArgsForFile(const std::vector<const char *> &args,
+                      const std::string &path);
+
+  void index(WorkingFiles *wfiles, const 
