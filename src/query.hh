@@ -210,3 +210,61 @@ std::optional<Location> getLsLocation(DB *db, WorkingFiles *wfiles,
 LocationLink getLocationLink(DB *db, WorkingFiles *wfiles, DeclRef dr);
 
 // Returns a symbol. The symbol will *NOT* have a location assigned.
+std::optional<SymbolInformation> getSymbolInfo(DB *db, SymbolIdx sym,
+                                               bool detailed);
+
+std::vector<SymbolRef> findSymbolsAtLocation(WorkingFile *working_file,
+                                             QueryFile *file, Position &ls_pos,
+                                             bool smallest = false);
+
+template <typename Fn> void withEntity(DB *db, SymbolIdx sym, Fn &&fn) {
+  switch (sym.kind) {
+  case Kind::Invalid:
+  case Kind::File:
+    break;
+  case Kind::Func:
+    fn(db->getFunc(sym));
+    break;
+  case Kind::Type:
+    fn(db->getType(sym));
+    break;
+  case Kind::Var:
+    fn(db->getVar(sym));
+    break;
+  }
+}
+
+template <typename Fn> void eachEntityDef(DB *db, SymbolIdx sym, Fn &&fn) {
+  withEntity(db, sym, [&](const auto &entity) {
+    for (auto &def : entity.def)
+      if (!fn(def))
+        break;
+  });
+}
+
+template <typename Fn>
+void eachOccurrence(DB *db, SymbolIdx sym, bool include_decl, Fn &&fn) {
+  withEntity(db, sym, [&](const auto &entity) {
+    for (Use use : entity.uses)
+      fn(use);
+    if (include_decl) {
+      for (auto &def : entity.def)
+        if (def.spell)
+          fn(*def.spell);
+      for (Use use : entity.declarations)
+        fn(use);
+    }
+  });
+}
+
+SymbolKind getSymbolKind(DB *db, SymbolIdx sym);
+
+template <typename C, typename Fn>
+void eachDefinedFunc(DB *db, const C &usrs, Fn &&fn) {
+  for (Usr usr : usrs) {
+    auto &obj = db->getFunc(usr);
+    if (!obj.def.empty())
+      fn(obj);
+  }
+}
+} // namespace ccls
