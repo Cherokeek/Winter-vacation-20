@@ -446,3 +446,400 @@ void DB::update(const Lid2file_id &lid2file_id, int file_id,
                 std::vector<std::pair<Usr, QueryType::Def>> &&us) {
   for (auto &u : us) {
     auto &def = u.second;
+    assert(def.detailed_name[0]);
+    u.second.file_id = file_id;
+    if (def.spell) {
+      assignFileId(lid2file_id, file_id, *def.spell);
+      files[def.spell->file_id].symbol2refcnt[{
+          {def.spell->range, u.first, Kind::Type, def.spell->role},
+          def.spell->extent}]++;
+    }
+    auto r = type_usr.try_emplace({u.first}, type_usr.size());
+    if (r.second)
+      types.emplace_back();
+    QueryType &existing = types[r.first->second];
+    existing.usr = u.first;
+    if (!tryReplaceDef(existing.def, std::move(def)))
+      existing.def.push_back(std::move(def));
+  }
+}
+
+void DB::update(const Lid2file_id &lid2file_id, int file_id,
+                std::vector<std::pair<Usr, QueryVar::Def>> &&us) {
+  for (auto &u : us) {
+    auto &def = u.second;
+    assert(def.detailed_name[0]);
+    u.second.file_id = file_id;
+    if (def.spell) {
+      assignFileId(lid2file_id, file_id, *def.spell);
+      files[def.spell->file_id].symbol2refcnt[{
+          {def.spell->range, u.first, Kind::Var, def.spell->role},
+          def.spell->extent}]++;
+    }
+    auto r = var_usr.try_emplace({u.first}, var_usr.size());
+    if (r.second)
+      vars.emplace_back();
+    QueryVar &existing = vars[r.first->second];
+    existing.usr = u.first;
+    if (!tryReplaceDef(existing.def, std::move(def)))
+      existing.def.push_back(std::move(def));
+  }
+}
+
+std::string_view DB::getSymbolName(SymbolIdx sym, bool qualified) {
+  Usr usr = sym.usr;
+  switch (sym.kind) {
+  default:
+    break;
+  case Kind::File:
+    if (files[usr].def)
+      return files[usr].def->path;
+    break;
+  case Kind::Func:
+    if (const auto *def = getFunc(usr).anyDef())
+      return def->name(qualified);
+    break;
+  case Kind::Type:
+    if (const auto *def = getType(usr).anyDef())
+      return def->name(qualified);
+    break;
+  case Kind::Var:
+    if (const auto *def = getVar(usr).anyDef())
+      return def->name(qualified);
+    break;
+  }
+  return "";
+}
+
+std::vector<uint8_t> DB::getFileSet(const std::vector<std::string> &folders) {
+  if (folders.empty())
+    return std::vector<uint8_t>(files.size(), 1);
+  std::vector<uint8_t> file_set(files.size());
+  for (QueryFile &file : files)
+    if (file.def) {
+      bool ok = false;
+      for (auto &folder : folders)
+        if (llvm::StringRef(file.def->path).startswith(folder)) {
+          ok = true;
+          break;
+        }
+      if (ok)
+        file_set[file.id] = 1;
+    }
+  return file_set;
+}
+
+namespace {
+// Computes roughly how long |range| is.
+int computeRangeSize(const Range &range) {
+  if (range.start.line != range.end.line)
+    return INT_MAX;
+  return range.end.column - range.start.column;
+}
+
+template <typename Q, typename C>
+std::vector<Use>
+getDeclarations(llvm::DenseMap<Usr, int, DenseMapInfoForUsr> &entity_usr,
+                llvm::SmallVectorImpl<Q> &entities, const C &usrs) {
+  std::vector<Use> ret;
+  ret.reserve(usrs.size());
+  for (Usr usr : usrs) {
+    Q &entity = entities[entity_usr[{usr}]];
+    bool has_def = false;
+    for (auto &def : entity.def)
+      if (def.spell) {
+        ret.push_back(*def.spell);
+        has_def = true;
+        break;
+      }
+    if (!has_def && entity.declarations.size())
+      ret.push_back(entity.declarations[0]);
+  }
+  return ret;
+}
+} // namespace
+
+Maybe<DeclRef> getDefinitionSpell(DB *db, SymbolIdx sym) {
+  Maybe<DeclRef> ret;
+  eachEntityDef(db, sym, [&](const auto &def) { return !(ret = def.spell); });
+  return ret;
+}
+
+std::vector<Use> getFuncDeclarations(DB *db, const std::vector<Usr> &usrs) {
+  return getDeclarations(db->func_usr, db->funcs, usrs);
+}
+std::vector<Use> getFuncDeclarations(DB *db, const Vec<Usr> &usrs) {
+  return getDeclarations(db->func_usr, db->funcs, usrs);
+}
+std::vector<Use> getTypeDeclarations(DB *db, const std::vector<Usr> &usrs) {
+  return getDeclarations(db->type_usr, db->types, usrs);
+}
+std::vector<DeclRef> getVarDeclarations(DB *db, const std::vector<Usr> &usrs,
+                                        unsigned kind) {
+  std::vector<DeclRef> ret;
+  ret.reserve(usrs.size());
+  for (Usr usr : usrs) {
+    QueryVar &var = db->getVar(usr);
+    bool has_def = false;
+    for (auto &def : var.def)
+      if (def.spell) {
+        has_def = true;
+        // See messages/ccls_vars.cc
+        if (def.kind == SymbolKind::Field) {
+          if (!(kind & 1))
+            break;
+        } else if (def.kind == SymbolKind::Variable) {
+          if (!(kind & 2))
+            break;
+        } else if (def.kind == SymbolKind::Parameter) {
+          if (!(kind & 4))
+            break;
+        }
+        ret.push_back(*def.spell);
+        break;
+      }
+    if (!has_def && var.declarations.size())
+      ret.push_back(var.declarations[0]);
+  }
+  return ret;
+}
+
+std::vector<DeclRef> &getNonDefDeclarations(DB *db, SymbolIdx sym) {
+  static std::vector<DeclRef> empty;
+  switch (sym.kind) {
+  case Kind::Func:
+    return db->getFunc(sym).declarations;
+  case Kind::Type:
+    return db->getType(sym).declarations;
+  case Kind::Var:
+    return db->getVar(sym).declarations;
+  default:
+    break;
+  }
+  return empty;
+}
+
+std::vector<Use> getUsesForAllBases(DB *db, QueryFunc &root) {
+  std::vector<Use> ret;
+  std::vector<QueryFunc *> stack{&root};
+  std::unordered_set<Usr> seen;
+  seen.insert(root.usr);
+  while (!stack.empty()) {
+    QueryFunc &func = *stack.back();
+    stack.pop_back();
+    if (auto *def = func.anyDef()) {
+      eachDefinedFunc(db, def->bases, [&](QueryFunc &func1) {
+        if (!seen.count(func1.usr)) {
+          seen.insert(func1.usr);
+          stack.push_back(&func1);
+          ret.insert(ret.end(), func1.uses.begin(), func1.uses.end());
+        }
+      });
+    }
+  }
+
+  return ret;
+}
+
+std::vector<Use> getUsesForAllDerived(DB *db, QueryFunc &root) {
+  std::vector<Use> ret;
+  std::vector<QueryFunc *> stack{&root};
+  std::unordered_set<Usr> seen;
+  seen.insert(root.usr);
+  while (!stack.empty()) {
+    QueryFunc &func = *stack.back();
+    stack.pop_back();
+    eachDefinedFunc(db, func.derived, [&](QueryFunc &func1) {
+      if (!seen.count(func1.usr)) {
+        seen.insert(func1.usr);
+        stack.push_back(&func1);
+        ret.insert(ret.end(), func1.uses.begin(), func1.uses.end());
+      }
+    });
+  }
+
+  return ret;
+}
+
+std::optional<lsRange> getLsRange(WorkingFile *wfile, const Range &location) {
+  if (!wfile || wfile->index_lines.empty())
+    return lsRange{Position{location.start.line, location.start.column},
+                   Position{location.end.line, location.end.column}};
+
+  int start_column = location.start.column, end_column = location.end.column;
+  std::optional<int> start = wfile->getBufferPosFromIndexPos(
+      location.start.line, &start_column, false);
+  std::optional<int> end =
+      wfile->getBufferPosFromIndexPos(location.end.line, &end_column, true);
+  if (!start || !end)
+    return std::nullopt;
+
+  // If remapping end fails (end can never be < start), just guess that the
+  // final location didn't move. This only screws up the highlighted code
+  // region if we guess wrong, so not a big deal.
+  //
+  // Remapping fails often in C++ since there are a lot of "};" at the end of
+  // class/struct definitions.
+  if (*end < *start)
+    *end = *start + (location.end.line - location.start.line);
+  if (*start == *end && start_column > end_column)
+    end_column = start_column;
+
+  return lsRange{Position{*start, start_column}, Position{*end, end_column}};
+}
+
+DocumentUri getLsDocumentUri(DB *db, int file_id, std::string *path) {
+  QueryFile &file = db->files[file_id];
+  if (file.def) {
+    *path = file.def->path;
+    return DocumentUri::fromPath(*path);
+  } else {
+    *path = "";
+    return DocumentUri::fromPath("");
+  }
+}
+
+DocumentUri getLsDocumentUri(DB *db, int file_id) {
+  QueryFile &file = db->files[file_id];
+  if (file.def) {
+    return DocumentUri::fromPath(file.def->path);
+  } else {
+    return DocumentUri::fromPath("");
+  }
+}
+
+std::optional<Location> getLsLocation(DB *db, WorkingFiles *wfiles, Use use) {
+  std::string path;
+  DocumentUri uri = getLsDocumentUri(db, use.file_id, &path);
+  std::optional<lsRange> range = getLsRange(wfiles->getFile(path), use.range);
+  if (!range)
+    return std::nullopt;
+  return Location{uri, *range};
+}
+
+std::optional<Location> getLsLocation(DB *db, WorkingFiles *wfiles,
+                                      SymbolRef sym, int file_id) {
+  return getLsLocation(db, wfiles, Use{{sym.range, sym.role}, file_id});
+}
+
+LocationLink getLocationLink(DB *db, WorkingFiles *wfiles, DeclRef dr) {
+  std::string path;
+  DocumentUri uri = getLsDocumentUri(db, dr.file_id, &path);
+  if (auto range = getLsRange(wfiles->getFile(path), dr.range))
+    if (auto extent = getLsRange(wfiles->getFile(path), dr.extent)) {
+      LocationLink ret;
+      ret.targetUri = uri.raw_uri;
+      ret.targetSelectionRange = *range;
+      ret.targetRange = extent->includes(*range) ? *extent : *range;
+      return ret;
+    }
+  return {};
+}
+
+SymbolKind getSymbolKind(DB *db, SymbolIdx sym) {
+  SymbolKind ret;
+  if (sym.kind == Kind::File)
+    ret = SymbolKind::File;
+  else {
+    ret = SymbolKind::Unknown;
+    withEntity(db, sym, [&](const auto &entity) {
+      for (auto &def : entity.def) {
+        ret = def.kind;
+        break;
+      }
+    });
+  }
+  return ret;
+}
+
+std::optional<SymbolInformation> getSymbolInfo(DB *db, SymbolIdx sym,
+                                               bool detailed) {
+  switch (sym.kind) {
+  case Kind::Invalid:
+    break;
+  case Kind::File: {
+    QueryFile &file = db->getFile(sym);
+    if (!file.def)
+      break;
+
+    SymbolInformation info;
+    info.name = file.def->path;
+    info.kind = SymbolKind::File;
+    return info;
+  }
+  default: {
+    SymbolInformation info;
+    eachEntityDef(db, sym, [&](const auto &def) {
+      if (detailed)
+        info.name = def.detailed_name;
+      else
+        info.name = def.name(true);
+      info.kind = def.kind;
+      return false;
+    });
+    return info;
+  }
+  }
+
+  return std::nullopt;
+}
+
+std::vector<SymbolRef> findSymbolsAtLocation(WorkingFile *wfile,
+                                             QueryFile *file, Position &ls_pos,
+                                             bool smallest) {
+  std::vector<SymbolRef> symbols;
+  // If multiVersion > 0, index may not exist and thus index_lines is empty.
+  if (wfile && wfile->index_lines.size()) {
+    if (auto line = wfile->getIndexPosFromBufferPos(ls_pos.line,
+                                                    &ls_pos.character, false)) {
+      ls_pos.line = *line;
+    } else {
+      ls_pos.line = -1;
+      return {};
+    }
+  }
+
+  for (auto [sym, refcnt] : file->symbol2refcnt)
+    if (refcnt > 0 && sym.range.contains(ls_pos.line, ls_pos.character))
+      symbols.push_back(sym);
+
+  // Order shorter ranges first, since they are more detailed/precise. This is
+  // important for macros which generate code so that we can resolving the
+  // macro argument takes priority over the entire macro body.
+  //
+  // Order Kind::Var before Kind::Type. Macro calls are treated as Var
+  // currently. If a macro expands to tokens led by a Kind::Type, the macro and
+  // the Type have the same range. We want to find the macro definition instead
+  // of the Type definition.
+  //
+  // Then order functions before other types, which makes goto definition work
+  // better on constructors.
+  std::sort(
+      symbols.begin(), symbols.end(),
+      [](const SymbolRef &a, const SymbolRef &b) {
+        int t = computeRangeSize(a.range) - computeRangeSize(b.range);
+        if (t)
+          return t < 0;
+        // MacroExpansion
+        if ((t = (a.role & Role::Dynamic) - (b.role & Role::Dynamic)))
+          return t > 0;
+        if ((t = (a.role & Role::Definition) - (b.role & Role::Definition)))
+          return t > 0;
+        // operator> orders Var/Func before Type.
+        t = static_cast<int>(a.kind) - static_cast<int>(b.kind);
+        if (t)
+          return t > 0;
+        return a.usr < b.usr;
+      });
+  if (symbols.size() && smallest) {
+    SymbolRef sym = symbols[0];
+    for (size_t i = 1; i < symbols.size(); i++)
+      if (!(sym.range == symbols[i].range && sym.kind == symbols[i].kind)) {
+        symbols.resize(i);
+        break;
+      }
+  }
+
+  return symbols;
+}
+} // namespace ccls
