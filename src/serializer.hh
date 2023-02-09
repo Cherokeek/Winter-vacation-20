@@ -228,3 +228,180 @@ void reflect(BinaryWriter &vis, std::string &v);
 
 void reflect(JsonReader &vis, JsonNull &v);
 void reflect(JsonWriter &vis, JsonNull &v);
+
+void reflect(JsonReader &vis, SerializeFormat &v);
+void reflect(JsonWriter &vis, SerializeFormat &v);
+
+void reflect(JsonWriter &vis, std::string_view &v);
+
+//// Type constructors
+
+// reflectMember std::optional<T> is used to represent TypeScript optional
+// properties (in `key: value` context). reflect std::optional<T> is used for a
+// different purpose, whether an object is nullable (possibly in `value`
+// context).
+template <typename T> void reflect(JsonReader &vis, std::optional<T> &v) {
+  if (!vis.isNull()) {
+    v.emplace();
+    reflect(vis, *v);
+  }
+}
+template <typename T> void reflect(JsonWriter &vis, std::optional<T> &v) {
+  if (v)
+    reflect(vis, *v);
+  else
+    vis.null_();
+}
+template <typename T> void reflect(BinaryReader &vis, std::optional<T> &v) {
+  if (*vis.p_++) {
+    v.emplace();
+    reflect(vis, *v);
+  }
+}
+template <typename T> void reflect(BinaryWriter &vis, std::optional<T> &v) {
+  if (v) {
+    vis.pack<unsigned char>(1);
+    reflect(vis, *v);
+  } else {
+    vis.pack<unsigned char>(0);
+  }
+}
+
+// The same as std::optional
+template <typename T> void reflect(JsonReader &vis, Maybe<T> &v) {
+  if (!vis.isNull())
+    reflect(vis, *v);
+}
+template <typename T> void reflect(JsonWriter &vis, Maybe<T> &v) {
+  if (v)
+    reflect(vis, *v);
+  else
+    vis.null_();
+}
+template <typename T> void reflect(BinaryReader &vis, Maybe<T> &v) {
+  if (*vis.p_++)
+    reflect(vis, *v);
+}
+template <typename T> void reflect(BinaryWriter &vis, Maybe<T> &v) {
+  if (v) {
+    vis.pack<unsigned char>(1);
+    reflect(vis, *v);
+  } else {
+    vis.pack<unsigned char>(0);
+  }
+}
+
+template <typename T>
+void reflectMember(JsonWriter &vis, const char *name, std::optional<T> &v) {
+  // For TypeScript std::optional property key?: value in the spec,
+  // We omit both key and value if value is std::nullopt (null) for JsonWriter
+  // to reduce output. But keep it for other serialization formats.
+  if (v) {
+    vis.key(name);
+    reflect(vis, *v);
+  }
+}
+template <typename T>
+void reflectMember(BinaryWriter &vis, const char *, std::optional<T> &v) {
+  reflect(vis, v);
+}
+
+// The same as std::optional
+template <typename T>
+void reflectMember(JsonWriter &vis, const char *name, Maybe<T> &v) {
+  if (v.valid()) {
+    vis.key(name);
+    reflect(vis, v);
+  }
+}
+template <typename T>
+void reflectMember(BinaryWriter &vis, const char *, Maybe<T> &v) {
+  reflect(vis, v);
+}
+
+template <typename L, typename R>
+void reflect(JsonReader &vis, std::pair<L, R> &v) {
+  vis.member("L", [&]() { reflect(vis, v.first); });
+  vis.member("R", [&]() { reflect(vis, v.second); });
+}
+template <typename L, typename R>
+void reflect(JsonWriter &vis, std::pair<L, R> &v) {
+  vis.startObject();
+  reflectMember(vis, "L", v.first);
+  reflectMember(vis, "R", v.second);
+  vis.endObject();
+}
+template <typename L, typename R>
+void reflect(BinaryReader &vis, std::pair<L, R> &v) {
+  reflect(vis, v.first);
+  reflect(vis, v.second);
+}
+template <typename L, typename R>
+void reflect(BinaryWriter &vis, std::pair<L, R> &v) {
+  reflect(vis, v.first);
+  reflect(vis, v.second);
+}
+
+// std::vector
+template <typename T> void reflect(JsonReader &vis, std::vector<T> &v) {
+  vis.iterArray([&]() {
+    v.emplace_back();
+    reflect(vis, v.back());
+  });
+}
+template <typename T> void reflect(JsonWriter &vis, std::vector<T> &v) {
+  vis.startArray();
+  for (auto &it : v)
+    reflect(vis, it);
+  vis.endArray();
+}
+template <typename T> void reflect(BinaryReader &vis, std::vector<T> &v) {
+  for (auto n = vis.varUInt(); n; n--) {
+    v.emplace_back();
+    reflect(vis, v.back());
+  }
+}
+template <typename T> void reflect(BinaryWriter &vis, std::vector<T> &v) {
+  vis.varUInt(v.size());
+  for (auto &it : v)
+    reflect(vis, it);
+}
+
+// reflectMember
+
+void reflectMemberStart(JsonReader &);
+template <typename T> void reflectMemberStart(T &) {}
+inline void reflectMemberStart(JsonWriter &vis) { vis.startObject(); }
+
+template <typename T> void reflectMemberEnd(T &) {}
+inline void reflectMemberEnd(JsonWriter &vis) { vis.endObject(); }
+
+template <typename T>
+void reflectMember(JsonReader &vis, const char *name, T &v) {
+  vis.member(name, [&]() { reflect(vis, v); });
+}
+template <typename T>
+void reflectMember(JsonWriter &vis, const char *name, T &v) {
+  vis.key(name);
+  reflect(vis, v);
+}
+template <typename T>
+void reflectMember(BinaryReader &vis, const char *, T &v) {
+  reflect(vis, v);
+}
+template <typename T>
+void reflectMember(BinaryWriter &vis, const char *, T &v) {
+  reflect(vis, v);
+}
+
+// API
+
+const char *intern(llvm::StringRef str);
+llvm::CachedHashStringRef internH(llvm::StringRef str);
+std::string serialize(SerializeFormat format, IndexFile &file);
+std::unique_ptr<IndexFile>
+deserialize(SerializeFormat format, const std::string &path,
+            const std::string &serialized_index_content,
+            const std::string &file_content,
+            std::optional<int> expected_version);
+} // namespace ccls
