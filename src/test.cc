@@ -38,4 +38,29 @@ std::string toString(const rapidjson::Document &document) {
   rapidjson::StringBuffer buffer;
   rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
   writer.SetFormatOptions(
-      rapidjson::Prett
+      rapidjson::PrettyFormatOptions::kFormatSingleLineArray);
+  writer.SetIndent(' ', 2);
+
+  buffer.Clear();
+  document.Accept(writer);
+  return buffer.GetString();
+}
+
+struct TextReplacer {
+  struct Replacement {
+    std::string from;
+    std::string to;
+  };
+
+  std::vector<Replacement> replacements;
+
+  std::string apply(const std::string &content) {
+    std::string result = content;
+
+    for (const Replacement &replacement : replacements) {
+      while (true) {
+        size_t idx = result.find(replacement.from);
+        if (idx == std::string::npos)
+          break;
+
+        result.replace(result.begin() + id
