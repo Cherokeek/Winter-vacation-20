@@ -85,4 +85,23 @@ std::vector<std::string> splitString(const std::string &str,
   std::vector<std::string> strings;
 
   std::string::size_type pos = 0;
-  std::stri
+  std::string::size_type prev = 0;
+  while ((pos = str.find(delimiter, prev)) != std::string::npos) {
+    strings.push_back(str.substr(prev, pos - prev));
+    prev = pos + 1;
+  }
+
+  // To get the last substring (or only, if delimiter is not found)
+  strings.push_back(str.substr(prev));
+
+  return strings;
+}
+
+void parseTestExpectation(
+    const std::string &filename,
+    const std::vector<std::string> &lines_with_endings, TextReplacer *replacer,
+    std::vector<std::string> *flags,
+    std::unordered_map<std::string, std::string> *output_sections) {
+  // Scan for EXTRA_FLAGS:
+  {
+    bool in_output = false;
