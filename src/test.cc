@@ -63,4 +63,26 @@ struct TextReplacer {
         if (idx == std::string::npos)
           break;
 
-        result.replace(result.begin() + id
+        result.replace(result.begin() + idx,
+                       result.begin() + idx + replacement.from.size(),
+                       replacement.to);
+      }
+    }
+
+    return result;
+  }
+};
+
+void trimInPlace(std::string &s) {
+  auto f = [](char c) { return !isspace(c); };
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), f));
+  s.erase(std::find_if(s.rbegin(), s.rend(), f).base(), s.end());
+}
+
+std::vector<std::string> splitString(const std::string &str,
+                                     const std::string &delimiter) {
+  // http://stackoverflow.com/a/13172514
+  std::vector<std::string> strings;
+
+  std::string::size_type pos = 0;
+  std::stri
