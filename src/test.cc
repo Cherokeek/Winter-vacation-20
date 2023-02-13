@@ -129,4 +129,22 @@ void parseTestExpectation(
 
     bool in_output = false;
     for (StringRef line_with_ending : lines_with_endings) {
-      if (line_with_ending.startswith
+      if (line_with_ending.startswith("*/"))
+        break;
+
+      if (line_with_ending.startswith("OUTPUT:")) {
+        // Terminate the previous output section if we found a new one.
+        if (in_output) {
+          (*output_sections)[active_output_filename] = active_output_contents;
+        }
+
+        // Try to tokenize OUTPUT: based one whitespace. If there is more than
+        // one token assume it is a filename.
+        SmallVector<StringRef, 2> tokens;
+        line_with_ending.split(tokens, ' ');
+        if (tokens.size() > 1) {
+          active_output_filename = tokens[1].str();
+        } else {
+          active_output_filename = filename;
+        }
+       
