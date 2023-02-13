@@ -105,3 +105,28 @@ void parseTestExpectation(
   // Scan for EXTRA_FLAGS:
   {
     bool in_output = false;
+    for (StringRef line : lines_with_endings) {
+      line = line.trim();
+
+      if (line.startswith("EXTRA_FLAGS:")) {
+        assert(!in_output && "multiple EXTRA_FLAGS sections");
+        in_output = true;
+        continue;
+      }
+
+      if (in_output && line.empty())
+        break;
+
+      if (in_output)
+        flags->push_back(line.str());
+    }
+  }
+
+  // Scan for OUTPUT:
+  {
+    std::string active_output_filename;
+    std::string active_output_contents;
+
+    bool in_output = false;
+    for (StringRef line_with_ending : lines_with_endings) {
+      if (line_with_ending.startswith
