@@ -147,4 +147,24 @@ void parseTestExpectation(
         } else {
           active_output_filename = filename;
         }
-       
+        active_output_contents = "";
+
+        in_output = true;
+      } else if (in_output) {
+        active_output_contents += line_with_ending;
+        active_output_contents.push_back('\n');
+      }
+    }
+
+    if (in_output)
+      (*output_sections)[active_output_filename] = active_output_contents;
+  }
+}
+
+void updateTestExpectation(const std::string &filename,
+                           const std::string &expectation,
+                           const std::string &actual) {
+  // Read the entire file into a string.
+  std::ifstream in(filename);
+  std::string str;
+  str.assign(std::istreamb
