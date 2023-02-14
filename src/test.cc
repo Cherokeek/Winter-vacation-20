@@ -184,4 +184,21 @@ void diffDocuments(std::string path, std::string path_section,
                    rapidjson::Document &expected, rapidjson::Document &actual) {
   std::string joined_actual_output = toString(actual);
   std::string joined_expected_output = toString(expected);
-  printf(
+  printf("[FAILED] %s (section %s)\n", path.c_str(), path_section.c_str());
+
+#if _POSIX_C_SOURCE >= 200809L
+  char expected_file[] = "/tmp/ccls.expected.XXXXXX";
+  char actual_file[] = "/tmp/ccls.actual.XXXXXX";
+  int expected_fd = mkstemp(expected_file);
+  int actual_fd = mkstemp(actual_file);
+  dprintf(expected_fd, "%s", joined_expected_output.c_str());
+  dprintf(actual_fd, "%s", joined_actual_output.c_str());
+  close(expected_fd);
+  close(actual_fd);
+  pid_t child = fork();
+  if (child == 0) {
+    execlp("diff", "diff", "-U", "3", expected_file, actual_file, NULL);
+    _Exit(127);
+  } else {
+    int status;
+    waitpid(child, &s
