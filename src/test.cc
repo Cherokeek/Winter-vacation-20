@@ -167,4 +167,21 @@ void updateTestExpectation(const std::string &filename,
   // Read the entire file into a string.
   std::ifstream in(filename);
   std::string str;
-  str.assign(std::istreamb
+  str.assign(std::istreambuf_iterator<char>(in),
+             std::istreambuf_iterator<char>());
+  in.close();
+
+  // Replace expectation
+  auto it = str.find(expectation);
+  assert(it != std::string::npos);
+  str.replace(it, expectation.size(), actual);
+
+  // Write it back out.
+  writeToFile(filename, str);
+}
+
+void diffDocuments(std::string path, std::string path_section,
+                   rapidjson::Document &expected, rapidjson::Document &actual) {
+  std::string joined_actual_output = toString(actual);
+  std::string joined_expected_output = toString(expected);
+  printf(
