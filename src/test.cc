@@ -257,4 +257,21 @@ findDbForPathEnding(const std::string &path,
   return nullptr;
 }
 
-bool runIndexTests(const std::string &filter_path, bool enabl
+bool runIndexTests(const std::string &filter_path, bool enable_update) {
+  gTestOutputMode = true;
+  std::string version = LLVM_VERSION_STRING;
+
+  // Index tests change based on the version of clang used.
+  static const char kRequiredClangVersion[] = "6.0.0";
+  if (version != kRequiredClangVersion &&
+      version.find("svn") == std::string::npos) {
+    fprintf(stderr,
+            "Index tests must be run using clang version %s, ccls is running "
+            "with %s\n",
+            kRequiredClangVersion, version.c_str());
+    return false;
+  }
+
+  bool success = true;
+  bool update_all = false;
+  // FIXME: sh
