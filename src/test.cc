@@ -234,4 +234,27 @@ void verifySerializeToFrom(IndexFile *file) {
 }
 
 std::string findExpectedOutputForFilename(
-    std::strin
+    std::string filename,
+    const std::unordered_map<std::string, std::string> &expected) {
+  for (const auto &entry : expected) {
+    if (StringRef(entry.first).endswith(filename))
+      return entry.second;
+  }
+
+  fprintf(stderr, "Couldn't find expected output for %s\n", filename.c_str());
+  getchar();
+  getchar();
+  return "{}";
+}
+
+IndexFile *
+findDbForPathEnding(const std::string &path,
+                    const std::vector<std::unique_ptr<IndexFile>> &dbs) {
+  for (auto &db : dbs) {
+    if (StringRef(db->path).endswith(path))
+      return db.get();
+  }
+  return nullptr;
+}
+
+bool runIndexTests(const std::string &filter_path, bool enabl
