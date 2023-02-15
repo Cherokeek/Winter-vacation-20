@@ -217,4 +217,21 @@ void diffDocuments(std::string path, std::string path_section,
   printf("Expected output for %s (section %s)\n:%s\n", path.c_str(),
          path_section.c_str(), joined_expected_output.c_str());
   printf("Actual output for %s (section %s)\n:%s\n", path.c_str(),
-      
+         path_section.c_str(), joined_actual_output.c_str());
+}
+
+void verifySerializeToFrom(IndexFile *file) {
+  std::string expected = file->toString();
+  std::string serialized = ccls::serialize(SerializeFormat::Json, *file);
+  std::unique_ptr<IndexFile> result =
+      ccls::deserialize(SerializeFormat::Json, "--.cc", serialized, "<empty>",
+                        std::nullopt /*expected_version*/);
+  std::string actual = result->toString();
+  if (expected != actual) {
+    fprintf(stderr, "Serialization failure\n");
+    // assert(false);
+  }
+}
+
+std::string findExpectedOutputForFilename(
+    std::strin
