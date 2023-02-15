@@ -201,4 +201,20 @@ void diffDocuments(std::string path, std::string path_section,
     _Exit(127);
   } else {
     int status;
-    waitpid(child, &s
+    waitpid(child, &status, 0);
+    unlink(expected_file);
+    unlink(actual_file);
+    // 'diff' returns 0 or 1 if exitted normaly.
+    if (WEXITSTATUS(status) <= 1)
+      return;
+  }
+#endif
+  std::vector<std::string> actual_output =
+      splitString(joined_actual_output, "\n");
+  std::vector<std::string> expected_output =
+      splitString(joined_expected_output, "\n");
+
+  printf("Expected output for %s (section %s)\n:%s\n", path.c_str(),
+         path_section.c_str(), joined_expected_output.c_str());
+  printf("Actual output for %s (section %s)\n:%s\n", path.c_str(),
+      
