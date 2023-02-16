@@ -290,4 +290,18 @@ bool runIndexTests(const std::string &filter_path, bool enable_update) {
         if (!filter_path.empty())
           printf("Running %s\n", path.c_str());
 
-        // Parse expected output fr
+        // Parse expected output from the test, parse it into JSON document.
+        std::vector<std::string> lines_with_endings;
+        {
+          std::ifstream fin(path);
+          for (std::string line; std::getline(fin, line);)
+            lines_with_endings.push_back(line);
+        }
+        TextReplacer text_replacer;
+        std::vector<std::string> flags;
+        std::unordered_map<std::string, std::string> all_expected_output;
+        parseTestExpectation(path, lines_with_endings, &text_replacer, &flags,
+                             &all_expected_output);
+
+        // Build flags.
+        fl
