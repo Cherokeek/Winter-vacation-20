@@ -320,4 +320,18 @@ bool runIndexTests(const std::string &filter_path, bool enable_update) {
 
         for (const auto &entry : all_expected_output) {
           const std::string &expected_path = entry.first;
-          std::string expected_
+          std::string expected_output = text_replacer.apply(entry.second);
+
+          // Get output from index operation.
+          IndexFile *db = findDbForPathEnding(expected_path, result.indexes);
+          std::string actual_output = "{}";
+          if (db) {
+            verifySerializeToFrom(db);
+            actual_output = db->toString();
+          }
+          actual_output = text_replacer.apply(actual_output);
+
+          // Compare output via rapidjson::Document to ignore any formatting
+          // differences.
+          rapidjson::Document actual;
+          actual.Parse(actual_output.
