@@ -304,4 +304,20 @@ bool runIndexTests(const std::string &filter_path, bool enable_update) {
                              &all_expected_output);
 
         // Build flags.
-        fl
+        flags.push_back("-resource-dir=" + getDefaultResourceDirectory());
+        flags.push_back(path);
+
+        // Run test.
+        g_config = new Config;
+        VFS vfs;
+        WorkingFiles wfiles;
+        std::vector<const char *> cargs;
+        for (auto &arg : flags)
+          cargs.push_back(arg.c_str());
+        bool ok;
+        auto result = ccls::idx::index(&completion, &wfiles, &vfs, "", path,
+                                       cargs, {}, true, ok);
+
+        for (const auto &entry : all_expected_output) {
+          const std::string &expected_path = entry.first;
+          std::string expected_
