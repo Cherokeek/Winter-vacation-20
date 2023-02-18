@@ -334,4 +334,21 @@ bool runIndexTests(const std::string &filter_path, bool enable_update) {
           // Compare output via rapidjson::Document to ignore any formatting
           // differences.
           rapidjson::Document actual;
-          actual.Parse(actual_output.
+          actual.Parse(actual_output.c_str());
+          rapidjson::Document expected;
+          expected.Parse(expected_output.c_str());
+
+          if (actual == expected) {
+            // std::cout << "[PASSED] " << path << std::endl;
+          } else {
+            if (!is_fail_allowed)
+              success = false;
+            diffDocuments(path, expected_path, expected, actual);
+            puts("\n");
+            if (enable_update) {
+              printf("[Enter to continue - type u to update test, a to update "
+                     "all]");
+              char c = 'u';
+              if (!update_all) {
+                c = getchar();
+              
