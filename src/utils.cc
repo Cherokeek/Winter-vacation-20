@@ -21,4 +21,26 @@
 #include <functional>
 #include <regex>
 #include <string.h>
-#include
+#include <unordered_map>
+
+using namespace llvm;
+
+namespace ccls {
+struct Matcher::Impl {
+  std::regex regex;
+};
+
+Matcher::Matcher(const std::string &pattern)
+    : impl(std::make_unique<Impl>()), pattern(pattern) {
+  impl->regex = std::regex(pattern, std::regex_constants::ECMAScript |
+                                        std::regex_constants::icase |
+                                        std::regex_constants::optimize);
+}
+
+Matcher::~Matcher() {}
+
+bool Matcher::matches(const std::string &text) const {
+  return std::regex_search(text, impl->regex, std::regex_constants::match_any);
+}
+
+GroupMatch::GroupMatch(const std::vector<std:
