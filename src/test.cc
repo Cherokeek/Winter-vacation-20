@@ -351,4 +351,24 @@ bool runIndexTests(const std::string &filter_path, bool enable_update) {
               char c = 'u';
               if (!update_all) {
                 c = getchar();
-              
+                getchar();
+              }
+
+              if (c == 'a')
+                update_all = true;
+
+              if (update_all || c == 'u') {
+                // Note: we use |entry.second| instead of |expected_output|
+                // because
+                // |expected_output| has had text replacements applied.
+                updateTestExpectation(path, entry.second,
+                                      toString(actual) + "\n");
+              }
+            }
+          }
+        }
+      });
+
+  return success;
+}
+} // namespace ccls
