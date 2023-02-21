@@ -43,4 +43,22 @@ bool Matcher::matches(const std::string &text) const {
   return std::regex_search(text, impl->regex, std::regex_constants::match_any);
 }
 
-GroupMatch::GroupMatch(const std::vector<std:
+GroupMatch::GroupMatch(const std::vector<std::string> &whitelist,
+                       const std::vector<std::string> &blacklist) {
+  auto err = [](const std::string &pattern, const char *what) {
+    ShowMessageParam params;
+    params.type = MessageType::Error;
+    params.message =
+        "failed to parse EMCAScript regex " + pattern + " : " + what;
+    pipeline::notify(window_showMessage, params);
+  };
+  for (const std::string &pattern : whitelist) {
+    try {
+      this->whitelist.emplace_back(pattern);
+    } catch (const std::exception &e) {
+      err(pattern, e.what());
+    }
+  }
+  for (const std::string &pattern : blacklist) {
+    try {
+      this->blacklist.emp
