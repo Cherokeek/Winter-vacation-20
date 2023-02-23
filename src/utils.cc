@@ -61,4 +61,30 @@ GroupMatch::GroupMatch(const std::vector<std::string> &whitelist,
   }
   for (const std::string &pattern : blacklist) {
     try {
-      this->blacklist.emp
+      this->blacklist.emplace_back(pattern);
+    } catch (const std::exception &e) {
+      err(pattern, e.what());
+    }
+  }
+}
+
+bool GroupMatch::matches(const std::string &text,
+                         std::string *blacklist_pattern) const {
+  for (const Matcher &m : whitelist)
+    if (m.matches(text))
+      return true;
+  for (const Matcher &m : blacklist)
+    if (m.matches(text)) {
+      if (blacklist_pattern)
+        *blacklist_pattern = m.pattern;
+      return false;
+    }
+  return true;
+}
+
+uint64_t hashUsr(llvm::StringRef s) {
+  union {
+    uint64_t ret;
+    uint8_t out[8];
+  };
+  // k is an arbitrary key. Do
