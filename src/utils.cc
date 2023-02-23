@@ -87,4 +87,28 @@ uint64_t hashUsr(llvm::StringRef s) {
     uint64_t ret;
     uint8_t out[8];
   };
-  // k is an arbitrary key. Do
+  // k is an arbitrary key. Don't change it.
+  const uint8_t k[16] = {0xd0, 0xe5, 0x4d, 0x61, 0x74, 0x63, 0x68, 0x52,
+                         0x61, 0x79, 0xea, 0x70, 0xca, 0x70, 0xf0, 0x0d};
+  (void)siphash(reinterpret_cast<const uint8_t *>(s.data()), s.size(), k, out,
+                8);
+  return ret;
+}
+
+std::string lowerPathIfInsensitive(const std::string &path) {
+#if defined(_WIN32)
+  std::string ret = path;
+  for (char &c : ret)
+    c = tolower(c);
+  return ret;
+#else
+  return path;
+#endif
+}
+
+void ensureEndsInSlash(std::string &path) {
+  if (path.empty() || path[path.size() - 1] != '/')
+    path += '/';
+}
+
+std::string es
