@@ -111,4 +111,26 @@ void ensureEndsInSlash(std::string &path) {
     path += '/';
 }
 
-std::string es
+std::string escapeFileName(std::string path) {
+  bool slash = path.size() && path.back() == '/';
+#ifdef _WIN32
+  std::replace(path.begin(), path.end(), ':', '@');
+#endif
+  std::replace(path.begin(), path.end(), '/', '@');
+  if (slash)
+    path += '/';
+  return path;
+}
+
+std::string resolveIfRelative(const std::string &directory,
+                              const std::string &path) {
+  if (sys::path::is_absolute(path))
+    return path;
+  SmallString<256> ret;
+  sys::path::append(ret, directory, path);
+  return normalizePath(ret.str());
+}
+
+std::string realPath(const std::string &path) {
+  SmallString<256> buf;
+  sys::fs::
