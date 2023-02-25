@@ -133,4 +133,28 @@ std::string resolveIfRelative(const std::string &directory,
 
 std::string realPath(const std::string &path) {
   SmallString<256> buf;
-  sys::fs::
+  sys::fs::real_path(path, buf);
+  return buf.empty() ? path : llvm::sys::path::convert_to_slash(buf);
+}
+
+bool normalizeFolder(std::string &path) {
+  for (auto &[root, real] : g_config->workspaceFolders) {
+    StringRef p(path);
+    if (p.startswith(root))
+      return true;
+    if (p.startswith(real)) {
+      path = root + path.substr(real.size());
+      return true;
+    }
+  }
+  return false;
+}
+
+std::optional<int64_t> lastWriteTime(const std::string &path) {
+  sys::fs::file_status status;
+  if (sys::fs::status(path, status))
+    return {};
+  return sys::toTimeT(status.getLastModificationTime());
+}
+
+std::optional<s
