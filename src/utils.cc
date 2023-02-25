@@ -175,4 +175,26 @@ void writeToFile(const std::string &filename, const std::string &content) {
   if (!f ||
       (content.size() && fwrite(content.c_str(), content.size(), 1, f) != 1)) {
     LOG_S(ERROR) << "failed to write to " << filename << ' ' << strerror(errno);
-    return
+    return;
+  }
+  fclose(f);
+}
+
+// Find discontinous |search| in |content|.
+// Return |found| and the count of skipped chars before found.
+int reverseSubseqMatch(std::string_view pat, std::string_view text,
+                       int case_sensitivity) {
+  if (case_sensitivity == 1)
+    case_sensitivity = std::any_of(pat.begin(), pat.end(), isupper) ? 2 : 0;
+  int j = pat.size();
+  if (!j)
+    return text.size();
+  for (int i = text.size(); i--;)
+    if ((case_sensitivity ? text[i] == pat[j - 1]
+                          : tolower(text[i]) == tolower(pat[j - 1])) &&
+        !--j)
+      return i;
+  return -1;
+}
+
+std::s
