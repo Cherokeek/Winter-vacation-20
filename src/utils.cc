@@ -157,4 +157,22 @@ std::optional<int64_t> lastWriteTime(const std::string &path) {
   return sys::toTimeT(status.getLastModificationTime());
 }
 
-std::optional<s
+std::optional<std::string> readContent(const std::string &filename) {
+  char buf[4096];
+  std::string ret;
+  FILE *f = fopen(filename.c_str(), "rb");
+  if (!f)
+    return {};
+  size_t n;
+  while ((n = fread(buf, 1, sizeof buf, f)) > 0)
+    ret.append(buf, n);
+  fclose(f);
+  return ret;
+}
+
+void writeToFile(const std::string &filename, const std::string &content) {
+  FILE *f = fopen(filename.c_str(), "wb");
+  if (!f ||
+      (content.size() && fwrite(content.c_str(), content.size(), 1, f) != 1)) {
+    LOG_S(ERROR) << "failed to write to " << filename << ' ' << strerror(errno);
+    return
