@@ -197,4 +197,5 @@ int reverseSubseqMatch(std::string_view pat, std::string_view text,
   return -1;
 }
 
-std::s
+std::string getDefaultResourceDirectory() { return CLANG_RESOURCE_DIRECTORY; }
+} // namespace ccls
