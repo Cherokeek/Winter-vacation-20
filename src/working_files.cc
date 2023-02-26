@@ -349,3 +349,122 @@ Position WorkingFile::getCompletionPosition(Position pos, std::string *filter) c
   while (i > 0 && isAsciiIdentifierContinue(buffer_content[i - 1]))
     --i;
   *filter = buffer_content.substr(i, start - i);
+  return getPositionForOffset(buffer_content, i);
+}
+
+WorkingFile *WorkingFiles::getFile(const std::string &path) {
+  std::lock_guard lock(mutex);
+  return getFileUnlocked(path);
+}
+
+WorkingFile *WorkingFiles::getFileUnlocked(const std::string &path) {
+  auto it = files.find(path);
+  return it != files.end() ? it->second.get() : nullptr;
+}
+
+std::string WorkingFiles::getContent(const std::string &path) {
+  std::lock_guard lock(mutex);
+  auto it = files.find(path);
+  return it != files.end() ? it->second->buffer_content : "";
+}
+
+WorkingFile *WorkingFiles::onOpen(const TextDocumentItem &open) {
+  std::lock_guard lock(mutex);
+
+  std::string path = open.uri.getPath();
+  std::string content = open.text;
+
+  auto &wf = files[path];
+  if (wf) {
+    wf->version = open.version;
+    wf->buffer_content = content;
+    wf->onBufferContentUpdated();
+  } else {
+    wf = std::make_unique<WorkingFile>(path, content);
+  }
+  return wf.get();
+}
+
+void WorkingFiles::onChange(const TextDocumentDidChangeParam &change) {
+  std::lock_guard lock(mutex);
+
+  std::string path = change.textDocument.uri.getPath();
+  WorkingFile *file = getFileUnlocked(path);
+  if (!file) {
+    LOG_S(WARNING) << "Could not change " << path << " because it was not open";
+    return;
+  }
+
+  file->timestamp = chrono::duration_cast<chrono::seconds>(
+                        chrono::high_resolution_clock::now().time_since_epoch())
+                        .count();
+
+  // version: number | null
+  if (change.textDocument.version)
+    file->version = *change.textDocument.version;
+
+  for (const TextDocumentContentChangeEvent &diff : change.contentChanges) {
+    // Per the spec replace everything if the rangeLength and range are not set.
+    // See https://github.com/Microsoft/language-server-protocol/issues/9.
+    if (!diff.range) {
+      file->buffer_content = diff.text;
+      file->onBufferContentUpdated();
+    } else {
+      int start_offset =
+          getOffsetForPosition(diff.range->start, file->buffer_content);
+      // Ignore TextDocumentContentChangeEvent.rangeLength which causes trouble
+      // when UTF-16 surrogate pairs are used.
+      int end_offset =
+          getOffsetForPosition(diff.range->end, file->buffer_content);
+      file->buffer_content.replace(file->buffer_content.begin() + start_offset,
+                                   file->buffer_content.begin() + end_offset,
+                                   diff.text);
+      file->onBufferContentUpdated();
+    }
+  }
+}
+
+void WorkingFiles::onClose(const std::string &path) {
+  std::lock_guard lock(mutex);
+  files.erase(path);
+}
+
+// VSCode (UTF-16) disagrees with Emacs lsp-mode (UTF-8) on how to represent
+// text documents.
+// We use a UTF-8 iterator to approximate UTF-16 in the specification (weird).
+// This is good enough and fails only for UTF-16 surrogate pairs.
+int getOffsetForPosition(Position pos, std::string_view content) {
+  size_t i = 0;
+  for (; pos.line > 0 && i < content.size(); i++)
+    if (content[i] == '\n')
+      pos.line--;
+  for (; pos.character > 0 && i < content.size() && content[i] != '\n';
+       pos.character--)
+    if (uint8_t(content[i++]) >= 128) {
+      // Skip 0b10xxxxxx
+      while (i < content.size() && uint8_t(content[i]) >= 128 &&
+             uint8_t(content[i]) < 192)
+        i++;
+    }
+  return int(i);
+}
+
+std::string_view lexIdentifierAroundPos(Position position,
+                                        std::string_view content) {
+  int start = getOffsetForPosition(position, content), end = start + 1;
+  char c;
+
+  // We search for :: before the cursor but not after to get the qualifier.
+  for (; start > 0; start--) {
+    c = content[start - 1];
+    if (c == ':' && start > 1 && content[start - 2] == ':')
+      start--;
+    else if (!isAsciiIdentifierContinue(c))
+      break;
+  }
+  for (; end < content.size() && isAsciiIdentifierContinue(content[end]); end++)
+    ;
+
+  return content.substr(start, end - start);
+}
+} // namespace ccls
