@@ -44,4 +44,19 @@ struct WorkingFile {
   // Also resolves |column| if not NULL.
   // When resolving a range, use is_end = false for begin() and is_end =
   // true for end() to get a better alignment of |column|.
-  std::optional<int> getBufferPosFromIndexPos(int line, i
+  std::optional<int> getBufferPosFromIndexPos(int line, int *column,
+                                              bool is_end);
+  // Finds the index line number which maps to buffer line number |line|.
+  // Also resolves |column| if not NULL.
+  std::optional<int> getIndexPosFromBufferPos(int line, int *column,
+                                              bool is_end);
+  // Returns the stable completion position (it jumps back until there is a
+  // non-alphanumeric character).
+  Position getCompletionPosition(Position pos, std::string *filter) const;
+
+private:
+  // Compute index_to_buffer and buffer_to_index.
+  void computeLineMapping();
+};
+
+struct WorkingFiles 
