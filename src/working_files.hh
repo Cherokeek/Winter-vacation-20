@@ -59,4 +59,24 @@ private:
   void computeLineMapping();
 };
 
-struct WorkingFiles 
+struct WorkingFiles {
+  WorkingFile *getFile(const std::string &path);
+  WorkingFile *getFileUnlocked(const std::string &path);
+  std::string getContent(const std::string &path);
+
+  template <typename Fn> void withLock(Fn &&fn) {
+    std::lock_guard lock(mutex);
+    fn();
+  }
+
+  WorkingFile *onOpen(const TextDocumentItem &open);
+  void onChange(const TextDocumentDidChangeParam &change);
+  void onClose(const std::string &close);
+
+  std::mutex mutex;
+  std::unordered_map<std::string, std::unique_ptr<WorkingFile>> files;
+};
+
+int getOffsetForPosition(Position pos, std::string_view content);
+
+std::string_vi
