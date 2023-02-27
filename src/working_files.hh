@@ -79,4 +79,6 @@ struct WorkingFiles {
 
 int getOffsetForPosition(Position pos, std::string_view content);
 
-std::string_vi
+std::string_view lexIdentifierAroundPos(Position position,
+                                        std::string_view content);
+} // namespace ccls
