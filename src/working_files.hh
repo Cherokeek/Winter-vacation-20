@@ -31,4 +31,17 @@ struct WorkingFile {
   std::vector<int> index_to_buffer;
   std::vector<int> buffer_to_index;
   // A set of diagnostics that have been reported for this file.
-  std::vector<
+  std::vector<Diagnostic> diagnostics;
+
+  WorkingFile(const std::string &filename, const std::string &buffer_content);
+
+  // This should be called when the indexed content has changed.
+  void setIndexContent(const std::string &index_content);
+  // This should be called whenever |buffer_content| has changed.
+  void onBufferContentUpdated();
+
+  // Finds the buffer line number which maps to index line number |line|.
+  // Also resolves |column| if not NULL.
+  // When resolving a range, use is_end = false for begin() and is_end =
+  // true for end() to get a better alignment of |column|.
+  std::optional<int> getBufferPosFromIndexPos(int line, i
